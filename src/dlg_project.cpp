@@ -16,6 +16,7 @@ ProjectEditDlg::~ProjectEditDlg()
 void ProjectEditDlg::setProject(const Project &project)
 {
     ui->editProjectName->setText(project.name());
+    ui->editProjectName->selectAll();
 }
 
 QString ProjectEditDlg::getName() const

@@ -15,13 +15,13 @@ struct Project : public QObject
     Q_OBJECT
 
 public:
-    Project(const QString& name, QObject* parent)
-        : QObject(parent)
-        , m_name(name)
-    {
-    }
+    Project(const QString& name, QObject* parent);
 
     const QString& name() const { return m_name; }
+    void setName(const QString& name);
+
+signals:
+    void changed();
 
 private:
     QString m_name;
@@ -72,9 +72,7 @@ public:
     int getProjectCount() const;
 
     const Project* getProject(int index) const;
-    const Project* getProject(const QString& name) const;
-
-    const BuildingBlock* getBuildingBlock(const QString& ref) const;
+    Project* getProject(int index);
 
     void save(const QString& path) const;
     void load(const QString& path);

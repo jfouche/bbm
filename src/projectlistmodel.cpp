@@ -1,7 +1,7 @@
 #include "projectlistmodel.h"
 #include <QDebug>
 
-ProjectListModel::ProjectListModel(QObject* parent, const DataModel* model)
+ProjectListModel::ProjectListModel(QObject* parent, DataModel* model)
     : QAbstractListModel(parent)
     , m_model(model)
 {
@@ -11,7 +11,7 @@ ProjectListModel::ProjectListModel(QObject* parent, const DataModel* model)
     endResetModel();
 }
 
-const Project* ProjectListModel::getProject(const QModelIndex &index) const
+Project* ProjectListModel::getProject(const QModelIndex &index)
 {
     return m_model->getProject(index.row());
 }
@@ -23,14 +23,15 @@ int ProjectListModel::rowCount(const QModelIndex &parent) const
     return m_model->getProjectCount();
 }
 
-int ProjectListModel::columnCount(const QModelIndex &parent) const
+int ProjectListModel::columnCount(const QModelIndex& parent) const
 {
+    Q_UNUSED(parent)
     return 2;
 }
 
 QVariant ProjectListModel::data(const QModelIndex &index, int role) const
 {
-    const Project* project = getProject(index);
+    const Project* project = m_model->getProject(index.row());
     Q_ASSERT(project != nullptr);
     qDebug() << "ProjectListModel::data(" << index.row() << ") : " << project->name();
     if (!index.isValid())

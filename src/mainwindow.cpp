@@ -84,11 +84,11 @@ void MainWindow::save()
 void MainWindow::on_listProjects_doubleClicked(const QModelIndex &index)
 {
     ProjectEditDlg dlg(this);
-    const Project* project = projectListModel->getProject(index);
+    Project* project = projectListModel->getProject(index);
     if (project) {
         dlg.setProject(*project);
     }
     if (dlg.exec() == QDialog::Accepted) {
-        addProject(dlg.getName());
+        project->setName(dlg.getName());
     }
 }

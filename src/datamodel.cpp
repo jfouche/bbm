@@ -33,6 +33,20 @@ static void write(const Project& project, QJsonObject& obj)
 }
 
 // ===========================================================================
+Project::Project(const QString& name, QObject* parent)
+    : QObject(parent)
+    , m_name(name)
+{
+}
+
+void Project::setName(const QString &name)
+{
+    m_name = name;
+    emit changed();
+}
+
+
+// ===========================================================================
 BuildingBlock::BuildingBlock(const QString& name, const QString& ref, QObject* parent)
     : QObject(parent)
     , m_name(name)
@@ -101,22 +115,12 @@ const Project* DataModel::getProject(int index) const
     return m_projects.at(index);
 }
 
-const Project* DataModel::getProject(const QString& name) const
+Project* DataModel::getProject(int index)
 {
-    auto by_name = [name](const Project* p) {
-        return p->name() == name;
-    };
-    auto it = std::find_if(m_projects.begin(), m_projects.end(), by_name);
-    return (it != m_projects.end()) ? *it : nullptr;
-}
-
-const BuildingBlock* DataModel::getBuildingBlock(const QString& ref) const
-{
-    auto by_ref = [ref](const BuildingBlock* bb) {
-        return bb->ref() == ref;
-    };
-    auto it = std::find_if(m_buildingblocks.begin(), m_buildingblocks.end(), by_ref);
-    return (it != m_buildingblocks.end()) ? *it : nullptr;
+    if (index > m_projects.size()) {
+        return nullptr;
+    }
+    return m_projects.at(index);
 }
 
 void DataModel::save(const QString& path) const
