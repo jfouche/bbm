@@ -14,7 +14,7 @@ AddProjectDlg::~AddProjectDlg()
 }
 
 
-void AddProjectDlg::on_buttonBox_accepted()
+void AddProjectDlg::on_accepted()
 {
     const QString name = ui->editProjectName->text();
     emit newProjectName(name);

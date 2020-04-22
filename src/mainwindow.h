@@ -23,8 +23,12 @@ public:
 
 private slots:
     void on_btnAddProject_clicked();
+    void on_btnAddBuildinBlock_clicked();
     void addProject(QString name);
+    void addBuildBlock(QString name, QString ref);
     void updateList();
+    void load();
+    void save();
 
 private:
     Ui::MainWindow *ui;

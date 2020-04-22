@@ -16,7 +16,7 @@ public:
     ~AddProjectDlg();
 
 private slots:
-    void on_buttonBox_accepted();
+    void on_accepted();
 
 signals:
     void newProjectName(const QString& name);
