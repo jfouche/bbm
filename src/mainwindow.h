@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "datamodel.h"
 #include "dbitemmodel.h"
+#include "projectlistmodel.h"
 #include "QStringListModel"
 
 QT_BEGIN_NAMESPACE
@@ -13,7 +14,7 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
     DataModel* m_datamodel;
-    QStringListModel* model;
+    ProjectListModel* projectListModel;
 
     Q_OBJECT
 
@@ -29,6 +30,8 @@ private slots:
     void updateList();
     void load();
     void save();
+
+    void on_listProjects_doubleClicked(const QModelIndex &index);
 
 private:
     Ui::MainWindow *ui;

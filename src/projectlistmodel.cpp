@@ -11,7 +11,10 @@ ProjectListModel::ProjectListModel(QObject* parent, const DataModel* model)
     endResetModel();
 }
 
-
+const Project* ProjectListModel::getProject(const QModelIndex &index) const
+{
+    return m_model->getProject(index.row());
+}
 
 int ProjectListModel::rowCount(const QModelIndex &parent) const
 {
@@ -27,15 +30,15 @@ int ProjectListModel::columnCount(const QModelIndex &parent) const
 
 QVariant ProjectListModel::data(const QModelIndex &index, int role) const
 {
-    const Project* project = m_model->getProject(index.row());
+    const Project* project = getProject(index);
     Q_ASSERT(project != nullptr);
-    qDebug() << "ProjectListModel::data(" << index.row() << ") : " << project->name;
+    qDebug() << "ProjectListModel::data(" << index.row() << ") : " << project->name();
     if (!index.isValid())
         return QVariant();
     if ( role == Qt::DisplayRole) {
         switch (index.column()) {
         case 0:
-            return project->name;
+            return project->name();
         case 1:
             return "Col #1";
         }

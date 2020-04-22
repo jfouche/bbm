@@ -17,6 +17,8 @@ public:
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
+    const Project* getProject(const QModelIndex &index) const;
+
 private slots:
     void update();
 };

@@ -1,8 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "addprojectdlg.h"
+#include "dlg_project.h"
 #include "addbuildingblockdlg.h"
-#include "projectlistmodel.h"
 #include <QDebug>
 #include <QFileDialog>
 
@@ -21,7 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
 */
 
     m_datamodel = new DataModel(this);
-    ui->listProjects->setModel(new ProjectListModel(this, m_datamodel));
+    projectListModel = new ProjectListModel(this, m_datamodel);
+    ui->listProjects->setModel(projectListModel);
 
     connect(m_datamodel, SIGNAL(dbChanged()), this, SLOT(updateList()));
 
@@ -37,9 +37,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_btnAddProject_clicked()
 {
-    AddProjectDlg* dlg = new AddProjectDlg(this);
-    connect(dlg, SIGNAL(newProjectName(QString)), this, SLOT(addProject(QString)));
-    dlg->exec();
+    ProjectEditDlg dlg(this);
+    if (dlg.exec() == QDialog::Accepted) {
+        addProject(dlg.getName());
+    }
 }
 
 void MainWindow::on_btnAddBuildinBlock_clicked()
@@ -77,5 +78,17 @@ void MainWindow::save()
     QString filename = QFileDialog::getSaveFileName(this, tr("Open file"), "", tr("BB Files (*.json)"));
     if (!filename.isNull()) {
         m_datamodel->save(filename);
+    }
+}
+
+void MainWindow::on_listProjects_doubleClicked(const QModelIndex &index)
+{
+    ProjectEditDlg dlg(this);
+    const Project* project = projectListModel->getProject(index);
+    if (project) {
+        dlg.setProject(*project);
+    }
+    if (dlg.exec() == QDialog::Accepted) {
+        addProject(dlg.getName());
     }
 }

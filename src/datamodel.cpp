@@ -29,35 +29,63 @@ static void read(Project& project, const QJsonObject& jsonObj)
 
 static void write(const Project& project, QJsonObject& obj)
 {
-    obj["name"] = project.name;
+    obj["name"] = project.name();
 }
 
-DataModel::DataModel(QObject *parent) : QObject(parent)
+// ===========================================================================
+BuildingBlock::BuildingBlock(const QString& name, const QString& ref, QObject* parent)
+    : QObject(parent)
+    , m_name(name)
+    , m_ref(ref)
 {
-    m_projects.push_back(Project("Project1"));
-    m_projects.push_back(Project("Project2"));
-    m_projects.push_back(Project("Project3"));
-    m_projects.push_back(Project("Project4"));
 }
 
-const Project* DataModel::addProject(const QString &name)
+void BuildingBlock::setName(const QString &name)
 {
-    if (getProject(name) != nullptr) {
-        return nullptr;
-    }
-    m_projects.push_back(Project(name));
+    m_name = name;
+    emit changed();
+}
+
+void BuildingBlock::setRef(const QString &ref)
+{
+    m_ref = ref;
+    emit changed();
+}
+
+
+// ===========================================================================
+DataModel::DataModel(QObject *parent)
+    : QObject(parent)
+{
+}
+
+Project* DataModel::addProject(const QString &name)
+{
+//    if (getProject(name) != nullptr) {
+//        return nullptr;
+//    }
+    auto project = new Project(name, this);
+    connect(project, SIGNAL(changed()), this, SLOT(changed()));
+    m_projects.push_back(project);
     emit dbChanged();
-    return &(*m_projects.rbegin());
+    return project;
 }
 
-const BuildingBlock* DataModel::addBuildingBlock(const QString& name, const QString& ref)
+BuildingBlock* DataModel::addBuildingBlock(const QString& name, const QString& ref)
 {
-    if (getBuildingBlock(ref) != nullptr) {
-        return nullptr;
-    }
-    m_buildingblocks.push_back(BuildingBlock(name, ref));
+//    if (getBuildingBlock(ref) != nullptr) {
+//        return nullptr;
+//    }
+    auto bb = new BuildingBlock(name, ref, this);
+    connect(bb, SIGNAL(changed()), this, SLOT(changed()));
+    m_buildingblocks.push_back(bb);
     emit dbChanged();
-    return &(*m_buildingblocks.rbegin());
+    return bb;
+}
+
+void DataModel::changed()
+{
+    emit dbChanged();
 }
 
 int DataModel::getProjectCount() const
@@ -70,25 +98,25 @@ const Project* DataModel::getProject(int index) const
     if (index > m_projects.size()) {
         return nullptr;
     }
-    return &m_projects.at(index);
+    return m_projects.at(index);
 }
 
 const Project* DataModel::getProject(const QString& name) const
 {
-    auto by_name = [name](const Project& p) {
-        return p.name == name;
+    auto by_name = [name](const Project* p) {
+        return p->name() == name;
     };
     auto it = std::find_if(m_projects.begin(), m_projects.end(), by_name);
-    return (it != m_projects.end()) ? &(*it) : nullptr;
+    return (it != m_projects.end()) ? *it : nullptr;
 }
 
 const BuildingBlock* DataModel::getBuildingBlock(const QString& ref) const
 {
-    auto by_ref = [ref](const BuildingBlock& bb) {
-        return bb.ref == ref;
+    auto by_ref = [ref](const BuildingBlock* bb) {
+        return bb->ref() == ref;
     };
     auto it = std::find_if(m_buildingblocks.begin(), m_buildingblocks.end(), by_ref);
-    return (it != m_buildingblocks.end()) ? &(*it) : nullptr;
+    return (it != m_buildingblocks.end()) ? *it : nullptr;
 }
 
 void DataModel::save(const QString& path) const
@@ -103,7 +131,7 @@ void DataModel::save(const QString& path) const
     QJsonArray projects;
     for (auto project : m_projects) {
         QJsonObject projectObj;
-        write(project, projectObj);
+        write(*project, projectObj);
         projects.append(projectObj);
     }
 

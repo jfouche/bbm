@@ -17,23 +17,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     addbuildingblockdlg.cpp \
-    addprojectdlg.cpp \
     datamodel.cpp \
+    dlg_project.cpp \
     main.cpp \
     mainwindow.cpp \
     projectlistmodel.cpp
 
 HEADERS += \
     addbuildingblockdlg.h \
-    addprojectdlg.h \
     datamodel.h \
+    dlg_project.h \
     json_utils.hpp \
     mainwindow.h \
     projectlistmodel.h
 
 FORMS += \
     addbuildingblockdlg.ui \
-    addprojectdlg.ui \
+    dlg_project.ui \
     mainwindow.ui
 
 # Default rules for deployment.
