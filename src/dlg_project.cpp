@@ -1,5 +1,5 @@
 #include "dlg_project.h"
-#include "ui_addprojectdlg.h"
+#include "ui_dlg_project.h"
 
 ProjectEditDlg::ProjectEditDlg(QWidget *parent)
     : QDialog(parent)
