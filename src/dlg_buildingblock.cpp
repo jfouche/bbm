@@ -13,9 +13,19 @@ BuildingBlockEditDlg::~BuildingBlockEditDlg()
     delete ui;
 }
 
-void BuildingBlockEditDlg::on_accepted()
+void BuildingBlockEditDlg::set(const BuildingBlock &bb)
 {
-    const QString name = ui->nameEdit->text();
-    const QString ref = ui->refEdit->text();
-    emit newBuildingBlock(name, ref);
+    ui->nameEdit->setText(bb.name());
+    ui->refEdit->setText(bb.ref());
 }
+
+QString BuildingBlockEditDlg::getName() const
+{
+    return ui->nameEdit->text();
+}
+
+QString BuildingBlockEditDlg::getRef() const
+{
+    return ui->refEdit->text();
+}
+

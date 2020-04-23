@@ -33,6 +33,37 @@ static void write(const Project& project, QJsonObject& obj)
     obj["name"] = project.name();
 }
 
+static void write(const BuildingBlock& bb, QJsonObject& obj)
+{
+    obj["name"] = bb.name();
+    obj["ref"] = bb.ref();
+}
+
+static void write(const DataModel& model, QJsonObject& obj)
+{
+    QJsonArray projects;
+    for (int i = 0; i < model.getProjectCount(); ++i) {
+        QJsonObject projectObj;
+        const Project* project = model.getProject(i);
+        if (project) {
+            write(*project, projectObj);
+            projects.append(projectObj);
+        }
+    }
+    obj["projects"] = projects;
+
+    QJsonArray buildingblocks;
+    for (int i = 0; i < model.getBuildingBlockCount(); ++i) {
+        QJsonObject bbObj;
+        const BuildingBlock* bb = model.getBuildingBlock(i);
+        if (bb) {
+            write(*bb, bbObj);
+            projects.append(bbObj);
+        }
+    }
+    obj["buildingblocks"] = projects;
+}
+
 // ===========================================================================
 Project::Project(QObject* parent)
     : QObject(parent)
@@ -105,6 +136,11 @@ int DataModel::getProjectCount() const
     return m_projects.size();
 }
 
+int DataModel::getBuildingBlockCount() const
+{
+    return m_buildingblocks.size();
+}
+
 const Project* DataModel::getProject(int index) const
 {
     if (index > m_projects.size()) {
@@ -121,6 +157,22 @@ Project* DataModel::getProject(int index)
     return m_projects.at(index);
 }
 
+const BuildingBlock* DataModel::getBuildingBlock(int index) const
+{
+    if (index > m_buildingblocks.size()) {
+        return nullptr;
+    }
+    return m_buildingblocks.at(index);
+}
+
+BuildingBlock* DataModel::getBuildingBlock(int index)
+{
+    if (index > m_buildingblocks.size()) {
+        return nullptr;
+    }
+    return m_buildingblocks.at(index);
+}
+
 void DataModel::save(const QString& path) const
 {
     QFile file(path);
@@ -130,15 +182,8 @@ void DataModel::save(const QString& path) const
         return;
     }
 
-    QJsonArray projects;
-    for (auto project : m_projects) {
-        QJsonObject projectObj;
-        write(*project, projectObj);
-        projects.append(projectObj);
-    }
-
     QJsonObject root;
-    root["projects"] = projects;
+    write(*this, root);
     QJsonDocument doc(root);
     file.write(doc.toJson());
 }

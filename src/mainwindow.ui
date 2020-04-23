@@ -141,7 +141,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="btnAddBuildinBlock">
+            <widget class="QPushButton" name="btnAssignBbToProject">
              <property name="text">
               <string>Add Building block</string>
              </property>
@@ -165,7 +165,31 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page2"/>
+      <widget class="QWidget" name="page2">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QTreeView" name="treeBuildingBlocks"/>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QPushButton" name="btnAddBuildingBlock">
+            <property name="text">
+             <string>Add BB</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnManageBuildingBlocks">
+            <property name="text">
+             <string>manage BB</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -178,7 +202,7 @@
   <tabstop>btnPageProjects</tabstop>
   <tabstop>btnPageBuildingBlocks</tabstop>
   <tabstop>btnAddProject</tabstop>
-  <tabstop>btnAddBuildinBlock</tabstop>
+  <tabstop>btnAssignBbToProject</tabstop>
   <tabstop>listProjects</tabstop>
  </tabstops>
  <resources/>
@@ -279,6 +303,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>btnAddBuildingBlock</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addBuildingBlock()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>58</x>
+     <y>95</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addProject()</slot>
@@ -287,5 +327,6 @@
   <slot>editProject(QModelIndex)</slot>
   <slot>showProjectPage()</slot>
   <slot>showBuildingBlockPage()</slot>
+  <slot>addBuildingBlock()</slot>
  </slots>
 </ui>

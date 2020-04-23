@@ -2,6 +2,7 @@
 #define ADDBUILDINGBLOCKDLG_H
 
 #include <QDialog>
+#include "datamodel.h"
 
 namespace Ui {
 class AddBuildingBlockDlg;
@@ -15,11 +16,9 @@ public:
     explicit BuildingBlockEditDlg(QWidget *parent = nullptr);
     ~BuildingBlockEditDlg();
 
-private slots:
-    void on_accepted();
-
-signals:
-    void newBuildingBlock(const QString& name, const QString& ref);
+    void set(const BuildingBlock& bb);
+    QString getName() const;
+    QString getRef() const;
 
 private:
     Ui::AddBuildingBlockDlg *ui;

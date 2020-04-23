@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     // the project list model
     projectListModel = new ProjectListModel(this, m_datamodel);
     ui->listProjects->setModel(projectListModel);
-    connect(m_datamodel, SIGNAL(dbChanged()), this, SLOT(updateProjectList()));
+    //connect(m_datamodel, SIGNAL(dbChanged()), this, SLOT(updateProjectList()));
 }
 
 MainWindow::~MainWindow()
@@ -38,7 +38,9 @@ void MainWindow::addBuildingBlock()
 {
     BuildingBlockEditDlg dlg(this);
     if (dlg.exec() == QDialog::Accepted) {
-        ;
+        auto bb = m_datamodel->addBuildingBlock();
+        bb->setName(dlg.getName());
+        bb->setRef(dlg.getRef());
     }
 }
 

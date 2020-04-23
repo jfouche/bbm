@@ -70,9 +70,13 @@ public:
     BuildingBlock* addBuildingBlock();
 
     int getProjectCount() const;
+    int getBuildingBlockCount() const;
 
     const Project* getProject(int index) const;
     Project* getProject(int index);
+
+    const BuildingBlock* getBuildingBlock(int index) const;
+    BuildingBlock* getBuildingBlock(int index);
 
     void save(const QString& path) const;
     void load(const QString& path);
