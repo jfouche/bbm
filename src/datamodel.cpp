@@ -10,7 +10,8 @@ static void read(DataModel& data, const QJsonObject& jsonObj)
     const QJsonArray array = json::check_type<QJsonArray>(value);
     for (auto it = array.begin(); it != array.end(); ++it) {
         QJsonObject projObj = json::check_type<QJsonObject>(json::json_pair("project index", *it));
-        data.addProject(json::read(projObj, "name"));
+        auto project =  data.addProject();
+        project->setName(json::read(projObj, "name"));
     }
     if (jsonObj.contains("projects") && jsonObj["projects"].isObject()) {
 
@@ -33,9 +34,8 @@ static void write(const Project& project, QJsonObject& obj)
 }
 
 // ===========================================================================
-Project::Project(const QString& name, QObject* parent)
+Project::Project(QObject* parent)
     : QObject(parent)
-    , m_name(name)
 {
 }
 
@@ -47,10 +47,8 @@ void Project::setName(const QString &name)
 
 
 // ===========================================================================
-BuildingBlock::BuildingBlock(const QString& name, const QString& ref, QObject* parent)
+BuildingBlock::BuildingBlock(QObject* parent)
     : QObject(parent)
-    , m_name(name)
-    , m_ref(ref)
 {
 }
 
@@ -73,24 +71,24 @@ DataModel::DataModel(QObject *parent)
 {
 }
 
-Project* DataModel::addProject(const QString &name)
+Project* DataModel::addProject()
 {
 //    if (getProject(name) != nullptr) {
 //        return nullptr;
 //    }
-    auto project = new Project(name, this);
+    auto project = new Project(this);
     connect(project, SIGNAL(changed()), this, SLOT(changed()));
     m_projects.push_back(project);
     emit dbChanged();
     return project;
 }
 
-BuildingBlock* DataModel::addBuildingBlock(const QString& name, const QString& ref)
+BuildingBlock* DataModel::addBuildingBlock()
 {
 //    if (getBuildingBlock(ref) != nullptr) {
 //        return nullptr;
 //    }
-    auto bb = new BuildingBlock(name, ref, this);
+    auto bb = new BuildingBlock(this);
     connect(bb, SIGNAL(changed()), this, SLOT(changed()));
     m_buildingblocks.push_back(bb);
     emit dbChanged();

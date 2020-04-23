@@ -15,7 +15,7 @@ struct Project : public QObject
     Q_OBJECT
 
 public:
-    Project(const QString& name, QObject* parent);
+    Project(QObject* parent);
 
     const QString& name() const { return m_name; }
     void setName(const QString& name);
@@ -35,7 +35,7 @@ struct BuildingBlock : public QObject
     Q_OBJECT
 
 public:
-    BuildingBlock(const QString& name, const QString& ref, QObject* parent);
+    BuildingBlock(QObject* parent);
 
     const QString& name() const { return m_name; }
     void setName(const QString& name);
@@ -66,8 +66,8 @@ class DataModel : public QObject
 public:
     explicit DataModel(QObject *parent = nullptr);
 
-    Project* addProject(const QString& name);
-    BuildingBlock* addBuildingBlock(const QString& name, const QString& ref);
+    Project* addProject();
+    BuildingBlock* addBuildingBlock();
 
     int getProjectCount() const;
 

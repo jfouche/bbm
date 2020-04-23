@@ -29,7 +29,8 @@ void MainWindow::addProject()
 {
     ProjectEditDlg dlg(this);
     if (dlg.exec() == QDialog::Accepted) {
-        addProject(dlg.getName());
+        auto project = m_datamodel->addProject();
+        project->setName(dlg.getName());
     }
 }
 
@@ -39,16 +40,6 @@ void MainWindow::addBuildingBlock()
     if (dlg.exec() == QDialog::Accepted) {
         ;
     }
-}
-
-void MainWindow::addProject(QString name)
-{
-    m_datamodel->addProject(name);
-}
-
-void MainWindow::addBuildBlock(QString name, QString ref)
-{
-    m_datamodel->addBuildingBlock(name, ref);
 }
 
 void MainWindow::updateProjectList()

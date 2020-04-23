@@ -27,8 +27,6 @@ private slots:
     void addBuildingBlock();
     void updateProjectList();
     void editProject(const QModelIndex &index);
-    void addProject(QString name);
-    void addBuildBlock(QString name, QString ref);
     void load();
     void save();
 
