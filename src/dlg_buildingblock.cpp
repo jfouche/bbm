@@ -1,19 +1,19 @@
-#include "addbuildingblockdlg.h"
-#include "ui_addbuildingblockdlg.h"
+#include "dlg_buildingblock.h"
+#include "ui_dlg_buildingblock.h"
 
-AddBuildingBlockDlg::AddBuildingBlockDlg(QWidget *parent) :
+BuildingBlockEditDlg::BuildingBlockEditDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddBuildingBlockDlg)
 {
     ui->setupUi(this);
 }
 
-AddBuildingBlockDlg::~AddBuildingBlockDlg()
+BuildingBlockEditDlg::~BuildingBlockEditDlg()
 {
     delete ui;
 }
 
-void AddBuildingBlockDlg::on_accepted()
+void BuildingBlockEditDlg::on_accepted()
 {
     const QString name = ui->nameEdit->text();
     const QString ref = ui->refEdit->text();

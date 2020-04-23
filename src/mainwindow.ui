@@ -146,5 +146,76 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>btnAddProject</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addProject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>540</x>
+     <y>544</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>735</x>
+     <y>570</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnLoad</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>load()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>241</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>572</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnSave</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>save()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>550</x>
+     <y>33</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>458</x>
+     <y>569</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>listProjects</sender>
+   <signal>activated(QModelIndex)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>editProject(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>126</x>
+     <y>152</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>45</x>
+     <y>569</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>addProject()</slot>
+  <slot>load()</slot>
+  <slot>save()</slot>
+  <slot>editProject(QModelIndex)</slot>
+ </slots>
 </ui>

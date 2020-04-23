@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dlg_project.h"
-#include "addbuildingblockdlg.h"
+#include "dlg_buildingblock.h"
 #include <QDebug>
 #include <QFileDialog>
 
@@ -11,22 +11,12 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    /*
-    QStringList List;
-    List << "Clair de Lune" << "Reverie" << "Prelude";
-    model = new QStringListModel(this);
-    model->setStringList(List);
-    ui->listProjects->setModel(model);
-*/
-
     m_datamodel = new DataModel(this);
+
+    // the project list model
     projectListModel = new ProjectListModel(this, m_datamodel);
     ui->listProjects->setModel(projectListModel);
-
-    connect(m_datamodel, SIGNAL(dbChanged()), this, SLOT(updateList()));
-
-    connect(ui->btnLoad, SIGNAL(clicked()), this, SLOT(load()));
-    connect(ui->btnSave, SIGNAL(clicked()), this, SLOT(save()));
+    connect(m_datamodel, SIGNAL(dbChanged()), this, SLOT(updateProjectList()));
 }
 
 MainWindow::~MainWindow()
@@ -35,7 +25,7 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::on_btnAddProject_clicked()
+void MainWindow::addProject()
 {
     ProjectEditDlg dlg(this);
     if (dlg.exec() == QDialog::Accepted) {
@@ -43,11 +33,12 @@ void MainWindow::on_btnAddProject_clicked()
     }
 }
 
-void MainWindow::on_btnAddBuildinBlock_clicked()
+void MainWindow::addBuildingBlock()
 {
-    AddBuildingBlockDlg* dlg = new AddBuildingBlockDlg(this);
-    connect(dlg, SIGNAL(newBuildingBlock(QString, Qstring)), this, SLOT(addBuildingBlock(QString, QString)));
-    dlg->exec();
+    BuildingBlockEditDlg dlg(this);
+    if (dlg.exec() == QDialog::Accepted) {
+        ;
+    }
 }
 
 void MainWindow::addProject(QString name)
@@ -60,7 +51,7 @@ void MainWindow::addBuildBlock(QString name, QString ref)
     m_datamodel->addBuildingBlock(name, ref);
 }
 
-void MainWindow::updateList()
+void MainWindow::updateProjectList()
 {
 
 }
@@ -81,7 +72,7 @@ void MainWindow::save()
     }
 }
 
-void MainWindow::on_listProjects_doubleClicked(const QModelIndex &index)
+void MainWindow::editProject(const QModelIndex &index)
 {
     ProjectEditDlg dlg(this);
     Project* project = projectListModel->getProject(index);

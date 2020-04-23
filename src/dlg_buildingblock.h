@@ -7,13 +7,13 @@ namespace Ui {
 class AddBuildingBlockDlg;
 }
 
-class AddBuildingBlockDlg : public QDialog
+class BuildingBlockEditDlg : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit AddBuildingBlockDlg(QWidget *parent = nullptr);
-    ~AddBuildingBlockDlg();
+    explicit BuildingBlockEditDlg(QWidget *parent = nullptr);
+    ~BuildingBlockEditDlg();
 
 private slots:
     void on_accepted();

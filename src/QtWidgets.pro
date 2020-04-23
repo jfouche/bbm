@@ -16,23 +16,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    addbuildingblockdlg.cpp \
     datamodel.cpp \
+    dlg_buildingblock.cpp \
     dlg_project.cpp \
     main.cpp \
     mainwindow.cpp \
     projectlistmodel.cpp
 
 HEADERS += \
-    addbuildingblockdlg.h \
     datamodel.h \
+    dlg_buildingblock.h \
     dlg_project.h \
     json_utils.hpp \
     mainwindow.h \
     projectlistmodel.h
 
 FORMS += \
-    addbuildingblockdlg.ui \
+    dlg_buildingblock.ui \
     dlg_project.ui \
     mainwindow.ui
 

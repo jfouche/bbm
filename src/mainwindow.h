@@ -23,15 +23,15 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_btnAddProject_clicked();
-    void on_btnAddBuildinBlock_clicked();
+    void addProject();
+    void addBuildingBlock();
+    void updateProjectList();
+    void editProject(const QModelIndex &index);
     void addProject(QString name);
     void addBuildBlock(QString name, QString ref);
-    void updateList();
     void load();
     void save();
 
-    void on_listProjects_doubleClicked(const QModelIndex &index);
 
 private:
     Ui::MainWindow *ui;
