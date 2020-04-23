@@ -23,11 +23,13 @@ private slots:
     void addProject();
     void addBuildingBlock();
     void updateProjectList();
+    void updateBuildingBlockList();
     void editProject(const QModelIndex &index);
     void load();
     void save();
     void showProjectPage();
     void showBuildingBlockPage();
+    void showBuildingBlockManager();
 
 
 private:

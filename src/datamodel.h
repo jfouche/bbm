@@ -51,7 +51,6 @@ private:
     QString m_ref;
     QString m_info;
     //QList<BuildingBlock const * const> children;
-
 };
 
 /**

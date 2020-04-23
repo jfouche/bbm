@@ -168,7 +168,21 @@
       <widget class="QWidget" name="page2">
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QTreeView" name="treeBuildingBlocks"/>
+         <widget class="QTreeWidget" name="treeBuildingBlocks">
+          <property name="columnCount">
+           <number>2</number>
+          </property>
+          <column>
+           <property name="text">
+            <string notr="true">1</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string notr="true">2</string>
+           </property>
+          </column>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -266,8 +280,8 @@
      <y>61</y>
     </hint>
     <hint type="destinationlabel">
-     <x>136</x>
-     <y>76</y>
+     <x>196</x>
+     <y>124</y>
     </hint>
    </hints>
   </connection>
@@ -282,8 +296,8 @@
      <y>62</y>
     </hint>
     <hint type="destinationlabel">
-     <x>619</x>
-     <y>80</y>
+     <x>558</x>
+     <y>123</y>
     </hint>
    </hints>
   </connection>
@@ -310,12 +324,28 @@
    <slot>addBuildingBlock()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>58</x>
-     <y>95</y>
+     <x>77</x>
+     <y>555</y>
     </hint>
     <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
+     <x>160</x>
+     <y>421</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnManageBuildingBlocks</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showBuildingBlockManager()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>591</x>
+     <y>541</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>562</x>
+     <y>469</y>
     </hint>
    </hints>
   </connection>
@@ -328,5 +358,6 @@
   <slot>showProjectPage()</slot>
   <slot>showBuildingBlockPage()</slot>
   <slot>addBuildingBlock()</slot>
+  <slot>showBuildingBlockManager()</slot>
  </slots>
 </ui>

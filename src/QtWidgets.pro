@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     datamodel.cpp \
+    dlg_bbmanager.cpp \
     dlg_buildingblock.cpp \
     dlg_project.cpp \
     main.cpp \
@@ -25,6 +26,7 @@ SOURCES += \
 
 HEADERS += \
     datamodel.h \
+    dlg_bbmanager.h \
     dlg_buildingblock.h \
     dlg_project.h \
     json_utils.hpp \
@@ -32,6 +34,7 @@ HEADERS += \
     projectlistmodel.h
 
 FORMS += \
+    dlg_bbmanager.ui \
     dlg_buildingblock.ui \
     dlg_project.ui \
     mainwindow.ui
