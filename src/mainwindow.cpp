@@ -44,7 +44,6 @@ void MainWindow::addBuildingBlock()
 
 void MainWindow::updateProjectList()
 {
-
 }
 
 void MainWindow::load()
@@ -63,14 +62,24 @@ void MainWindow::save()
     }
 }
 
+void MainWindow::showProjectPage()
+{
+    ui->stackedWidget->setCurrentIndex(0);
+}
+
+void MainWindow::showBuildingBlockPage()
+{
+    ui->stackedWidget->setCurrentIndex(1);
+}
+
 void MainWindow::editProject(const QModelIndex &index)
 {
-    ProjectEditDlg dlg(this);
     Project* project = projectListModel->getProject(index);
     if (project) {
+        ProjectEditDlg dlg(this);
         dlg.setProject(*project);
-    }
-    if (dlg.exec() == QDialog::Accepted) {
-        project->setName(dlg.getName());
+        if (dlg.exec() == QDialog::Accepted) {
+            project->setName(dlg.getName());
+        }
     }
 }

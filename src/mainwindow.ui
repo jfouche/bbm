@@ -73,78 +73,114 @@
      </layout>
     </item>
     <item>
-     <widget class="QListView" name="listProjects">
-      <property name="viewMode">
-       <enum>QListView::ListMode</enum>
-      </property>
-      <property name="modelColumn">
-       <number>0</number>
-      </property>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QPushButton" name="btnPageProjects">
+        <property name="text">
+         <string>Projects</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnPageBuildingBlocks">
+        <property name="text">
+         <string>Buildin blocks</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
-     <widget class="QWidget" name="widget" native="true">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnAddBuildinBlock">
-         <property name="text">
-          <string>Add Building block</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnAddProject">
-         <property name="text">
-          <string>Add project</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <widget class="QWidget" name="pageProject">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QListView" name="listProjects">
+          <property name="viewMode">
+           <enum>QListView::ListMode</enum>
+          </property>
+          <property name="modelColumn">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QWidget" name="widget" native="true">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btnAddProject">
+             <property name="text">
+              <string>Add project</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btnAddBuildinBlock">
+             <property name="text">
+              <string>Add Building block</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page2"/>
      </widget>
     </item>
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>btnLoad</tabstop>
+  <tabstop>btnSave</tabstop>
+  <tabstop>btnPageProjects</tabstop>
+  <tabstop>btnPageBuildingBlocks</tabstop>
+  <tabstop>btnAddProject</tabstop>
+  <tabstop>btnAddBuildinBlock</tabstop>
+  <tabstop>listProjects</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -154,28 +190,12 @@
    <slot>addProject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>540</x>
-     <y>544</y>
+     <x>297</x>
+     <y>547</y>
     </hint>
     <hint type="destinationlabel">
-     <x>735</x>
-     <y>570</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>btnLoad</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>load()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>241</x>
-     <y>22</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>318</x>
-     <y>572</y>
+     <x>197</x>
+     <y>534</y>
     </hint>
    </hints>
   </connection>
@@ -190,8 +210,8 @@
      <y>33</y>
     </hint>
     <hint type="destinationlabel">
-     <x>458</x>
-     <y>569</y>
+     <x>619</x>
+     <y>11</y>
     </hint>
    </hints>
   </connection>
@@ -206,8 +226,56 @@
      <y>152</y>
     </hint>
     <hint type="destinationlabel">
-     <x>45</x>
-     <y>569</y>
+     <x>254</x>
+     <y>570</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnPageProjects</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showProjectPage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>161</x>
+     <y>61</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>136</x>
+     <y>76</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnPageBuildingBlocks</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showBuildingBlockPage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>582</x>
+     <y>62</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>619</x>
+     <y>80</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnLoad</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>load()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>252</x>
+     <y>23</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>320</x>
+     <y>10</y>
     </hint>
    </hints>
   </connection>
@@ -217,5 +285,7 @@
   <slot>load()</slot>
   <slot>save()</slot>
   <slot>editProject(QModelIndex)</slot>
+  <slot>showProjectPage()</slot>
+  <slot>showBuildingBlockPage()</slot>
  </slots>
 </ui>

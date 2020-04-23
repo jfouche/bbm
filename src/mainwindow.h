@@ -13,9 +13,6 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
-    DataModel* m_datamodel;
-    ProjectListModel* projectListModel;
-
     Q_OBJECT
 
 public:
@@ -29,9 +26,15 @@ private slots:
     void editProject(const QModelIndex &index);
     void load();
     void save();
+    void showProjectPage();
+    void showBuildingBlockPage();
 
 
 private:
     Ui::MainWindow *ui;
+
+    DataModel* m_datamodel;
+    ProjectListModel* projectListModel;
 };
+
 #endif // MAINWINDOW_H
