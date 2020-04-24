@@ -104,25 +104,19 @@ DataModel::DataModel(QObject *parent)
 
 Project* DataModel::addProject()
 {
-//    if (getProject(name) != nullptr) {
-//        return nullptr;
-//    }
     auto project = new Project(this);
     connect(project, SIGNAL(changed()), this, SLOT(changed()));
     m_projects.push_back(project);
-    emit dbChanged();
+    emit projectAdded(project);
     return project;
 }
 
 BuildingBlock* DataModel::addBuildingBlock()
 {
-//    if (getBuildingBlock(ref) != nullptr) {
-//        return nullptr;
-//    }
     auto bb = new BuildingBlock(this);
     connect(bb, SIGNAL(changed()), this, SLOT(changed()));
     m_buildingblocks.push_back(bb);
-    emit dbChanged();
+    emit buildingBlockAdded(bb);
     return bb;
 }
 

@@ -11,14 +11,16 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->treeBuildingBlocks->setHeaderLabels({"Name", "Ref"});
 
     m_datamodel = new DataModel(this);
 
     // the project list model
-    projectListModel = new ProjectListModel(this, m_datamodel);
-    ui->listProjects->setModel(projectListModel);
-    connect(m_datamodel, SIGNAL(dbChanged()), this, SLOT(updateBuildingBlockList()));
+    m_projectListModel = new ProjectListModel(this, m_datamodel);
+    ui->listProjects->setModel(m_projectListModel);
+
+    // the BB tree model
+    m_bbTreeModel = new BuildingBlockTreeModel(m_datamodel, this);
+    ui->treeBuildingBlocks->setModel(m_bbTreeModel);
 }
 
 MainWindow::~MainWindow()
@@ -52,24 +54,6 @@ void MainWindow::updateProjectList()
 
 void MainWindow::updateBuildingBlockList()
 {
-    auto root = ui->treeBuildingBlocks->invisibleRootItem();
-
-    // clear the tree
-    for (int i = 0; i < root->childCount(); ++i) {
-        root->removeChild(root->child(i));
-    }
-
-    // add all building blocks
-    for (int i = 0; i < m_datamodel->getBuildingBlockCount(); ++i) {
-        BuildingBlock* bb = m_datamodel->getBuildingBlock(i);
-        if (bb) {
-            QStringList cols = { bb->name(), bb->ref() };
-            auto item = new QTreeWidgetItem(ui->treeBuildingBlocks, cols);
-            QVariant data(QVariant::fromValue(static_cast<void*>(bb)));
-            item->setData(0, QTreeWidgetItem::UserType, data);
-            root->addChild(item);
-        }
-    }
 }
 
 void MainWindow::load()
@@ -106,7 +90,7 @@ void MainWindow::showBuildingBlockManager()
 
 void MainWindow::editProject(const QModelIndex &index)
 {
-    Project* project = projectListModel->getProject(index);
+    Project* project = m_projectListModel->getProject(index);
     if (project) {
         ProjectEditDlg dlg(this);
         dlg.setProject(*project);

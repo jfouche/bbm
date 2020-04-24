@@ -168,21 +168,7 @@
       <widget class="QWidget" name="page2">
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QTreeWidget" name="treeBuildingBlocks">
-          <property name="columnCount">
-           <number>2</number>
-          </property>
-          <column>
-           <property name="text">
-            <string notr="true">1</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string notr="true">2</string>
-           </property>
-          </column>
-         </widget>
+         <widget class="QTreeView" name="treeBuildingBlocks"/>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_4">

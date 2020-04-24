@@ -58,10 +58,8 @@ private:
  */
 class DataModel : public QObject
 {
-    QList<Project*> m_projects;
-    QList<BuildingBlock*> m_buildingblocks;
-
     Q_OBJECT
+
 public:
     explicit DataModel(QObject *parent = nullptr);
 
@@ -85,6 +83,12 @@ private slots:
 
 signals:
     void dbChanged();
+    void projectAdded(Project*);
+    void buildingBlockAdded(BuildingBlock*);
+
+private:
+    QList<Project*> m_projects;
+    QList<BuildingBlock*> m_buildingblocks;
 };
 
 #endif // DATABASE_H

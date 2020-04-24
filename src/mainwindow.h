@@ -3,9 +3,8 @@
 
 #include <QMainWindow>
 #include "datamodel.h"
-#include "dbitemmodel.h"
 #include "projectlistmodel.h"
-#include "QStringListModel"
+#include "buildingblocktreemodel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -34,9 +33,9 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-
     DataModel* m_datamodel;
-    ProjectListModel* projectListModel;
+    ProjectListModel* m_projectListModel;
+    BuildingBlockTreeModel* m_bbTreeModel;
 };
 
 #endif // MAINWINDOW_H
