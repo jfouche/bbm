@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     buildingblocktreemodel.cpp \
     datamodel.cpp \
+    datamodel_file.cpp \
     dlg_bbmanager.cpp \
     dlg_buildingblock.cpp \
     dlg_project.cpp \
@@ -28,6 +29,7 @@ SOURCES += \
 HEADERS += \
     buildingblocktreemodel.h \
     datamodel.h \
+    datamodel_file.h \
     dlg_bbmanager.h \
     dlg_buildingblock.h \
     dlg_project.h \
