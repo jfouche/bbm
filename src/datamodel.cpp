@@ -44,24 +44,24 @@ DataModel::DataModel(QObject *parent)
 {
 }
 
-DataModel::ProjectsView DataModel::projects()
+const QVector<Project*>& DataModel::projects()
+{
+    return m_projects;
+}
+
+DataModel::ProjectsView DataModel::projects() const
 {
     return ProjectsView(m_projects);
 }
 
-DataModel::ProjectsConstView DataModel::projects() const
+const QVector<BuildingBlock*>& DataModel::buildingBlocks()
 {
-    return ProjectsConstView(m_projects);
+    return m_buildingblocks;
 }
 
-DataModel::BuildingBlocksView DataModel::buildingBlocks()
+DataModel::BuildingBlocksView DataModel::buildingBlocks() const
 {
     return BuildingBlocksView(m_buildingblocks);
-}
-
-DataModel::BuildingBlocksConstView DataModel::buildingBlocks() const
-{
-    return BuildingBlocksConstView(m_buildingblocks);
 }
 
 Project* DataModel::addProject()
@@ -84,7 +84,7 @@ BuildingBlock* DataModel::addBuildingBlock()
 
 void DataModel::changed()
 {
-    emit dbChanged();
+    emit modelChanged();
 }
 
 void DataModel::save(const QString& path) const

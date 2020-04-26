@@ -6,7 +6,7 @@ ProjectListModel::ProjectListModel(QObject* parent, DataModel* model)
     , m_model(model)
 {
     qDebug() << "ProjectListModel::ProjectListModel()";
-    connect(model, SIGNAL(dbChanged()), this, SLOT(update()));
+    connect(model, SIGNAL(modelChanged()), this, SLOT(update()));
     beginResetModel();
     endResetModel();
 }

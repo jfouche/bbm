@@ -64,21 +64,21 @@ class DataModel : public QObject
 public:
     explicit DataModel(QObject *parent = nullptr);
 
-    typedef const_view<QVector<Project*>, Project*> ProjectsConstView;
-    typedef view<QVector<Project*>, Project*> ProjectsView;
+    typedef QVector<Project*> Projects;
+    typedef QVector<BuildingBlock*> BuildingBlocks;
 
-    typedef const_view<QVector<BuildingBlock*>, BuildingBlock*> BuildingBlocksConstView;
-    typedef view<QVector<BuildingBlock*>, BuildingBlock*> BuildingBlocksView;
+    typedef view<Projects, Project*> ProjectsView;
+    typedef view<BuildingBlocks, BuildingBlock*> BuildingBlocksView;
 
 
     Project* addProject();
     BuildingBlock* addBuildingBlock();
 
-    ProjectsConstView projects() const;
-    ProjectsView projects();
+    ProjectsView projects() const;
+    const Projects& projects();
 
-    BuildingBlocksConstView buildingBlocks() const;
-    BuildingBlocksView buildingBlocks();
+    BuildingBlocksView buildingBlocks() const;
+    const BuildingBlocks& buildingBlocks();
 
     void save(const QString& path) const;
     void load(const QString& path);
@@ -87,13 +87,13 @@ private slots:
     void changed();
 
 signals:
-    void dbChanged();
+    void modelChanged();
     void projectAdded(Project*);
     void buildingBlockAdded(BuildingBlock*);
 
 private:
-    QVector<Project*> m_projects;
-    QVector<BuildingBlock*> m_buildingblocks;
+    Projects m_projects;
+    BuildingBlocks m_buildingblocks;
 };
 
 #endif // DATABASE_H
