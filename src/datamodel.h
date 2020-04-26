@@ -2,7 +2,8 @@
 #define DATABASE_H
 
 #include <QObject>
-#include <QList>
+#include <QVector>
+#include "ctn_view.hpp"
 
 struct Project;
 struct BuildingBlock;
@@ -63,17 +64,21 @@ class DataModel : public QObject
 public:
     explicit DataModel(QObject *parent = nullptr);
 
+    typedef const_view<QVector<Project*>, Project*> ProjectsConstView;
+    typedef view<QVector<Project*>, Project*> ProjectsView;
+
+    typedef const_view<QVector<BuildingBlock*>, BuildingBlock*> BuildingBlocksConstView;
+    typedef view<QVector<BuildingBlock*>, BuildingBlock*> BuildingBlocksView;
+
+
     Project* addProject();
     BuildingBlock* addBuildingBlock();
 
-    int getProjectCount() const;
-    int getBuildingBlockCount() const;
+    ProjectsConstView projects() const;
+    ProjectsView projects();
 
-    const Project* getProject(int index) const;
-    Project* getProject(int index);
-
-    const BuildingBlock* getBuildingBlock(int index) const;
-    BuildingBlock* getBuildingBlock(int index);
+    BuildingBlocksConstView buildingBlocks() const;
+    BuildingBlocksView buildingBlocks();
 
     void save(const QString& path) const;
     void load(const QString& path);
@@ -87,8 +92,8 @@ signals:
     void buildingBlockAdded(BuildingBlock*);
 
 private:
-    QList<Project*> m_projects;
-    QList<BuildingBlock*> m_buildingblocks;
+    QVector<Project*> m_projects;
+    QVector<BuildingBlock*> m_buildingblocks;
 };
 
 #endif // DATABASE_H

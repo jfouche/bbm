@@ -13,14 +13,14 @@ ProjectListModel::ProjectListModel(QObject* parent, DataModel* model)
 
 Project* ProjectListModel::getProject(const QModelIndex &index)
 {
-    return m_model->getProject(index.row());
+    return m_model->projects().at(index.row());
 }
 
 int ProjectListModel::rowCount(const QModelIndex &parent) const
 {
     qDebug() << "ProjectListModel::rowCount()";
     Q_ASSERT(parent.parent().isValid() == false);
-    return m_model->getProjectCount();
+    return m_model->projects().size();
 }
 
 int ProjectListModel::columnCount(const QModelIndex& parent) const
@@ -31,7 +31,7 @@ int ProjectListModel::columnCount(const QModelIndex& parent) const
 
 QVariant ProjectListModel::data(const QModelIndex &index, int role) const
 {
-    const Project* project = m_model->getProject(index.row());
+    const Project* project = m_model->projects().at(index.row());
     Q_ASSERT(project != nullptr);
     qDebug() << "ProjectListModel::data(" << index.row() << ") : " << project->name();
     if (!index.isValid())

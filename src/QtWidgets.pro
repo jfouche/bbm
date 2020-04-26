@@ -28,6 +28,7 @@ SOURCES += \
 
 HEADERS += \
     buildingblocktreemodel.h \
+    ctn_view.hpp \
     datamodel.h \
     datamodel_file.h \
     dlg_bbmanager.h \

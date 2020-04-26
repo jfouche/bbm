@@ -44,6 +44,26 @@ DataModel::DataModel(QObject *parent)
 {
 }
 
+DataModel::ProjectsView DataModel::projects()
+{
+    return ProjectsView(m_projects);
+}
+
+DataModel::ProjectsConstView DataModel::projects() const
+{
+    return ProjectsConstView(m_projects);
+}
+
+DataModel::BuildingBlocksView DataModel::buildingBlocks()
+{
+    return BuildingBlocksView(m_buildingblocks);
+}
+
+DataModel::BuildingBlocksConstView DataModel::buildingBlocks() const
+{
+    return BuildingBlocksConstView(m_buildingblocks);
+}
+
 Project* DataModel::addProject()
 {
     auto project = new Project(this);
@@ -65,48 +85,6 @@ BuildingBlock* DataModel::addBuildingBlock()
 void DataModel::changed()
 {
     emit dbChanged();
-}
-
-int DataModel::getProjectCount() const
-{
-    return m_projects.size();
-}
-
-int DataModel::getBuildingBlockCount() const
-{
-    return m_buildingblocks.size();
-}
-
-const Project* DataModel::getProject(int index) const
-{
-    if (index > m_projects.size()) {
-        return nullptr;
-    }
-    return m_projects.at(index);
-}
-
-Project* DataModel::getProject(int index)
-{
-    if (index > m_projects.size()) {
-        return nullptr;
-    }
-    return m_projects.at(index);
-}
-
-const BuildingBlock* DataModel::getBuildingBlock(int index) const
-{
-    if (index > m_buildingblocks.size()) {
-        return nullptr;
-    }
-    return m_buildingblocks.at(index);
-}
-
-BuildingBlock* DataModel::getBuildingBlock(int index)
-{
-    if (index > m_buildingblocks.size()) {
-        return nullptr;
-    }
-    return m_buildingblocks.at(index);
 }
 
 void DataModel::save(const QString& path) const

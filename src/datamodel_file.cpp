@@ -39,9 +39,8 @@ static void write(const BuildingBlock& bb, QJsonObject& obj)
 void write(const DataModel& model, QJsonObject& obj)
 {
     QJsonArray projects;
-    for (int i = 0; i < model.getProjectCount(); ++i) {
+    for (const Project* project : model.projects()) {
         QJsonObject projectObj;
-        const Project* project = model.getProject(i);
         if (project) {
             write(*project, projectObj);
             projects.append(projectObj);
@@ -50,13 +49,10 @@ void write(const DataModel& model, QJsonObject& obj)
     obj["projects"] = projects;
 
     QJsonArray buildingblocks;
-    for (int i = 0; i < model.getBuildingBlockCount(); ++i) {
+    for (const BuildingBlock* bb : model.buildingBlocks()) {
         QJsonObject bbObj;
-        const BuildingBlock* bb = model.getBuildingBlock(i);
-        if (bb) {
-            write(*bb, bbObj);
-            projects.append(bbObj);
-        }
+        write(*bb, bbObj);
+        projects.append(bbObj);
     }
     obj["buildingblocks"] = projects;
 }

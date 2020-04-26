@@ -84,7 +84,7 @@ void MainWindow::showBuildingBlockPage()
 
 void MainWindow::showBuildingBlockManager()
 {
-    BuildingBlockMgrDlg dlg(this);
+    BuildingBlockMgrDlg dlg(m_datamodel, this);
     dlg.exec();
 }
 

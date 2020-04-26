@@ -24,7 +24,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QListWidget" name="listAllBuildingBlocks"/>
+      <widget class="QListView" name="listAllBuildingBlocks"/>
      </item>
     </layout>
    </item>
@@ -52,7 +52,7 @@
       <widget class="QComboBox" name="comboBox"/>
      </item>
      <item>
-      <widget class="QListWidget" name="listBuildingBlocksChildren"/>
+      <widget class="QListView" name="listBuildingBlocksChildren"/>
      </item>
     </layout>
    </item>

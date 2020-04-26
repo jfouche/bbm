@@ -18,8 +18,7 @@ TreeItem::TreeItem(DataModel* model, BuildingBlockTreeModel* treeModel)
 {
     //connect(model, SIGNAL(buildingBlockAdded(BuildingBlock*)), m_treeModel, SLOT(bbAdded(BuildingBlock*)));
     connect(model, SIGNAL(buildingBlockAdded(BuildingBlock*)), this, SLOT(bbAdded(BuildingBlock*)));
-    for (int i = 0; i < model->getBuildingBlockCount(); ++i) {
-        BuildingBlock* bb = model->getBuildingBlock(i);
+    for (BuildingBlock* bb : model->buildingBlocks()) {
         appendChild(new TreeItem(bb, this, m_treeModel));
     }
 }
