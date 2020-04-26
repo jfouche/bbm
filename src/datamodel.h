@@ -67,8 +67,8 @@ public:
     typedef QVector<Project*> Projects;
     typedef QVector<BuildingBlock*> BuildingBlocks;
 
-    typedef view<Projects, Project*> ProjectsView;
-    typedef view<BuildingBlocks, BuildingBlock*> BuildingBlocksView;
+    typedef view<Projects> ProjectsView;
+    typedef view<BuildingBlocks> BuildingBlocksView;
 
 
     Project* addProject();

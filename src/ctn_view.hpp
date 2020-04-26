@@ -1,7 +1,7 @@
 #ifndef CTN_VIEW_HPP
 #define CTN_VIEW_HPP
 
-template<class C, class T = typename C::Data>
+template<class C, class T = typename C::value_type>
 class view
 {
 public:
