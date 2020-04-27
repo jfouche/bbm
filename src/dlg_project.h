@@ -1,9 +1,8 @@
 #ifndef ADDPROJECTDLG_H
 #define ADDPROJECTDLG_H
 
-#include "datamodel.h"
-
 #include <QDialog>
+#include "datamodel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ProjectDlg; }

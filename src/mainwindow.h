@@ -2,9 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "datamodel.h"
-#include "projectlistmodel.h"
-#include "buildingblocktreemodel.h"
+
+class DataModel;
+class ProjectListModel;
+class BuildingBlockTreeModel;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

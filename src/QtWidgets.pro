@@ -16,7 +16,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    buildingblocktreemodel.cpp \
     datamodel.cpp \
     datamodel_file.cpp \
     dlg_bbmanager.cpp \
@@ -24,10 +23,11 @@ SOURCES += \
     dlg_project.cpp \
     main.cpp \
     mainwindow.cpp \
-    projectlistmodel.cpp
+    model_bblist.cpp \
+    model_bbtree.cpp \
+    model_projectlist.cpp
 
 HEADERS += \
-    buildingblocktreemodel.h \
     datamodel.h \
     datamodel_file.h \
     dlg_bbmanager.h \
@@ -35,7 +35,9 @@ HEADERS += \
     dlg_project.h \
     json_utils.hpp \
     mainwindow.h \
-    projectlistmodel.h
+    model_bblist.h \
+    model_bbtree.h \
+    model_projectlist.h
 
 FORMS += \
     dlg_bbmanager.ui \

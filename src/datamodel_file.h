@@ -3,7 +3,6 @@
 
 #include "datamodel.h"
 
-
 void read(DataModel& data, const QJsonObject& jsonObj);
 
 void write(const DataModel& model, QJsonObject& obj);

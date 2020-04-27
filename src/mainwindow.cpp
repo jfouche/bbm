@@ -3,6 +3,9 @@
 #include "dlg_project.h"
 #include "dlg_buildingblock.h"
 #include "dlg_bbmanager.h"
+#include "datamodel.h"
+#include "model_projectlist.h"
+#include "model_bbtree.h"
 #include <QDebug>
 #include <QFileDialog>
 

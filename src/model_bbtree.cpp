@@ -1,4 +1,4 @@
-#include "buildingblocktreemodel.h"
+#include "model_bbtree.h"
 #include "datamodel.h"
 #include <QDebug>
 
@@ -7,9 +7,6 @@ enum Columns {
     COL_NAME,
     COL_COUNT
 };
-
-
-
 
 
 TreeItem::TreeItem(DataModel* model, BuildingBlockTreeModel* treeModel)

@@ -2,12 +2,12 @@
 #define PROJECTLISTMODEL_H
 
 #include <QAbstractListModel>
-#include "datamodel.h"
+
+class DataModel;
+class Project;
 
 class ProjectListModel : public QAbstractListModel
 {
-    DataModel* m_model;
-
     Q_OBJECT
 
 public:
@@ -21,6 +21,9 @@ public:
 
 private slots:
     void update();
+
+private:
+    DataModel* m_model;
 };
 
 #endif // PROJECTLISTMODEL_H

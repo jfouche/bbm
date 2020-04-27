@@ -1,4 +1,5 @@
-#include "projectlistmodel.h"
+#include "model_projectlist.h"
+#include "datamodel.h"
 
 ProjectListModel::ProjectListModel(QObject* parent, DataModel* model)
     : QAbstractListModel(parent)
