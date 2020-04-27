@@ -20,7 +20,7 @@ public:
 
 private:
     Ui::BuildingBlockMgrDlg *ui;
-    DataModel* m_datamodel;
+    DataModel* m_model;
     BuildingBlockListModel* m_listBbModel;
 };
 

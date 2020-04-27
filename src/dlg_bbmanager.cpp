@@ -4,16 +4,16 @@
 #include "model_bblist.h"
 
 
-BuildingBlockMgrDlg::BuildingBlockMgrDlg(DataModel* datamodel, QWidget *parent)
+BuildingBlockMgrDlg::BuildingBlockMgrDlg(DataModel* model, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::BuildingBlockMgrDlg)
-    , m_datamodel(datamodel)
+    , m_model(model)
 {
     ui->setupUi(this);
 
-    m_listBbModel = new BuildingBlockListModel(m_datamodel, this);
-    ui->listAllBuildingBlocks->setModel(m_listBbModel);
-    //ui->comboBox->setModel(m_listBbModel);
+    m_listBbModel = new BuildingBlockListModel(m_model, this);
+    ui->listBuildingBlocksChildren->setModel(m_listBbModel);
+    ui->comboBuildingBlocks->setModel(m_listBbModel);
 }
 
 BuildingBlockMgrDlg::~BuildingBlockMgrDlg()

@@ -6,6 +6,11 @@ ProjectListModel::ProjectListModel(QObject* parent, DataModel* model)
     , m_model(model)
 {
     connect(model, SIGNAL(modelChanged()), this, SLOT(update()));
+    update();
+}
+
+void ProjectListModel::update()
+{
     beginResetModel();
     endResetModel();
 }
@@ -29,11 +34,9 @@ int ProjectListModel::columnCount(const QModelIndex& parent) const
 
 QVariant ProjectListModel::data(const QModelIndex &index, int role) const
 {
-    const Project* project = m_model->projects().at(index.row());
-    Q_ASSERT(project != nullptr);
-    if (!index.isValid())
-        return QVariant();
-    if (role == Qt::DisplayRole) {
+    if (index.isValid() && (role == Qt::DisplayRole)) {
+        const Project* project = m_model->projects().at(index.row());
+        Q_ASSERT(project != nullptr);
         switch (index.column()) {
         case 0:
             return project->name();
@@ -44,8 +47,3 @@ QVariant ProjectListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-void ProjectListModel::update()
-{
-    beginResetModel();
-    endResetModel();
-}

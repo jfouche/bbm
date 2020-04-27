@@ -3,11 +3,10 @@
 
 BuildingBlockListModel::BuildingBlockListModel(DataModel* datamodel, QObject* parent)
     : QAbstractListModel(parent)
-    , m_datamodel(datamodel)
+    , m_model(datamodel)
 {
-    connect(m_datamodel, SIGNAL(buildingBlockAdded(BuildingBlock*)), this, SLOT(update()));
-    beginResetModel();
-    endResetModel();
+    connect(m_model, SIGNAL(buildingBlockAdded(BuildingBlock*)), this, SLOT(update()));
+    update();
 }
 
 void BuildingBlockListModel::update()
@@ -16,17 +15,37 @@ void BuildingBlockListModel::update()
     endResetModel();
 }
 
+BuildingBlock* BuildingBlockListModel::getBuildingBlock(const QModelIndex &index)
+{
+    return m_model->buildingBlocks().at(index.row());
+}
+
 int BuildingBlockListModel::rowCount(const QModelIndex &parent) const
 {
+    Q_ASSERT(parent.parent().isValid() == false);
+    return m_model->buildingBlocks().size();
+}
+
+int BuildingBlockListModel::columnCount(const QModelIndex& parent) const
+{
     Q_UNUSED(parent)
-//    qDebug() << "BuildingBlockListModel::rowCount() => " << m_datamodel->buildingBlocks().size();;
-    return m_datamodel->buildingBlocks().size();
+    return 1;
 }
 
 QVariant BuildingBlockListModel::data(const QModelIndex &index, int role) const
 {
-    Q_UNUSED(role)
-    auto bb = m_datamodel->buildingBlocks().at(index.row());
-//    qDebug() << "BuildingBlockListModel::data(" << index.row() << ") => " << QString("%1 (%2)").arg(bb->name(), bb->ref());
-    return QString("%1 (%2)").arg(bb->name(), bb->ref());
+    if (index.isValid() && (role == Qt::DisplayRole)) {
+        auto bb = m_model->buildingBlocks().at(index.row());
+        return QString("%1 (%2)").arg(bb->name(), bb->ref());
+    }
+    return QVariant();
+}
+
+Qt::ItemFlags BuildingBlockListModel::flags(const QModelIndex &index) const
+{
+    auto flags = QAbstractListModel::flags(index);
+    if (index.isValid()){
+        flags |= Qt::ItemIsUserCheckable;
+    }
+    return flags;
 }

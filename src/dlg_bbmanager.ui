@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>470</width>
+    <width>648</width>
     <height>546</height>
    </rect>
   </property>
@@ -17,39 +17,38 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>All building blocks</string>
+      <widget class="QComboBox" name="comboBuildingBlocks">
+       <property name="editable">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QListView" name="listAllBuildingBlocks"/>
+      <widget class="QTreeView" name="treeCurrentBb"/>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string>&gt;&gt;</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="text">
-        <string>&lt;&lt;</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
-      <widget class="QComboBox" name="comboBox"/>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>contains those BB</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QListView" name="listBuildingBlocksChildren"/>
