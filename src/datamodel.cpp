@@ -44,24 +44,15 @@ DataModel::DataModel(QObject *parent)
 {
 }
 
-const QVector<Project*>& DataModel::projects()
+
+const QVector<Project*>& DataModel::projects() const
 {
     return m_projects;
 }
 
-DataModel::ProjectsView DataModel::projects() const
-{
-    return ProjectsView(m_projects);
-}
-
-const QVector<BuildingBlock*>& DataModel::buildingBlocks()
+const QVector<BuildingBlock*>& DataModel::buildingBlocks() const
 {
     return m_buildingblocks;
-}
-
-DataModel::BuildingBlocksView DataModel::buildingBlocks() const
-{
-    return BuildingBlocksView(m_buildingblocks);
 }
 
 Project* DataModel::addProject()

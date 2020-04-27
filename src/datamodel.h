@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QVector>
-#include "ctn_view.hpp"
 
 struct Project;
 struct BuildingBlock;
@@ -67,18 +66,11 @@ public:
     typedef QVector<Project*> Projects;
     typedef QVector<BuildingBlock*> BuildingBlocks;
 
-    typedef view<Projects> ProjectsView;
-    typedef view<BuildingBlocks> BuildingBlocksView;
-
-
     Project* addProject();
     BuildingBlock* addBuildingBlock();
 
-    ProjectsView projects() const;
-    const Projects& projects();
-
-    BuildingBlocksView buildingBlocks() const;
-    const BuildingBlocks& buildingBlocks();
+    const Projects& projects() const;
+    const BuildingBlocks& buildingBlocks() const;
 
     void save(const QString& path) const;
     void load(const QString& path);
