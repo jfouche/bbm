@@ -34,7 +34,7 @@ int BuildingBlockListModel::columnCount(const QModelIndex& parent) const
 
 QVariant BuildingBlockListModel::data(const QModelIndex &index, int role) const
 {
-    if (index.isValid() && (role == Qt::DisplayRole)) {
+    if (index.isValid() && (role == Qt::DisplayRole || role == Qt::EditRole)) {
         auto bb = m_model->buildingBlocks().at(index.row());
         return QString("%1 (%2)").arg(bb->name(), bb->ref());
     }

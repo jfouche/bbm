@@ -21,6 +21,12 @@
        <property name="editable">
         <bool>true</bool>
        </property>
+       <property name="insertPolicy">
+        <enum>QComboBox::InsertAtCurrent</enum>
+       </property>
+       <property name="duplicatesEnabled">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -59,4 +65,7 @@
  </widget>
  <resources/>
  <connections/>
+ <slots>
+  <slot>updateFilteredBuildingBlocks(QString)</slot>
+ </slots>
 </ui>
