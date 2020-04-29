@@ -31,11 +31,11 @@ public:
     const char* what() const noexcept override { return m_what.c_str(); }
 };
 
-struct json_pair {
+struct key_value {
     const QString field;
     const QJsonValue value;
 
-    json_pair(const QString& _field, const QJsonValue& _value)
+    key_value(const QString& _field, const QJsonValue& _value)
         : field(_field)
         , value(_value)
     {}
@@ -43,18 +43,24 @@ struct json_pair {
     const QJsonValue& operator()() { return value; }
 };
 
-json_pair check_exists(const QJsonObject& jsonObj, const QString& field)
+key_value get(const QJsonObject& jsonObj, const QString& field)
 {
     if (!jsonObj.contains(field))
         throw new missing_field_exception(field);
-    return json_pair(field, jsonObj[field]);
+    return key_value(field, jsonObj[field]);
 }
 
 template<class T>
-T check_type(json_pair pair);
+T as(const key_value& pair);
+
+template<class T>
+T as(const QJsonObject& jsonObj, const QString& field)
+{
+    return json::as<T>(json::get(jsonObj, field));
+}
 
 template<>
-QString check_type(json_pair pair)
+QString as(const key_value& pair)
 {
     if (!pair.value.isString()) {
         throw new invalid_type_exception(pair.field);
@@ -63,7 +69,7 @@ QString check_type(json_pair pair)
 }
 
 template<>
-QJsonArray check_type(json_pair pair)
+QJsonArray as(const key_value& pair)
 {
     if (!pair.value.isArray()) {
         throw new invalid_type_exception(pair.field);
@@ -72,7 +78,7 @@ QJsonArray check_type(json_pair pair)
 }
 
 template<>
-QJsonObject check_type(json_pair pair)
+QJsonObject as(const key_value& pair)
 {
     if (!pair.value.isObject()) {
         throw new invalid_type_exception(pair.field);
@@ -80,15 +86,6 @@ QJsonObject check_type(json_pair pair)
     return pair.value.toObject();
 }
 
-template<class T>
-T read(const QJsonObject& jsonObj, const QString& field);
-
-QString read(const QJsonObject& jsonObj, const QString& field)
-{
-    auto value = check_exists(jsonObj, field);
-    return check_type<QString>(value);
-}
-
-}
+} // namespace json
 
 #endif // JSON_UTILS_HPP
