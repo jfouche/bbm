@@ -86,6 +86,15 @@ QJsonObject as(const key_value& pair)
     return pair.value.toObject();
 }
 
+template<>
+int as(const key_value& pair)
+{
+    if (!pair.value.isDouble()) {
+        throw new invalid_type_exception(pair.field);
+    }
+    return pair.value.toInt();
+}
+
 } // namespace json
 
 #endif // JSON_UTILS_HPP

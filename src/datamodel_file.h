@@ -2,6 +2,7 @@
 #define DATAMODELFILE_H
 
 #include "datamodel.h"
+#include <QJsonObject>
 
 void read(DataModel& data, const QJsonObject& jsonObj);
 
