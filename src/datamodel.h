@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVector>
+#include <QList>
 
 struct Project;
 struct BuildingBlock;
@@ -43,6 +44,11 @@ public:
     const QString& ref() const { return m_ref; }
     void setRef(const QString& ref);
 
+    void add(BuildingBlock* bb);
+    void remove(BuildingBlock* bb);
+    const QList<BuildingBlock*>& children();
+    const QList<BuildingBlock*>& children() const;
+
 signals:
     void changed();
 
@@ -50,7 +56,7 @@ private:
     QString m_name;
     QString m_ref;
     QString m_info;
-    //QList<BuildingBlock const * const> children;
+    QList<BuildingBlock*> m_children;
 };
 
 /**

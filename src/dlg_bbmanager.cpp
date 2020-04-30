@@ -52,15 +52,20 @@ QVariant BuildingBlocksCompleterModel::data(const QModelIndex &index, int role) 
 
 // ===========================================================================
 
-AvailableBuildingBlockChildrenModel::AvailableBuildingBlockChildrenModel(DataModel* datamodel, QObject* parent)
+AvailableBuildingBlockChildrenModel::AvailableBuildingBlockChildrenModel(BuildingBlockListModel* model, QObject* parent)
     : QSortFilterProxyModel(parent)
-    , m_model(new BuildingBlockListModel(datamodel, this))
+    , m_model(model)
     , m_parentBB(nullptr)
 {
     setSourceModel(m_model);
 }
 
-void AvailableBuildingBlockChildrenModel::setParentBuildingBlock(const BuildingBlock* parentBb)
+AvailableBuildingBlockChildrenModel::AvailableBuildingBlockChildrenModel(DataModel* datamodel, QObject* parent)
+    : AvailableBuildingBlockChildrenModel(new BuildingBlockListModel(datamodel, this), parent)
+{
+}
+
+void AvailableBuildingBlockChildrenModel::setParentBuildingBlock(BuildingBlock* parentBb)
 {
     beginResetModel();
     m_parentBB = parentBb;
@@ -69,53 +74,60 @@ void AvailableBuildingBlockChildrenModel::setParentBuildingBlock(const BuildingB
 
 bool AvailableBuildingBlockChildrenModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    if (m_model->getBuildingBlock(sourceParent) == m_parentBB)
+    Q_UNUSED(sourceParent)
+    if (m_model->getBuildingBlock(createIndex(sourceRow, 0)) == m_parentBB)
         return false;
     return true;
 }
 
 Qt::ItemFlags AvailableBuildingBlockChildrenModel::flags(const QModelIndex &index) const
 {
-    if (!index.isValid()) {
-        return Qt::NoItemFlags;
-    }
     auto flags = QSortFilterProxyModel::flags(index);
-    flags |= Qt::ItemIsUserCheckable;
+    if (index.isValid()) {
+        flags |= Qt::ItemIsUserCheckable;
+    }
     return flags;
 }
 
-// ===========================================================================
-
-BuildingBlocksFilterModel::BuildingBlocksFilterModel(QObject* parent)
-    : QSortFilterProxyModel(parent)
+QVariant AvailableBuildingBlockChildrenModel::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid())
+        return QVariant();
+
+    auto srcIndex = mapToSource(index);
+    auto childBb = m_model->getBuildingBlock(srcIndex);
+
+    if(role == Qt::CheckStateRole) {
+        qDebug() << "data - " << m_parentBB->name() << " > " << childBb->name() << " : " << m_parentBB->children().contains(childBb);
+        if (m_parentBB->children().contains(childBb)) {
+            return Qt::Checked;
+        }
+        else {
+            return Qt::Unchecked;
+        }
+    }
+
+    return QSortFilterProxyModel::data(index, role);
 }
 
-bool BuildingBlocksFilterModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool AvailableBuildingBlockChildrenModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    bool ret = QSortFilterProxyModel::setData(index, value);
-    return ret;
-}
+    if(!index.isValid() || role != Qt::CheckStateRole)
+            return false;
 
-bool BuildingBlocksFilterModel::setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles)
-{
-    bool ret = QSortFilterProxyModel::setItemData(index, roles);
-    return ret;
-}
+    auto srcIndex = mapToSource(index);
+    auto childBb = m_model->getBuildingBlock(srcIndex);
 
-void BuildingBlocksFilterModel::filter(const QString& filter)
-{
-    beginResetModel();
-    m_filter = filter;
-    endResetModel();
-}
-
-bool BuildingBlocksFilterModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
-{
-    if (m_filter.isEmpty()) return true;
-    auto srcModel = sourceModel();
-    auto idx = srcModel->index(source_row, 0, source_parent);
-    return srcModel->data(idx).toString().contains(m_filter);
+    if(value == Qt::Checked) {
+        qDebug() << m_parentBB->name() << " add " << childBb->name();
+        m_parentBB->add(childBb);
+    }
+    else {
+        qDebug() << m_parentBB->name() << " remove " << childBb->name();
+        m_parentBB->remove(childBb);
+    }
+    emit dataChanged(index, index);
+    return true;
 }
 
 // ===========================================================================
@@ -127,14 +139,23 @@ BuildingBlockMgrDlg::BuildingBlockMgrDlg(DataModel* model, QWidget *parent)
 {
     ui->setupUi(this);
 
-    m_listBbModel = new BuildingBlockListModel(m_model, this);
-    ui->listBuildingBlocksChildren->setModel(m_listBbModel);
-
+    // MODELS
+    m_BbListModel = new BuildingBlockListModel(m_model, this);
+    m_childrenBbModel = new AvailableBuildingBlockChildrenModel(m_BbListModel, this);
     m_BbCompleterModel = new BuildingBlocksCompleterModel(m_model, this);
+
+    // WIDGETS
+    ui->listBuildingBlocksChildren->setModel(m_childrenBbModel);
+
     QCompleter* completer = new QCompleter(m_BbCompleterModel);
     completer->setFilterMode(Qt::MatchContains);
-    ui->comboBuildingBlocks->setModel(m_listBbModel);
+    ui->comboBuildingBlocks->setModel(m_BbListModel);
     ui->comboBuildingBlocks->setCompleter(completer);
+
+    // SIGNALS
+    connect(ui->comboBuildingBlocks, SIGNAL(activated(int)), this, SLOT(updateBuildingBlockChildren()));
+
+    updateBuildingBlockChildren();
 }
 
 BuildingBlockMgrDlg::~BuildingBlockMgrDlg()
@@ -144,4 +165,9 @@ BuildingBlockMgrDlg::~BuildingBlockMgrDlg()
 
 void BuildingBlockMgrDlg::updateBuildingBlockChildren()
 {
+
+    int i = ui->comboBuildingBlocks->currentIndex();
+    QModelIndex idx = m_BbListModel->index(i, 0);
+    auto bb = m_BbListModel->getBuildingBlock(idx);
+    m_childrenBbModel->setParentBuildingBlock(bb);
 }

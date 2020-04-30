@@ -37,6 +37,34 @@ void BuildingBlock::setRef(const QString &ref)
     emit changed();
 }
 
+void BuildingBlock::add(BuildingBlock *bb)
+{
+    int index = m_children.indexOf(bb);
+    if (index == -1) {
+        m_children.append(bb);
+        emit changed();
+    }
+}
+
+void BuildingBlock::remove(BuildingBlock* bb)
+{
+    int index = m_children.indexOf(bb);
+    if (index != -1) {
+        m_children.removeAt(index);
+        emit changed();
+    }
+}
+
+const QList<BuildingBlock *> &BuildingBlock::children()
+{
+    return m_children;
+}
+
+const QList<BuildingBlock *> &BuildingBlock::children() const
+{
+    return m_children;
+}
+
 
 // ===========================================================================
 DataModel::DataModel(QObject *parent)

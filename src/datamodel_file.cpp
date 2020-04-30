@@ -1,6 +1,6 @@
 #include "datamodel_file.h"
 #include "json_utils.hpp"
-#include <QHash>
+#include <map>
 
 
 static const char* KEY_PROJECT_ARRAY = "projects";
@@ -9,6 +9,8 @@ static const char* KEY_BB_ARRAY = "building_blocks";
 static const char* KEY_BB_NAME = "name";
 static const char* KEY_BB_REF = "ref";
 static const char* KEY_BB_ID = "id";
+static const char* KEY_BB_CHILDREN = "children";
+
 
 struct projectIndexValue : public json::key_value
 {
@@ -38,7 +40,7 @@ private:
 
 private:
     const DataModel& m_model;
-    QHash<const BuildingBlock*, int> m_bbHash;
+    std::map<const BuildingBlock*, int> m_bbMap;
 };
 
 class JsonReader
@@ -54,7 +56,8 @@ private:
 
 private:
     DataModel& m_model;
-    QHash<int, BuildingBlock*> m_bbHash;
+    std::map<int, BuildingBlock*> m_bbHash;
+    std::map<BuildingBlock*, std::vector<int>> m_bbChildren;
 };
 
 JsonReader::JsonReader(DataModel& model)
@@ -74,6 +77,9 @@ void JsonReader::read(BuildingBlock* bb, const QJsonObject& jsonObj)
     bb->setRef(json::as<QString>(jsonObj, KEY_BB_REF));
     int id = json::as<int>(jsonObj, KEY_BB_ID);
     m_bbHash[id] = bb;
+    for (auto value : json::as<QJsonArray>(jsonObj, KEY_BB_CHILDREN)) {
+        m_bbChildren[bb].push_back(json::as<int>(value));
+    }
 }
 
 void JsonReader::read(const QJsonObject& jsonObj)
@@ -86,17 +92,23 @@ void JsonReader::read(const QJsonObject& jsonObj)
     }
 
     // read BB
-    QHash<int, BuildingBlock*> bbIds;
     for (auto value : json::as<QJsonArray>(jsonObj, KEY_BB_ARRAY)) {
         QJsonObject bbObj = json::as<QJsonObject>(bbIndexValue(value));
         auto bb = m_model.addBuildingBlock();
         read(bb, bbObj);
-        int id = json::as<int>(bbObj, KEY_BB_ID);
-        bbIds[id] = bb;
     }
 
     // link BB children to BB
-    /// TODO
+    for (const auto& kv: m_bbChildren) {
+        BuildingBlock* bb = kv.first;
+        for (int id : kv.second) {
+            auto it = m_bbHash.find(id);
+            if (it->first) {
+                bb->add(it->second);
+            }
+        }
+    }
+
     // link BB children to projects
     /// TODO
 }
@@ -106,7 +118,7 @@ JsonWriter::JsonWriter(const DataModel& model)
 {
     int id = 1;
     for (const BuildingBlock* bb : m_model.buildingBlocks()) {
-        m_bbHash[bb] = id++;
+        m_bbMap[bb] = id++;
     }
 }
 
@@ -119,7 +131,16 @@ void JsonWriter::write(const BuildingBlock* bb, QJsonObject& obj) const
 {
     obj[KEY_BB_NAME] = bb->name();
     obj[KEY_BB_REF] = bb->ref();
-    obj[KEY_BB_ID] = m_bbHash.value(bb);
+    obj[KEY_BB_ID] = m_bbMap.at(bb);
+
+    QJsonArray children;
+    for (const BuildingBlock* childBb : bb->children()) {
+        auto it = m_bbMap.find(childBb);
+        if (it->first) {
+            children.append( QJsonValue(it->second));
+        }
+    }
+    obj[KEY_BB_CHILDREN] = children;
 }
 
 void JsonWriter::write(QJsonObject& jsonObj) const

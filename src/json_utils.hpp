@@ -51,6 +51,27 @@ key_value get(const QJsonObject& jsonObj, const QString& field)
 }
 
 template<class T>
+T as(const QJsonValue& value);
+
+template<>
+QString as(const QJsonValue& value)
+{
+    if (!value.isString()) {
+        throw new invalid_type_exception("string");
+    }
+    return value.toString();
+}
+
+template<>
+int as(const QJsonValue& value)
+{
+    if (!value.isDouble()) {
+        throw new invalid_type_exception("int");
+    }
+    return value.toInt();
+}
+
+template<class T>
 T as(const key_value& pair);
 
 template<class T>
@@ -65,7 +86,7 @@ QString as(const key_value& pair)
     if (!pair.value.isString()) {
         throw new invalid_type_exception(pair.field);
     }
-    return pair.value.toString();
+    return as<QString>(pair.value);
 }
 
 template<>

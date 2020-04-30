@@ -37,35 +37,19 @@ class AvailableBuildingBlockChildrenModel : public QSortFilterProxyModel
     Q_OBJECT
 
 public:
+    explicit AvailableBuildingBlockChildrenModel(BuildingBlockListModel* model, QObject* parent);
     explicit AvailableBuildingBlockChildrenModel(DataModel* datamodel, QObject* parent);
 
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
-    void setParentBuildingBlock(const BuildingBlock* parentBb);
+    void setParentBuildingBlock(BuildingBlock* parentBb);
 
 private:
     BuildingBlockListModel* m_model;
-    const BuildingBlock* m_parentBB;
-};
-
-class BuildingBlocksFilterModel : public QSortFilterProxyModel
-{
-    Q_OBJECT
-
-public:
-    BuildingBlocksFilterModel(QObject* parent);
-
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
-    bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles) override;
-
-    void filter(const QString& filter);
-
-protected:
-    virtual bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
-
-private:
-    QString m_filter;
+    BuildingBlock* m_parentBB;
 };
 
 class BuildingBlockMgrDlg : public QDialog
@@ -82,7 +66,8 @@ public slots:
 private:
     Ui::BuildingBlockMgrDlg *ui;
     DataModel* m_model;
-    BuildingBlockListModel* m_listBbModel;
+    AvailableBuildingBlockChildrenModel* m_childrenBbModel;
+    BuildingBlockListModel* m_BbListModel;
     BuildingBlocksCompleterModel* m_BbCompleterModel;
 };
 
