@@ -7,6 +7,7 @@
 class DataModel;
 class BuildingBlock;
 class BuildingBlockListModel;
+class BuildingBlockTreeModel;
 
 namespace Ui {
 class BuildingBlockMgrDlg;
@@ -69,6 +70,7 @@ private:
     AvailableBuildingBlockChildrenModel* m_childrenBbModel;
     BuildingBlockListModel* m_BbListModel;
     BuildingBlocksCompleterModel* m_BbCompleterModel;
+    BuildingBlockTreeModel* m_currentBbTreeModel;
 };
 
 #endif // DLG_BBMANAGER_H

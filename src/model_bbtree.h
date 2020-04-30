@@ -25,10 +25,11 @@ public:
     TreeItem *parentItem();
 
 private slots:
-    void bbAdded(BuildingBlock* bb);
+    void add(BuildingBlock* bb);
+    void remove(BuildingBlock* bb);
 
 private:
-    QVector<TreeItem*> m_children;
+    QList<TreeItem*> m_children;
     TreeItem *m_parent;
     BuildingBlockTreeModel* m_treeModel;
     BuildingBlock* m_bb;

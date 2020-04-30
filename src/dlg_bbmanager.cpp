@@ -2,6 +2,7 @@
 #include "ui_dlg_bbmanager.h"
 #include "datamodel.h"
 #include "model_bblist.h"
+#include "model_bbtree.h"
 
 #include <QCompleter>
 
@@ -143,18 +144,22 @@ BuildingBlockMgrDlg::BuildingBlockMgrDlg(DataModel* model, QWidget *parent)
     m_BbListModel = new BuildingBlockListModel(m_model, this);
     m_childrenBbModel = new AvailableBuildingBlockChildrenModel(m_BbListModel, this);
     m_BbCompleterModel = new BuildingBlocksCompleterModel(m_model, this);
+    m_currentBbTreeModel = new BuildingBlockTreeModel(m_model, this);
 
-    // WIDGETS
-    ui->listBuildingBlocksChildren->setModel(m_childrenBbModel);
-
+    // WIDGETS config
     QCompleter* completer = new QCompleter(m_BbCompleterModel);
     completer->setFilterMode(Qt::MatchContains);
-    ui->comboBuildingBlocks->setModel(m_BbListModel);
     ui->comboBuildingBlocks->setCompleter(completer);
+
+    // UI models
+    ui->listBuildingBlocksChildren->setModel(m_childrenBbModel);
+    ui->treeCurrentBb->setModel(m_currentBbTreeModel);
+    ui->comboBuildingBlocks->setModel(m_BbListModel);
 
     // SIGNALS
     connect(ui->comboBuildingBlocks, SIGNAL(activated(int)), this, SLOT(updateBuildingBlockChildren()));
 
+    // INIT
     updateBuildingBlockChildren();
 }
 

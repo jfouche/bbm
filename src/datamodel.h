@@ -51,6 +51,8 @@ public:
 
 signals:
     void changed();
+    void childAdded(BuildingBlock* child);
+    void childRemoved(BuildingBlock* child);
 
 private:
     QString m_name;

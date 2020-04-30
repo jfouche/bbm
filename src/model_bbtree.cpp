@@ -13,8 +13,7 @@ TreeItem::TreeItem(DataModel* model, BuildingBlockTreeModel* treeModel)
     : m_parent(nullptr)
     , m_treeModel(treeModel)
 {
-    //connect(model, SIGNAL(buildingBlockAdded(BuildingBlock*)), m_treeModel, SLOT(bbAdded(BuildingBlock*)));
-    connect(model, SIGNAL(buildingBlockAdded(BuildingBlock*)), this, SLOT(bbAdded(BuildingBlock*)));
+    connect(model, SIGNAL(buildingBlockAdded(BuildingBlock*)), this, SLOT(add(BuildingBlock*)));
     for (BuildingBlock* bb : model->buildingBlocks()) {
         appendChild(new TreeItem(bb, this, m_treeModel));
     }
@@ -25,6 +24,8 @@ TreeItem::TreeItem(BuildingBlock* bb, TreeItem* parent, BuildingBlockTreeModel* 
     , m_treeModel(treeModel)
     , m_bb(bb)
 {
+    connect(bb, SIGNAL(childAdded(BuildingBlock*)), this, SLOT(add(BuildingBlock*)));
+    connect(bb, SIGNAL(childRemoved(BuildingBlock*)), this, SLOT(removeBuildingBlockChild(BuildingBlock*)));
 }
 
 TreeItem::~TreeItem()
@@ -32,10 +33,22 @@ TreeItem::~TreeItem()
     qDeleteAll(m_children);
 }
 
-void TreeItem::bbAdded(BuildingBlock* bb)
+void TreeItem::add(BuildingBlock* bb)
 {
     m_treeModel->beginResetModel();
     appendChild(new TreeItem(bb, this, m_treeModel));
+    m_treeModel->endResetModel();
+}
+
+void TreeItem::remove(BuildingBlock* bb)
+{
+    m_treeModel->beginResetModel();
+    for (auto it = m_children.begin(); it != m_children.end(); ++it) {
+        TreeItem* item = *it;
+        if (item->m_bb == bb) {
+            it = m_children.erase(it);
+        }
+    }
     m_treeModel->endResetModel();
 }
 
