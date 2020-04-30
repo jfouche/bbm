@@ -52,74 +52,35 @@ QVariant BuildingBlocksCompleterModel::data(const QModelIndex &index, int role) 
 
 // ===========================================================================
 
-EditableBuildingBlocksModel::EditableBuildingBlocksModel(DataModel* datamodel, QObject* parent)
-    : QAbstractListModel(parent)
-    , m_model(datamodel)
+AvailableBuildingBlockChildrenModel::AvailableBuildingBlockChildrenModel(DataModel* datamodel, QObject* parent)
+    : QSortFilterProxyModel(parent)
+    , m_model(new BuildingBlockListModel(datamodel, this))
+    , m_parentBB(nullptr)
 {
+    setSourceModel(m_model);
 }
 
-bool EditableBuildingBlocksModel::setData(const QModelIndex &index, const QVariant &value, int role)
+void AvailableBuildingBlockChildrenModel::setParentBuildingBlock(const BuildingBlock* parentBb)
 {
-    qDebug() << "EditableBuildingBlocksModel::setData(idx, " << value << ")";
-    bool ret = QAbstractListModel::setData(index, value, role);
-    return ret;
-}
-
-bool EditableBuildingBlocksModel::setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles)
-{
-    qDebug() << "EditableBuildingBlocksModel::setItemData(idx, ...)";
-    bool ret = QAbstractListModel::setItemData(index, roles);
-    return ret;
-}
-
-void EditableBuildingBlocksModel::filter(const QString& filter)
-{
-    qDebug() << "EditableBuildingBlocksModel::filter(" << filter << ")";
     beginResetModel();
-    m_filter = filter;
+    m_parentBB = parentBb;
     endResetModel();
 }
 
-const QString& EditableBuildingBlocksModel::filter() const
+bool AvailableBuildingBlockChildrenModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    return m_filter;
+    if (m_model->getBuildingBlock(sourceParent) == m_parentBB)
+        return false;
+    return true;
 }
 
-int EditableBuildingBlocksModel::rowCount(const QModelIndex &parent) const
-{
-    Q_ASSERT(parent.parent().isValid() == false);
-    return m_model->buildingBlocks().size() + 1;
-}
-
-int EditableBuildingBlocksModel::columnCount(const QModelIndex& parent) const
-{
-    Q_UNUSED(parent)
-    return 1;
-}
-
-QVariant EditableBuildingBlocksModel::data(const QModelIndex &index, int role) const
-{
-    if (index.isValid() && (role == Qt::DisplayRole || role == Qt::EditRole)) {
-        if (index.row() == 0) {
-            return m_filter;
-        }
-        else {
-            auto bb = m_model->buildingBlocks().at(index.row() - 1);
-            return QString("%1 (%2)").arg(bb->name(), bb->ref());
-        }
-    }
-    return QVariant();
-}
-
-Qt::ItemFlags EditableBuildingBlocksModel::flags(const QModelIndex &index) const
+Qt::ItemFlags AvailableBuildingBlockChildrenModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid()) {
         return Qt::NoItemFlags;
     }
-    auto flags = QAbstractListModel::flags(index);
-    if (index.row() == 0){
-        flags |= Qt::ItemIsEditable;
-    }
+    auto flags = QSortFilterProxyModel::flags(index);
+    flags |= Qt::ItemIsUserCheckable;
     return flags;
 }
 
@@ -174,8 +135,6 @@ BuildingBlockMgrDlg::BuildingBlockMgrDlg(DataModel* model, QWidget *parent)
     completer->setFilterMode(Qt::MatchContains);
     ui->comboBuildingBlocks->setModel(m_listBbModel);
     ui->comboBuildingBlocks->setCompleter(completer);
-
-//    connect(ui->comboBuildingBlocks, SIGNAL(editTextChanged(QString)), this, SLOT(updateFilteredBuildingBlocks(QString)));
 }
 
 BuildingBlockMgrDlg::~BuildingBlockMgrDlg()
@@ -183,9 +142,6 @@ BuildingBlockMgrDlg::~BuildingBlockMgrDlg()
     delete ui;
 }
 
-void BuildingBlockMgrDlg::updateFilteredBuildingBlocks(const QString &filter)
+void BuildingBlockMgrDlg::updateBuildingBlockChildren()
 {
-//    m_proxyFilteredListBbModel->filter(filter);
-//    m_listBbModel->filter(filter);
-    m_BbCompleterModel->filter(filter);
 }

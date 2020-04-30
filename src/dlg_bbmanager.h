@@ -5,6 +5,7 @@
 #include <QSortFilterProxyModel>
 
 class DataModel;
+class BuildingBlock;
 class BuildingBlockListModel;
 
 namespace Ui {
@@ -31,29 +32,21 @@ private:
     QString m_filter;
 };
 
-class EditableBuildingBlocksModel : public QAbstractListModel
+class AvailableBuildingBlockChildrenModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
 public:
-    explicit EditableBuildingBlocksModel(DataModel* datamodel, QObject* parent);
+    explicit AvailableBuildingBlockChildrenModel(DataModel* datamodel, QObject* parent);
 
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
-    bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles) override;
-
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-    void filter(const QString& filter);
-    const QString& filter() const;
-
-//    BuildingBlock* getBuildingBlock(const QModelIndex &index);
+    void setParentBuildingBlock(const BuildingBlock* parentBb);
 
 private:
-    DataModel* m_model;
-    QString m_filter;
+    BuildingBlockListModel* m_model;
+    const BuildingBlock* m_parentBB;
 };
 
 class BuildingBlocksFilterModel : public QSortFilterProxyModel
@@ -75,7 +68,6 @@ private:
     QString m_filter;
 };
 
-
 class BuildingBlockMgrDlg : public QDialog
 {
     Q_OBJECT
@@ -85,7 +77,7 @@ public:
     ~BuildingBlockMgrDlg();
 
 public slots:
-    void updateFilteredBuildingBlocks(const QString& filter);
+    void updateBuildingBlockChildren();
 
 private:
     Ui::BuildingBlockMgrDlg *ui;
