@@ -62,7 +62,7 @@ AvailableBuildingBlockChildrenModel::AvailableBuildingBlockChildrenModel(Buildin
 }
 
 AvailableBuildingBlockChildrenModel::AvailableBuildingBlockChildrenModel(DataModel* datamodel, QObject* parent)
-    : AvailableBuildingBlockChildrenModel(new BuildingBlockListModel(datamodel, this), parent)
+    : AvailableBuildingBlockChildrenModel(new BuildingBlockListModel(datamodel, parent), parent)
 {
 }
 
