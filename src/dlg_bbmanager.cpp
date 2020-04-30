@@ -3,7 +3,6 @@
 #include "datamodel.h"
 #include "model_bblist.h"
 #include "model_bbtree.h"
-
 #include <QCompleter>
 
 #include <QDebug>
@@ -49,6 +48,46 @@ QVariant BuildingBlocksCompleterModel::data(const QModelIndex &index, int role) 
         return QString("%1 (%2)").arg(bb->name(), bb->ref());
     }
     return QVariant();
+}
+
+// ===========================================================================
+
+CurrentBbTreeModel::CurrentBbTreeModel(BuildingBlockTreeModel* model, QObject* parent)
+    : QSortFilterProxyModel(parent)
+    , m_model(model)
+    , m_parentBB(nullptr)
+{
+    setSourceModel(m_model);
+}
+
+CurrentBbTreeModel::CurrentBbTreeModel(DataModel* datamodel, QObject* parent)
+    : CurrentBbTreeModel(new BuildingBlockTreeModel(datamodel, parent), parent)
+{
+}
+
+void CurrentBbTreeModel::setParentBuildingBlock(BuildingBlock* parentBb)
+{
+    beginResetModel();
+    m_parentBB = parentBb;
+    endResetModel();
+}
+
+bool CurrentBbTreeModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    qDebug() << "CurrentBbTreeModel::filterAcceptsRow(" << sourceRow << ", " << sourceParent.row() << ") - selection = " << (m_parentBB ? m_parentBB->name() : "null");
+    TreeItem* item = m_model->treeItem(sourceRow, sourceParent);
+    if (item->data() == nullptr) {
+        return true;
+    }
+    do {
+        qDebug() << "  - item is : " << item->data()->name();
+        if (item->data() == m_parentBB) {
+            return true;
+        }
+        item = item->parentItem();
+    }
+    while (item && item->data());
+    return false;
 }
 
 // ===========================================================================
@@ -99,7 +138,6 @@ QVariant AvailableBuildingBlockChildrenModel::data(const QModelIndex &index, int
     auto childBb = m_model->getBuildingBlock(srcIndex);
 
     if(role == Qt::CheckStateRole) {
-        qDebug() << "data - " << m_parentBB->name() << " > " << childBb->name() << " : " << m_parentBB->children().contains(childBb);
         if (m_parentBB->children().contains(childBb)) {
             return Qt::Checked;
         }
@@ -120,11 +158,9 @@ bool AvailableBuildingBlockChildrenModel::setData(const QModelIndex &index, cons
     auto childBb = m_model->getBuildingBlock(srcIndex);
 
     if(value == Qt::Checked) {
-        qDebug() << m_parentBB->name() << " add " << childBb->name();
         m_parentBB->add(childBb);
     }
     else {
-        qDebug() << m_parentBB->name() << " remove " << childBb->name();
         m_parentBB->remove(childBb);
     }
     emit dataChanged(index, index);
@@ -142,9 +178,9 @@ BuildingBlockMgrDlg::BuildingBlockMgrDlg(DataModel* model, QWidget *parent)
 
     // MODELS
     m_BbListModel = new BuildingBlockListModel(m_model, this);
-    m_childrenBbModel = new AvailableBuildingBlockChildrenModel(m_BbListModel, this);
+    m_childrenBbModel = new AvailableBuildingBlockChildrenModel(m_model, this);
     m_BbCompleterModel = new BuildingBlocksCompleterModel(m_model, this);
-    m_currentBbTreeModel = new BuildingBlockTreeModel(m_model, this);
+    m_currentBbTreeModel = new CurrentBbTreeModel(m_model, this);
 
     // WIDGETS config
     QCompleter* completer = new QCompleter(m_BbCompleterModel);
@@ -170,9 +206,12 @@ BuildingBlockMgrDlg::~BuildingBlockMgrDlg()
 
 void BuildingBlockMgrDlg::updateBuildingBlockChildren()
 {
-
     int i = ui->comboBuildingBlocks->currentIndex();
     QModelIndex idx = m_BbListModel->index(i, 0);
     auto bb = m_BbListModel->getBuildingBlock(idx);
+
     m_childrenBbModel->setParentBuildingBlock(bb);
+    m_currentBbTreeModel->setParentBuildingBlock(bb);
+
+    ui->treeCurrentBb->expandAll();
 }

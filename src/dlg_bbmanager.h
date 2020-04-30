@@ -13,7 +13,9 @@ namespace Ui {
 class BuildingBlockMgrDlg;
 }
 
-
+/**
+ * @brief The BuildingBlocksCompleterModel class
+ */
 class BuildingBlocksCompleterModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -33,6 +35,30 @@ private:
     QString m_filter;
 };
 
+/**
+ * @brief The CurrentBbTreeModel class
+ */
+class CurrentBbTreeModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+
+public:
+    CurrentBbTreeModel(BuildingBlockTreeModel* model, QObject* parent);
+    CurrentBbTreeModel(DataModel* datamodel, QObject* parent);
+
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+//    Qt::ItemFlags flags(const QModelIndex &index) const override;
+
+    void setParentBuildingBlock(BuildingBlock* parentBb);
+
+private:
+    BuildingBlockTreeModel* m_model;
+    BuildingBlock* m_parentBB;
+};
+
+/**
+ * @brief The AvailableBuildingBlockChildrenModel class
+ */
 class AvailableBuildingBlockChildrenModel : public QSortFilterProxyModel
 {
     Q_OBJECT
@@ -53,6 +79,9 @@ private:
     BuildingBlock* m_parentBB;
 };
 
+/**
+ * @brief The BuildingBlockMgrDlg class
+ */
 class BuildingBlockMgrDlg : public QDialog
 {
     Q_OBJECT
@@ -70,7 +99,7 @@ private:
     AvailableBuildingBlockChildrenModel* m_childrenBbModel;
     BuildingBlockListModel* m_BbListModel;
     BuildingBlocksCompleterModel* m_BbCompleterModel;
-    BuildingBlockTreeModel* m_currentBbTreeModel;
+    CurrentBbTreeModel* m_currentBbTreeModel;
 };
 
 #endif // DLG_BBMANAGER_H

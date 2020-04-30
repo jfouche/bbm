@@ -12,6 +12,7 @@ enum Columns {
 TreeItem::TreeItem(DataModel* model, BuildingBlockTreeModel* treeModel)
     : m_parent(nullptr)
     , m_treeModel(treeModel)
+    , m_bb(nullptr)
 {
     connect(model, SIGNAL(buildingBlockAdded(BuildingBlock*)), this, SLOT(add(BuildingBlock*)));
     for (BuildingBlock* bb : model->buildingBlocks()) {
@@ -25,7 +26,7 @@ TreeItem::TreeItem(BuildingBlock* bb, TreeItem* parent, BuildingBlockTreeModel* 
     , m_bb(bb)
 {
     connect(bb, SIGNAL(childAdded(BuildingBlock*)), this, SLOT(add(BuildingBlock*)));
-    connect(bb, SIGNAL(childRemoved(BuildingBlock*)), this, SLOT(removeBuildingBlockChild(BuildingBlock*)));
+    connect(bb, SIGNAL(childRemoved(BuildingBlock*)), this, SLOT(remove(BuildingBlock*)));
 }
 
 TreeItem::~TreeItem()
@@ -202,4 +203,13 @@ QVariant BuildingBlockTreeModel::headerData(int section, Qt::Orientation orienta
         qWarning() << "Missing header data";
     }
     return QVariant();
+}
+
+TreeItem* BuildingBlockTreeModel::treeItem(int row, const QModelIndex &parent)
+{
+    TreeItem* item = m_rootItem;
+    if (parent.isValid()) {
+        item = static_cast<TreeItem*>(parent.internalPointer());
+    }
+    return item->child(row);
 }
