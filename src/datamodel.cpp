@@ -42,7 +42,7 @@ void BuildingBlock::add(BuildingBlock *bb)
     int index = m_children.indexOf(bb);
     if (index == -1) {
         m_children.append(bb);
-        emit childAdded(bb);
+        emit childAdded(bb, this);
     }
 }
 
@@ -51,7 +51,7 @@ void BuildingBlock::remove(BuildingBlock* bb)
     int index = m_children.indexOf(bb);
     if (index != -1) {
         m_children.removeAt(index);
-        emit childRemoved(bb);
+        emit childRemoved(bb, this);
     }
 }
 

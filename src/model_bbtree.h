@@ -8,6 +8,9 @@ class BuildingBlock;
 class TreeItem;
 class BuildingBlockTreeModel;
 
+/**
+ * @brief The TreeItem class
+ */
 class TreeItem : public QObject
 {
     Q_OBJECT
@@ -25,8 +28,8 @@ public:
     TreeItem *parentItem();
 
 private slots:
-    void add(BuildingBlock* bb);
-    void remove(BuildingBlock* bb);
+    void add(BuildingBlock* bb, BuildingBlock* parent);
+    void remove(BuildingBlock* bb, BuildingBlock* parent);
 
 private:
     QList<TreeItem*> m_children;
@@ -35,6 +38,9 @@ private:
     BuildingBlock* m_bb;
 };
 
+/**
+ * @brief The BuildingBlockTreeModel class
+ */
 class BuildingBlockTreeModel : public QAbstractItemModel
 {
     Q_OBJECT

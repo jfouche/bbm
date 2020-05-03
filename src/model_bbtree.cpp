@@ -8,6 +8,7 @@ enum Columns {
     COL_COUNT
 };
 
+// ===========================================================================
 
 TreeItem::TreeItem(DataModel* model, BuildingBlockTreeModel* treeModel)
     : m_parent(nullptr)
@@ -25,8 +26,11 @@ TreeItem::TreeItem(BuildingBlock* bb, TreeItem* parent, BuildingBlockTreeModel* 
     , m_treeModel(treeModel)
     , m_bb(bb)
 {
-    connect(bb, SIGNAL(childAdded(BuildingBlock*)), this, SLOT(add(BuildingBlock*)));
-    connect(bb, SIGNAL(childRemoved(BuildingBlock*)), this, SLOT(remove(BuildingBlock*)));
+    connect(bb, SIGNAL(childAdded(BuildingBlock*, BuildingBlock*)), this, SLOT(add(BuildingBlock*, BuildingBlock*)));
+    connect(bb, SIGNAL(childRemoved(BuildingBlock*, BuildingBlock*)), this, SLOT(remove(BuildingBlock*, BuildingBlock*)));
+    for (auto bb : m_bb->children()) {
+        appendChild(new TreeItem(bb, this, m_treeModel));
+    }
 }
 
 TreeItem::~TreeItem()
@@ -34,23 +38,36 @@ TreeItem::~TreeItem()
     qDeleteAll(m_children);
 }
 
-void TreeItem::add(BuildingBlock* bb)
+void TreeItem::add(BuildingBlock* bb, BuildingBlock* parent)
 {
-    m_treeModel->beginResetModel();
+    Q_ASSERT(data() == parent);
+
+    const auto parentIdx = m_treeModel->createIndex(row(), 0, this);
+    const int first = m_children.size();
+    m_treeModel->beginInsertRows(parentIdx, first, first);
     appendChild(new TreeItem(bb, this, m_treeModel));
-    m_treeModel->endResetModel();
+    m_treeModel->endInsertRows();
 }
 
-void TreeItem::remove(BuildingBlock* bb)
+void TreeItem::remove(BuildingBlock* bb, BuildingBlock* parent)
 {
-    m_treeModel->beginResetModel();
-    for (auto it = m_children.begin(); it != m_children.end(); ++it) {
-        TreeItem* item = *it;
+    Q_ASSERT(data() == parent);
+
+    int pos = 0;
+    for (auto it = m_children.begin(); it != m_children.end(); /* no it++ */) {
+        const TreeItem* item = *it;
         if (item->m_bb == bb) {
+            const auto parentIdx = m_treeModel->createIndex(row(), 0, this);
+            m_treeModel->beginRemoveRows(parentIdx, pos, pos);
             it = m_children.erase(it);
+            delete item;
+            m_treeModel->endRemoveRows();
         }
+        else {
+            ++it;
+        }
+        pos++;
     }
-    m_treeModel->endResetModel();
 }
 
 void TreeItem::appendChild(TreeItem *child)
@@ -98,6 +115,7 @@ TreeItem* TreeItem::parentItem()
 }
 
 // ===========================================================================
+
 BuildingBlockTreeModel::BuildingBlockTreeModel(DataModel* model, QObject *parent)
     : QAbstractItemModel(parent)
     , m_model(model)
