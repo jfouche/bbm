@@ -115,8 +115,12 @@ void AvailableBuildingBlockChildrenModel::setParentBuildingBlock(BuildingBlock* 
 bool AvailableBuildingBlockChildrenModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     Q_UNUSED(sourceParent)
-    if (m_model->getBuildingBlock(createIndex(sourceRow, 0)) == m_parentBB)
+    auto bb = m_model->getBuildingBlock(createIndex(sourceRow, 0));
+    if (bb == m_parentBB)
         return false;
+    if (bb->children().contains(m_parentBB)) {
+        return false;
+    }
     return true;
 }
 
