@@ -28,6 +28,7 @@ public:
     TreeItem *parentItem();
 
 private slots:
+    void add(BuildingBlock* bb);
     void add(BuildingBlock* bb, BuildingBlock* parent);
     void remove(BuildingBlock* bb, BuildingBlock* parent);
 

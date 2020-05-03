@@ -38,11 +38,21 @@ struct BuildingBlock : public QObject
 public:
     BuildingBlock(QObject* parent);
 
+    enum Maturity {
+        A, B, C, D, E, F
+    };
+
     const QString& name() const { return m_name; }
     void setName(const QString& name);
 
     const QString& ref() const { return m_ref; }
     void setRef(const QString& ref);
+
+    const QString& info() const { return m_info; }
+    void setInfo(const QString& name);
+
+    Maturity maturity() const { return m_maturity; }
+    void setMaturity(Maturity maturity);
 
     void add(BuildingBlock* bb);
     void remove(BuildingBlock* bb);
@@ -57,6 +67,7 @@ signals:
 private:
     QString m_name;
     QString m_ref;
+    Maturity m_maturity;
     QString m_info;
     QList<BuildingBlock*> m_children;
 };

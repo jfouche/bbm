@@ -3,9 +3,20 @@
 #include <QDebug>
 
 enum Columns {
-    COL_REF,
     COL_NAME,
+    COL_REF,
+    COL_MATURITY,
+    COL_INFO,
     COL_COUNT
+};
+
+static const std::map<BuildingBlock::Maturity, QString> MaturityLabel = {
+    {BuildingBlock::Maturity::A, "A"},
+    {BuildingBlock::Maturity::B, "B"},
+    {BuildingBlock::Maturity::C, "C"},
+    {BuildingBlock::Maturity::D, "D"},
+    {BuildingBlock::Maturity::E, "E"},
+    {BuildingBlock::Maturity::F, "F"}
 };
 
 // ===========================================================================
@@ -36,6 +47,11 @@ TreeItem::TreeItem(BuildingBlock* bb, TreeItem* parent, BuildingBlockTreeModel* 
 TreeItem::~TreeItem()
 {
     qDeleteAll(m_children);
+}
+
+void TreeItem::add(BuildingBlock* bb)
+{
+    add(bb, nullptr);
 }
 
 void TreeItem::add(BuildingBlock* bb, BuildingBlock* parent)
@@ -80,6 +96,8 @@ QVariant TreeItem::data(int column) const
     switch (column) {
     case COL_REF: return m_bb->ref();
     case COL_NAME: return m_bb->name();
+    case COL_MATURITY: return MaturityLabel.at(m_bb->maturity());
+    case COL_INFO: return m_bb->info();
     }
     return QVariant();
 }
@@ -217,6 +235,8 @@ QVariant BuildingBlockTreeModel::headerData(int section, Qt::Orientation orienta
         switch (section) {
         case COL_REF : return "Reference";
         case COL_NAME : return "Name";
+        case COL_INFO : return "Info";
+        case COL_MATURITY : return "Maturity";
         }
         qWarning() << "Missing header data";
     }

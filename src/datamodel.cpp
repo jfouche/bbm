@@ -22,6 +22,7 @@ void Project::setName(const QString &name)
 // ===========================================================================
 BuildingBlock::BuildingBlock(QObject* parent)
     : QObject(parent)
+    , m_maturity(F)
 {
 }
 
@@ -34,6 +35,18 @@ void BuildingBlock::setName(const QString &name)
 void BuildingBlock::setRef(const QString &ref)
 {
     m_ref = ref;
+    emit changed();
+}
+
+void BuildingBlock::setInfo(const QString &info)
+{
+    m_info = info;
+    emit changed();
+}
+
+void BuildingBlock::setMaturity(Maturity maturity)
+{
+    m_maturity = maturity;
     emit changed();
 }
 
