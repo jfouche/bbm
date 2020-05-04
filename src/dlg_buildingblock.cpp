@@ -23,6 +23,8 @@ void BuildingBlockEditDlg::set(const BuildingBlock &bb)
 {
     ui->nameEdit->setText(bb.name());
     ui->refEdit->setText(bb.ref());
+    ui->infoEdit->setText(bb.info());
+    ui->comboMaturity->setCurrentIndex(bb.maturity());
 }
 
 QString BuildingBlockEditDlg::getName() const
@@ -33,5 +35,15 @@ QString BuildingBlockEditDlg::getName() const
 QString BuildingBlockEditDlg::getRef() const
 {
     return ui->refEdit->text();
+}
+
+QString BuildingBlockEditDlg::getInfo() const
+{
+    return ui->infoEdit->text();
+}
+
+BuildingBlock::Maturity BuildingBlockEditDlg::getMaturity() const
+{
+    return static_cast<BuildingBlock::Maturity>(ui->comboMaturity->currentIndex());
 }
 

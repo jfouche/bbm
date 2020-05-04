@@ -19,6 +19,8 @@ public:
     void set(const BuildingBlock& bb);
     QString getName() const;
     QString getRef() const;
+    QString getInfo() const;
+    BuildingBlock::Maturity getMaturity() const;
 
 private:
     Ui::AddBuildingBlockDlg *ui;

@@ -38,18 +38,20 @@ private slots:
     void updateProjectList();
     void updateBuildingBlockList();
     void editProject(const QModelIndex &index);
+    void editCurrentBuildingBlock();
     void load();
     void save();
     void showProjectPage();
     void showBuildingBlockPage();
     void showBuildingBlockManager();
-
+    void updateUI();
 
 private:
     Ui::MainWindow *ui;
     DataModel* m_datamodel;
     ProjectListModel* m_projectListModel;
     BuildingBlockTreeModel* m_bbTreeModel;
+    FilteredBbTreeModel* m_filteredBbTreeModel;
 };
 
 #endif // MAINWINDOW_H

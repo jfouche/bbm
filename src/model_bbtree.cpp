@@ -207,7 +207,7 @@ QVariant BuildingBlockTreeModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+    TreeItem *item = treeItem(index);
     if (role == Qt::DisplayRole) {
         return item->data(index.column());
     }
@@ -244,11 +244,16 @@ QVariant BuildingBlockTreeModel::headerData(int section, Qt::Orientation orienta
     return QVariant();
 }
 
+TreeItem* BuildingBlockTreeModel::treeItem(const QModelIndex& index) const
+{
+    return static_cast<TreeItem*>(index.internalPointer());
+}
+
 TreeItem* BuildingBlockTreeModel::treeItem(int row, const QModelIndex &parent)
 {
     TreeItem* item = m_rootItem;
     if (parent.isValid()) {
-        item = static_cast<TreeItem*>(parent.internalPointer());
+        item = treeItem(parent);
     }
     return item->child(row);
 }

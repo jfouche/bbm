@@ -61,6 +61,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
+    TreeItem* treeItem(const QModelIndex& index) const;
     TreeItem* treeItem(int row, const QModelIndex& parent);
 
 private slots:

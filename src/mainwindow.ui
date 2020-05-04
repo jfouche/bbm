@@ -196,14 +196,14 @@
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <item>
-             <widget class="QPushButton" name="pushButton">
+             <widget class="QPushButton" name="btnEditBuildingBlock">
               <property name="text">
                <string>Edit</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_2">
+             <widget class="QPushButton" name="btnDelBuildingBlock">
               <property name="text">
                <string>Delete</string>
               </property>
