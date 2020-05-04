@@ -1,5 +1,6 @@
 #include "model_bbtree.h"
 #include "datamodel.h"
+#include <QColor>
 #include <QDebug>
 
 enum Columns {
@@ -10,14 +11,7 @@ enum Columns {
     COL_COUNT
 };
 
-static const std::map<BuildingBlock::Maturity, QString> MaturityLabel = {
-    {BuildingBlock::Maturity::A, "A"},
-    {BuildingBlock::Maturity::B, "B"},
-    {BuildingBlock::Maturity::C, "C"},
-    {BuildingBlock::Maturity::D, "D"},
-    {BuildingBlock::Maturity::E, "E"},
-    {BuildingBlock::Maturity::F, "F"}
-};
+static const std::vector<QString> MaturityLabel = {"A", "B", "C", "D", "E", "F"};
 
 // ===========================================================================
 
@@ -96,7 +90,7 @@ QVariant TreeItem::data(int column) const
     switch (column) {
     case COL_REF: return m_bb->ref();
     case COL_NAME: return m_bb->name();
-    case COL_MATURITY: return MaturityLabel.at(m_bb->maturity());
+    case COL_MATURITY: return MaturityLabel[m_bb->maturity()];
     case COL_INFO: return m_bb->info();
     }
     return QVariant();
@@ -213,11 +207,18 @@ QVariant BuildingBlockTreeModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (role != Qt::DisplayRole)
-        return QVariant();
-
     TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
-    return item->data(index.column());
+    if (role == Qt::DisplayRole) {
+        return item->data(index.column());
+    }
+    else if (role == Qt::ForegroundRole) {
+        // A child BB should be gray
+        TreeItem* parent = item->parentItem();
+        if (parent && parent->data()) {
+            return QColor(Qt::darkGray);
+        }
+    }
+    return QVariant();
 }
 
 Qt::ItemFlags BuildingBlockTreeModel::flags(const QModelIndex &index) const
