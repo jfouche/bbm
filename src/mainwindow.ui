@@ -95,14 +95,18 @@
       <widget class="QWidget" name="pageProject">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QListView" name="listProjects">
-          <property name="viewMode">
-           <enum>QListView::ListMode</enum>
-          </property>
-          <property name="modelColumn">
-           <number>0</number>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QListView" name="listProjects">
+            <property name="viewMode">
+             <enum>QListView::ListMode</enum>
+            </property>
+            <property name="modelColumn">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="QWidget" name="widget" native="true">
@@ -168,10 +172,46 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page2">
+      <widget class="QWidget" name="pageBuildingBlocks">
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QTreeView" name="treeBuildingBlocks"/>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Filter</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="editFilter"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <item>
+           <widget class="QTreeView" name="treeBuildingBlocks"/>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QPushButton" name="pushButton">
+              <property name="text">
+               <string>Edit</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_2">
+              <property name="text">
+               <string>Delete</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -206,7 +246,6 @@
   <tabstop>btnPageBuildingBlocks</tabstop>
   <tabstop>btnAddProject</tabstop>
   <tabstop>btnAssignBbToProject</tabstop>
-  <tabstop>listProjects</tabstop>
  </tabstops>
  <resources/>
  <connections>

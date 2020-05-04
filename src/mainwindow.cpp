@@ -9,6 +9,16 @@
 #include <QDebug>
 #include <QFileDialog>
 
+// ===========================================================================
+
+FilteredBbTreeModel::FilteredBbTreeModel(BuildingBlockTreeModel* model, QObject* parent)
+    : QSortFilterProxyModel(parent)
+{
+    setSourceModel(model);
+}
+
+// ===========================================================================
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -16,16 +26,21 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     m_datamodel = new DataModel(this);
+    m_projectListModel = new ProjectListModel(this, m_datamodel);
+    m_bbTreeModel = new BuildingBlockTreeModel(m_datamodel, this);
+
     // TODO : remove me
     m_datamodel->load("test.json");
 
     // the project list model
-    m_projectListModel = new ProjectListModel(this, m_datamodel);
     ui->listProjects->setModel(m_projectListModel);
 
     // the BB tree model
-    m_bbTreeModel = new BuildingBlockTreeModel(m_datamodel, this);
-    ui->treeBuildingBlocks->setModel(m_bbTreeModel);
+    FilteredBbTreeModel* filteredBbModel = new FilteredBbTreeModel(m_bbTreeModel, this);
+    filteredBbModel->setFilterKeyColumn(-1);
+    ui->treeBuildingBlocks->setModel(filteredBbModel);
+
+    connect(ui->editFilter, SIGNAL(textChanged(QString)), filteredBbModel, SLOT(setFilterRegularExpression(QString)));
 }
 
 MainWindow::~MainWindow()

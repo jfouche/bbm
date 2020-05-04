@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSortFilterProxyModel>
 
 class DataModel;
 class ProjectListModel;
@@ -11,6 +12,18 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+class FilteredBbTreeModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+
+public:
+    FilteredBbTreeModel(BuildingBlockTreeModel* model, QObject* parent);
+};
+
+
+/**
+ * @brief The MainWindow class
+ */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
