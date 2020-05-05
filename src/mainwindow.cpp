@@ -1,21 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "dlg_project.h"
-#include "dlg_buildingblock.h"
-#include "dlg_bbmanager.h"
 #include "datamodel.h"
-#include "model_projectlist.h"
-#include "model_bbtree.h"
-#include <QDebug>
+#include "page_project.h"
+#include "page_buildingblock.h"
 #include <QFileDialog>
-
-// ===========================================================================
-
-FilteredBbTreeModel::FilteredBbTreeModel(BuildingBlockTreeModel* model, QObject* parent)
-    : QSortFilterProxyModel(parent)
-{
-    setSourceModel(model);
-}
 
 // ===========================================================================
 
@@ -26,26 +14,16 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     m_datamodel = new DataModel(this);
-    m_projectListModel = new ProjectListModel(this, m_datamodel);
-    m_bbTreeModel = new BuildingBlockTreeModel(m_datamodel, this);
-
     // TODO : remove me
     m_datamodel->load("test.json");
 
-    // the project list model
-    ui->listProjects->setModel(m_projectListModel);
+    m_pageProject = new ProjectPage(m_datamodel, this);
+    m_pageBb = new BuildingBlockPage(m_datamodel, this);
 
-    // the BB tree model
-    m_filteredBbTreeModel = new FilteredBbTreeModel(m_bbTreeModel, this);
-    m_filteredBbTreeModel->setFilterKeyColumn(-1);
-    ui->treeBuildingBlocks->setModel(m_filteredBbTreeModel);
+    ui->stackedWidget->addWidget(m_pageProject);
+    ui->stackedWidget->addWidget(m_pageBb);
 
-    // SIGNALS
-    connect(ui->editFilter, SIGNAL(textChanged(QString)), m_filteredBbTreeModel, SLOT(setFilterRegularExpression(QString)));
-    connect(ui->btnEditBuildingBlock, SIGNAL(clicked()), this, SLOT(editCurrentBuildingBlock()));
-    connect(ui->treeBuildingBlocks->selectionModel(), SIGNAL(selectionChanged(QItemSelection , QItemSelection )), this, SLOT(updateUI()));
-
-    updateUI();
+    showProjectPage();
 }
 
 MainWindow::~MainWindow()
@@ -53,41 +31,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
-void MainWindow::addProject()
-{
-    ProjectEditDlg dlg(this);
-    if (dlg.exec() == QDialog::Accepted) {
-        auto project = m_datamodel->addProject();
-        project->setName(dlg.getName());
-    }
-}
-
-void MainWindow::addBuildingBlock()
-{
-    BuildingBlockEditDlg dlg(this);
-    if (dlg.exec() == QDialog::Accepted) {
-        auto bb = m_datamodel->addBuildingBlock();
-        bb->setName(dlg.getName());
-        bb->setRef(dlg.getRef());
-    }
-}
-
-void MainWindow::updateProjectList()
-{
-}
-
-void MainWindow::updateBuildingBlockList()
-{
-}
-
-void MainWindow::updateUI()
-{
-    auto curSel = ui->treeBuildingBlocks->selectionModel()->selection().indexes();
-    bool sel = !curSel.empty();
-    ui->btnEditBuildingBlock->setEnabled(sel);
-    ui->btnDelBuildingBlock->setEnabled(sel);
-}
 
 void MainWindow::load()
 {
@@ -115,42 +58,6 @@ void MainWindow::showBuildingBlockPage()
     ui->stackedWidget->setCurrentIndex(1);
 }
 
-void MainWindow::showBuildingBlockManager()
-{
-    BuildingBlockMgrDlg dlg(m_datamodel, this);
-    dlg.exec();
-}
 
-void MainWindow::editProject(const QModelIndex &index)
-{
-    Project* project = m_projectListModel->getProject(index);
-    if (project) {
-        ProjectEditDlg dlg(this);
-        dlg.setProject(*project);
-        if (dlg.exec() == QDialog::Accepted) {
-            project->setName(dlg.getName());
-        }
-    }
-}
 
-void MainWindow::editCurrentBuildingBlock()
-{
-    auto curSel = ui->treeBuildingBlocks->selectionModel()->selection().indexes();
-    if (curSel.empty()) {
-        return;
-    }
-    auto sel = ui->treeBuildingBlocks->selectionModel()->currentIndex();
-    auto idx = m_filteredBbTreeModel->mapToSource(sel);
-    auto bb = m_bbTreeModel->treeItem(idx)->data();
-    if (bb) {
-        BuildingBlockEditDlg dlg(this);
-        dlg.set(*bb);
-        if (dlg.exec() == QDialog::Accepted) {
-            bb->setName(dlg.getName());
-            bb->setRef(dlg.getRef());
-            bb->setInfo(dlg.getInfo());
-            bb->setMaturity(dlg.getMaturity());
-        }
-    }
 
-}

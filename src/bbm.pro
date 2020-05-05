@@ -25,7 +25,9 @@ SOURCES += \
     mainwindow.cpp \
     model_bblist.cpp \
     model_bbtree.cpp \
-    model_projectlist.cpp
+    model_projectlist.cpp \
+    page_buildingblock.cpp \
+    page_project.cpp
 
 HEADERS += \
     datamodel.h \
@@ -37,13 +39,17 @@ HEADERS += \
     mainwindow.h \
     model_bblist.h \
     model_bbtree.h \
-    model_projectlist.h
+    model_projectlist.h \
+    page_buildingblock.h \
+    page_project.h
 
 FORMS += \
     dlg_bbmanager.ui \
     dlg_buildingblock.ui \
     dlg_project.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    page_buildingblock.ui \
+    page_project.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>540</width>
+    <height>374</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -91,149 +91,7 @@
      </layout>
     </item>
     <item>
-     <widget class="QStackedWidget" name="stackedWidget">
-      <widget class="QWidget" name="pageProject">
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_5">
-          <item>
-           <widget class="QListView" name="listProjects">
-            <property name="viewMode">
-             <enum>QListView::ListMode</enum>
-            </property>
-            <property name="modelColumn">
-             <number>0</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QWidget" name="widget" native="true">
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <spacer name="horizontalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QPushButton" name="btnAddProject">
-             <property name="text">
-              <string>Add project</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QPushButton" name="btnAssignBbToProject">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Add Building block</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="pageBuildingBlocks">
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_6">
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Filter</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="editFilter"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_8">
-          <item>
-           <widget class="QTreeView" name="treeBuildingBlocks"/>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_4">
-            <item>
-             <widget class="QPushButton" name="btnEditBuildingBlock">
-              <property name="text">
-               <string>Edit</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="btnDelBuildingBlock">
-              <property name="text">
-               <string>Delete</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <item>
-           <widget class="QPushButton" name="btnAddBuildingBlock">
-            <property name="text">
-             <string>Add BB</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="btnManageBuildingBlocks">
-            <property name="text">
-             <string>manage BB</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </widget>
+     <widget class="QStackedWidget" name="stackedWidget"/>
     </item>
    </layout>
   </widget>
@@ -244,27 +102,9 @@
   <tabstop>btnSave</tabstop>
   <tabstop>btnPageProjects</tabstop>
   <tabstop>btnPageBuildingBlocks</tabstop>
-  <tabstop>btnAddProject</tabstop>
-  <tabstop>btnAssignBbToProject</tabstop>
  </tabstops>
  <resources/>
  <connections>
-  <connection>
-   <sender>btnAddProject</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>addProject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>297</x>
-     <y>547</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>197</x>
-     <y>534</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>btnSave</sender>
    <signal>clicked()</signal>
@@ -278,22 +118,6 @@
     <hint type="destinationlabel">
      <x>619</x>
      <y>11</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>listProjects</sender>
-   <signal>activated(QModelIndex)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>editProject(QModelIndex)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>126</x>
-     <y>152</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>254</x>
-     <y>570</y>
     </hint>
    </hints>
   </connection>
@@ -345,47 +169,11 @@
     </hint>
    </hints>
   </connection>
-  <connection>
-   <sender>btnAddBuildingBlock</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>addBuildingBlock()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>77</x>
-     <y>555</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>160</x>
-     <y>421</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>btnManageBuildingBlocks</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>showBuildingBlockManager()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>591</x>
-     <y>541</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>562</x>
-     <y>469</y>
-    </hint>
-   </hints>
-  </connection>
  </connections>
  <slots>
-  <slot>addProject()</slot>
   <slot>load()</slot>
   <slot>save()</slot>
-  <slot>editProject(QModelIndex)</slot>
   <slot>showProjectPage()</slot>
   <slot>showBuildingBlockPage()</slot>
-  <slot>addBuildingBlock()</slot>
-  <slot>showBuildingBlockManager()</slot>
  </slots>
 </ui>
