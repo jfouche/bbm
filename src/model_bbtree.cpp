@@ -45,18 +45,20 @@ TreeItem::~TreeItem()
 
 void TreeItem::add(BuildingBlock* bb)
 {
-    add(bb, nullptr);
+    QModelIndex parentIdx = QModelIndex();
+    if (m_bb) {
+        parentIdx = m_treeModel->createIndex(row(), 0, this);
+    }
+    const int first = m_children.size();
+    m_treeModel->beginInsertRows(parentIdx, first, first);
+    appendChild(new TreeItem(bb, this, m_treeModel));
+    m_treeModel->endInsertRows();
 }
 
 void TreeItem::add(BuildingBlock* bb, BuildingBlock* parent)
 {
     Q_ASSERT(data() == parent);
-
-    const auto parentIdx = m_treeModel->createIndex(row(), 0, this);
-    const int first = m_children.size();
-    m_treeModel->beginInsertRows(parentIdx, first, first);
-    appendChild(new TreeItem(bb, this, m_treeModel));
-    m_treeModel->endInsertRows();
+    add(bb);
 }
 
 void TreeItem::remove(BuildingBlock* bb, BuildingBlock* parent)
