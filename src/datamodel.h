@@ -21,6 +21,8 @@ public:
     const QString& name() const { return m_name; }
     void setName(const QString& name);
 
+    bool contains(BuildingBlock* bb) const;
+
 signals:
     void changed();
 
@@ -59,6 +61,13 @@ public:
     const QList<BuildingBlock*>& children();
     const QList<BuildingBlock*>& children() const;
 
+    /**
+    * @brief contains
+    * @param bb
+    * @return true if the BB or its children contains the BB
+    */
+    bool contains(BuildingBlock* bb) const;
+
 signals:
     void changed();
     void childAdded(BuildingBlock* child, BuildingBlock* parent);
@@ -86,10 +95,12 @@ public:
     typedef QVector<BuildingBlock*> BuildingBlocks;
 
     Project* addProject();
-    BuildingBlock* addBuildingBlock();
-
     const Projects& projects() const;
+    void removeProject(Project* project);
+
+    BuildingBlock* addBuildingBlock();
     const BuildingBlocks& buildingBlocks() const;
+    bool removeBuildingBlock(BuildingBlock* bb);
 
     void save(const QString& path) const;
     void load(const QString& path);
@@ -100,7 +111,9 @@ private slots:
 signals:
     void modelChanged();
     void projectAdded(Project*);
+    void projectRemoved(Project*);
     void buildingBlockAdded(BuildingBlock*);
+    void buildingBlockRemoved(BuildingBlock*);
 
 private:
     Projects m_projects;

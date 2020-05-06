@@ -30,7 +30,10 @@ public:
 private slots:
     void add(BuildingBlock* bb);
     void add(BuildingBlock* bb, BuildingBlock* parent);
-    void remove(BuildingBlock* bb, BuildingBlock* parent);
+    void remove(BuildingBlock* bb);
+
+private:
+    QModelIndex index();
 
 private:
     QList<TreeItem*> m_children;

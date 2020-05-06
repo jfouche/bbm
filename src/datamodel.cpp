@@ -18,6 +18,10 @@ void Project::setName(const QString &name)
     emit changed();
 }
 
+bool Project::contains(BuildingBlock* bb) const
+{
+    return false;
+}
 
 // ===========================================================================
 BuildingBlock::BuildingBlock(QObject* parent)
@@ -78,6 +82,18 @@ const QList<BuildingBlock *> &BuildingBlock::children() const
     return m_children;
 }
 
+bool BuildingBlock::contains(BuildingBlock* bb) const
+{
+    for (const BuildingBlock* child : m_children) {
+        if (child == bb) {
+            return true;
+        }
+        if (child->contains(bb)) {
+            return true;
+        }
+    }
+    return false;
+}
 
 // ===========================================================================
 DataModel::DataModel(QObject *parent)
@@ -114,6 +130,32 @@ BuildingBlock* DataModel::addBuildingBlock()
     return bb;
 }
 
+bool DataModel::removeBuildingBlock(BuildingBlock* bb)
+{
+    const int index = m_buildingblocks.indexOf(bb);
+    Q_ASSERT(index != -1);
+
+    // Search recursively in projects if it is use
+    for (const Project* project : m_projects) {
+        if (project->contains(bb)) {
+            return false;
+        }
+    }
+
+    // Search recursively in building blocks if it is use
+    for (const BuildingBlock* child : m_buildingblocks) {
+        if (child->contains(bb)) {
+            return false;
+        }
+    }
+
+    // Remove the BB
+    delete m_buildingblocks.at(index);
+    m_buildingblocks.removeAt(index);
+    emit buildingBlockRemoved(bb);
+    return true;
+}
+
 void DataModel::changed()
 {
     emit modelChanged();
@@ -122,7 +164,6 @@ void DataModel::changed()
 void DataModel::save(const QString& path) const
 {
     QFile file(path);
-
     if (!file.open(QIODevice::WriteOnly)) {
         qWarning("Couldn't open save file.");
         return;

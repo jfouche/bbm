@@ -21,6 +21,7 @@ TreeItem::TreeItem(DataModel* model, BuildingBlockTreeModel* treeModel)
     , m_bb(nullptr)
 {
     connect(model, SIGNAL(buildingBlockAdded(BuildingBlock*)), this, SLOT(add(BuildingBlock*)));
+    connect(model, SIGNAL(buildingBlockRemoved(BuildingBlock*)), this, SLOT(remove(BuildingBlock*)));
     for (BuildingBlock* bb : model->buildingBlocks()) {
         appendChild(new TreeItem(bb, this, m_treeModel));
     }
@@ -43,12 +44,16 @@ TreeItem::~TreeItem()
     qDeleteAll(m_children);
 }
 
+QModelIndex TreeItem::index()
+{
+    if (m_bb)
+        return m_treeModel->createIndex(row(), 0, this);
+    return QModelIndex();
+}
+
 void TreeItem::add(BuildingBlock* bb)
 {
-    QModelIndex parentIdx = QModelIndex();
-    if (m_bb) {
-        parentIdx = m_treeModel->createIndex(row(), 0, this);
-    }
+    QModelIndex parentIdx = index();
     const int first = m_children.size();
     m_treeModel->beginInsertRows(parentIdx, first, first);
     appendChild(new TreeItem(bb, this, m_treeModel));
@@ -61,15 +66,13 @@ void TreeItem::add(BuildingBlock* bb, BuildingBlock* parent)
     add(bb);
 }
 
-void TreeItem::remove(BuildingBlock* bb, BuildingBlock* parent)
+void TreeItem::remove(BuildingBlock* bb)
 {
-    Q_ASSERT(data() == parent);
-
+    QModelIndex parentIdx = index();
     int pos = 0;
     for (auto it = m_children.begin(); it != m_children.end(); /* no it++ */) {
         const TreeItem* item = *it;
         if (item->m_bb == bb) {
-            const auto parentIdx = m_treeModel->createIndex(row(), 0, this);
             m_treeModel->beginRemoveRows(parentIdx, pos, pos);
             it = m_children.erase(it);
             delete item;

@@ -5,6 +5,7 @@
 #include <QSortFilterProxyModel>
 
 class DataModel;
+class BuildingBlock;
 class BuildingBlockTreeModel;
 
 
@@ -31,8 +32,12 @@ public:
 private slots:
     void addBuildingBlock();
     void editCurrentBuildingBlock();
+    void removeCurrentBuildingBlock();
     void showBuildingBlockManager();
     void updateUI();
+
+private:
+    BuildingBlock* getSelection();
 
 private:
     Ui::BuildingBlockPage *ui;

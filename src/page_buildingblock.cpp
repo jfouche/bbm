@@ -4,6 +4,8 @@
 #include "dlg_buildingblock.h"
 #include "dlg_bbmanager.h"
 
+#include <QMessageBox>
+
 FilteredBbTreeModel::FilteredBbTreeModel(BuildingBlockTreeModel* model, QObject* parent)
     : QSortFilterProxyModel(parent)
 {
@@ -26,6 +28,7 @@ BuildingBlockPage::BuildingBlockPage(DataModel* model, QWidget *parent) :
     connect(ui->editFilter, SIGNAL(textChanged(QString)), m_filteredBbTreeModel, SLOT(setFilterRegularExpression(QString)));
     connect(ui->btnAddBuildingBlock, SIGNAL(clicked()), this, SLOT(addBuildingBlock()));
     connect(ui->btnEditBuildingBlock, SIGNAL(clicked()), this, SLOT(editCurrentBuildingBlock()));
+    connect(ui->btnDelBuildingBlock, SIGNAL(clicked()), this, SLOT(removeCurrentBuildingBlock()));
     connect(ui->btnManageBuildingBlocks, SIGNAL(clicked()), this, SLOT(showBuildingBlockManager()));
     connect(ui->treeBuildingBlocks->selectionModel(), SIGNAL(selectionChanged(QItemSelection , QItemSelection )), this, SLOT(updateUI()));
 
@@ -45,6 +48,17 @@ void BuildingBlockPage::updateUI()
     ui->btnDelBuildingBlock->setEnabled(sel);
 }
 
+BuildingBlock* BuildingBlockPage::getSelection()
+{
+    auto curSel = ui->treeBuildingBlocks->selectionModel()->selection().indexes();
+    if (curSel.empty()) {
+        return nullptr;
+    }
+    auto sel = ui->treeBuildingBlocks->selectionModel()->currentIndex();
+    auto idx = m_filteredBbTreeModel->mapToSource(sel);
+    return m_bbTreeModel->treeItem(idx)->data();
+}
+
 void BuildingBlockPage::addBuildingBlock()
 {
     BuildingBlockEditDlg dlg(this);
@@ -57,13 +71,7 @@ void BuildingBlockPage::addBuildingBlock()
 
 void BuildingBlockPage::editCurrentBuildingBlock()
 {
-    auto curSel = ui->treeBuildingBlocks->selectionModel()->selection().indexes();
-    if (curSel.empty()) {
-        return;
-    }
-    auto sel = ui->treeBuildingBlocks->selectionModel()->currentIndex();
-    auto idx = m_filteredBbTreeModel->mapToSource(sel);
-    auto bb = m_bbTreeModel->treeItem(idx)->data();
+    auto bb = getSelection();
     if (bb) {
         BuildingBlockEditDlg dlg(this);
         dlg.set(*bb);
@@ -72,6 +80,19 @@ void BuildingBlockPage::editCurrentBuildingBlock()
             bb->setRef(dlg.getRef());
             bb->setInfo(dlg.getInfo());
             bb->setMaturity(dlg.getMaturity());
+        }
+    }
+}
+
+void BuildingBlockPage::removeCurrentBuildingBlock()
+{
+    auto bb = getSelection();
+    if (bb) {
+        if (m_model->removeBuildingBlock(bb) == false) {
+            QMessageBox msgBox;
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setText("Can't delete building block because it is in use in project or building block.");
+            msgBox.exec();
         }
     }
 }
