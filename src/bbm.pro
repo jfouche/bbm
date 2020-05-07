@@ -21,6 +21,7 @@ SOURCES += \
     dlg_bbmanager.cpp \
     dlg_buildingblock.cpp \
     dlg_project.cpp \
+    dlg_projectbb.cpp \
     main.cpp \
     mainwindow.cpp \
     model_bblist.cpp \
@@ -35,6 +36,7 @@ HEADERS += \
     dlg_bbmanager.h \
     dlg_buildingblock.h \
     dlg_project.h \
+    dlg_projectbb.h \
     json_utils.hpp \
     mainwindow.h \
     model_bblist.h \
@@ -47,6 +49,7 @@ FORMS += \
     dlg_bbmanager.ui \
     dlg_buildingblock.ui \
     dlg_project.ui \
+    dlg_projectbb.ui \
     mainwindow.ui \
     page_buildingblock.ui \
     page_project.ui

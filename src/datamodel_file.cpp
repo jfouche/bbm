@@ -159,9 +159,9 @@ void JsonWriter::write(QJsonObject& jsonObj) const
     for (const BuildingBlock* bb : m_model.buildingBlocks()) {
         QJsonObject bbObj;
         write(bb, bbObj);
-        projects.append(bbObj);
+        buildingblocks.append(bbObj);
     }
-    jsonObj[KEY_BB_ARRAY] = projects;
+    jsonObj[KEY_BB_ARRAY] = buildingblocks;
 }
 
 void read(DataModel& data, const QJsonObject& jsonObj)

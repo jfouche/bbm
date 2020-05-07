@@ -5,14 +5,6 @@ ProjectListModel::ProjectListModel(QObject* parent, DataModel* model)
     : QAbstractListModel(parent)
     , m_model(model)
 {
-    connect(model, SIGNAL(modelChanged()), this, SLOT(update()));
-    update();
-}
-
-void ProjectListModel::update()
-{
-    beginResetModel();
-    endResetModel();
 }
 
 Project* ProjectListModel::getProject(const QModelIndex &index)
@@ -29,19 +21,20 @@ int ProjectListModel::rowCount(const QModelIndex &parent) const
 int ProjectListModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent)
-    return 2;
+    return 1;
 }
 
 QVariant ProjectListModel::data(const QModelIndex &index, int role) const
 {
-    if (index.isValid() && (role == Qt::DisplayRole)) {
-        const Project* project = m_model->projects().at(index.row());
-        Q_ASSERT(project != nullptr);
+    if (!index.isValid())
+        return QVariant();
+
+    const Project* project = m_model->projects().at(index.row());
+    Q_ASSERT(project != nullptr);
+    if (role == Qt::DisplayRole) {
         switch (index.column()) {
         case 0:
             return project->name();
-        case 1:
-            return "Col #1";
         }
     }
     return QVariant();

@@ -4,6 +4,7 @@
 #include <QWidget>
 
 class DataModel;
+class Project;
 class ProjectListModel;
 
 namespace Ui {
@@ -19,8 +20,13 @@ public:
     ~ProjectPage();
 
 private slots:
-    void editCurrentProject();
     void addProject();
+    void deleteCurrentProject();
+    void editCurrentProject();
+    void addBuildingBlockToProject();
+
+private:
+    Project* getSelection();
 
 private:
     Ui::ProjectPage *ui;

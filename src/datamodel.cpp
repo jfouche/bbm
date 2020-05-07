@@ -18,9 +18,36 @@ void Project::setName(const QString &name)
     emit changed();
 }
 
+const QList<BuildingBlock*>& Project::buildingBlocks()
+{
+    return m_buildingblocks;
+}
+
+const QList<BuildingBlock*>& Project::buildingBlocks() const
+{
+    return m_buildingblocks;
+}
+
+void Project::add(BuildingBlock* bb)
+{
+    if (!contains(bb)) {
+        m_buildingblocks.push_back(bb);
+        emit buildinBlockAdded(bb);
+    }
+}
+
+void Project::remove(BuildingBlock* bb)
+{
+    int index = m_buildingblocks.indexOf(bb);
+    if (index != -1) {
+        m_buildingblocks.removeAt(index);
+        emit buildinBlockRemoved(bb);
+    }
+}
+
 bool Project::contains(BuildingBlock* bb) const
 {
-    return false;
+    return (m_buildingblocks.indexOf(bb) != 1);
 }
 
 // ===========================================================================
@@ -115,22 +142,30 @@ const QVector<BuildingBlock*>& DataModel::buildingBlocks() const
 Project* DataModel::addProject()
 {
     auto project = new Project(this);
-    connect(project, SIGNAL(changed()), this, SLOT(changed()));
     m_projects.push_back(project);
     emit projectAdded(project);
     return project;
 }
 
+void DataModel::deleteProject(Project* project)
+{
+    int idx = m_projects.indexOf(project);
+    if (idx != -1) {
+        m_projects.remove(idx);
+        emit projectRemoved(project);
+        delete project;
+    }
+}
+
 BuildingBlock* DataModel::addBuildingBlock()
 {
     auto bb = new BuildingBlock(this);
-    connect(bb, SIGNAL(changed()), this, SLOT(changed()));
     m_buildingblocks.push_back(bb);
     emit buildingBlockAdded(bb);
     return bb;
 }
 
-bool DataModel::removeBuildingBlock(BuildingBlock* bb)
+bool DataModel::deleteBuildingBlock(BuildingBlock* bb)
 {
     const int index = m_buildingblocks.indexOf(bb);
     Q_ASSERT(index != -1);
@@ -154,11 +189,6 @@ bool DataModel::removeBuildingBlock(BuildingBlock* bb)
     m_buildingblocks.removeAt(index);
     emit buildingBlockRemoved(bb);
     return true;
-}
-
-void DataModel::changed()
-{
-    emit modelChanged();
 }
 
 void DataModel::save(const QString& path) const

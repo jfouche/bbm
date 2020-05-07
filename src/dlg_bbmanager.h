@@ -27,12 +27,8 @@ public:
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    void filter(const QString& filter);
-    const QString& filter() const;
-
 private:
     DataModel* m_model;
-    QString m_filter;
 };
 
 /**

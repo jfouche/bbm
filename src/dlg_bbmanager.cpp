@@ -16,19 +16,6 @@ BuildingBlocksCompleterModel::BuildingBlocksCompleterModel(DataModel* datamodel,
 {
 }
 
-void BuildingBlocksCompleterModel::filter(const QString& filter)
-{
-    qDebug() << "BuildingBlocksCompleterModel::filter(" << filter << ")";
-    beginResetModel();
-    m_filter = filter;
-    endResetModel();
-}
-
-const QString& BuildingBlocksCompleterModel::filter() const
-{
-    return m_filter;
-}
-
 int BuildingBlocksCompleterModel::rowCount(const QModelIndex &parent) const
 {
     Q_ASSERT(parent.parent().isValid() == false);

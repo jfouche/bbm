@@ -21,13 +21,20 @@ public:
     const QString& name() const { return m_name; }
     void setName(const QString& name);
 
+    void add(BuildingBlock* bb);
+    void remove(BuildingBlock* bb);
     bool contains(BuildingBlock* bb) const;
+    const QList<BuildingBlock*>& buildingBlocks();
+    const QList<BuildingBlock*>& buildingBlocks() const;
 
 signals:
     void changed();
+    void buildinBlockAdded(BuildingBlock* bb);
+    void buildinBlockRemoved(BuildingBlock* bb);
 
 private:
     QString m_name;
+    QList<BuildingBlock*> m_buildingblocks;
 };
 
 /**
@@ -96,20 +103,18 @@ public:
 
     Project* addProject();
     const Projects& projects() const;
-    void removeProject(Project* project);
+    void deleteProject(Project* project);
 
     BuildingBlock* addBuildingBlock();
     const BuildingBlocks& buildingBlocks() const;
-    bool removeBuildingBlock(BuildingBlock* bb);
+    bool deleteBuildingBlock(BuildingBlock* bb);
 
     void save(const QString& path) const;
     void load(const QString& path);
 
 private slots:
-    void changed();
 
 signals:
-    void modelChanged();
     void projectAdded(Project*);
     void projectRemoved(Project*);
     void buildingBlockAdded(BuildingBlock*);
