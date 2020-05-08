@@ -20,8 +20,8 @@ TreeItem::TreeItem(DataModel* model, BuildingBlockTreeModel* treeModel)
     , m_treeModel(treeModel)
     , m_bb(nullptr)
 {
-    connect(model, SIGNAL(buildingBlockAdded(BuildingBlock*)), this, SLOT(add(BuildingBlock*)));
-    connect(model, SIGNAL(buildingBlockRemoved(BuildingBlock*)), this, SLOT(remove(BuildingBlock*)));
+    connect(model, &DataModel::buildingBlockAdded, this, &TreeItem::add);
+    connect(model, &DataModel::buildingBlockRemoved, this, &TreeItem::remove);
     for (BuildingBlock* bb : model->buildingBlocks()) {
         appendChild(new TreeItem(bb, this, m_treeModel));
     }
@@ -32,8 +32,8 @@ TreeItem::TreeItem(BuildingBlock* bb, TreeItem* parent, BuildingBlockTreeModel* 
     , m_treeModel(treeModel)
     , m_bb(bb)
 {
-    connect(bb, SIGNAL(childAdded(BuildingBlock*, BuildingBlock*)), this, SLOT(add(BuildingBlock*, BuildingBlock*)));
-    connect(bb, SIGNAL(childRemoved(BuildingBlock*, BuildingBlock*)), this, SLOT(remove(BuildingBlock*, BuildingBlock*)));
+    connect(bb, &BuildingBlock::childAdded, this, &TreeItem::add);
+    connect(bb, &BuildingBlock::childRemoved, this, &TreeItem::remove);
     for (auto bb : m_bb->children()) {
         appendChild(new TreeItem(bb, this, m_treeModel));
     }
@@ -58,12 +58,6 @@ void TreeItem::add(BuildingBlock* bb)
     m_treeModel->beginInsertRows(parentIdx, first, first);
     appendChild(new TreeItem(bb, this, m_treeModel));
     m_treeModel->endInsertRows();
-}
-
-void TreeItem::add(BuildingBlock* bb, BuildingBlock* parent)
-{
-    Q_ASSERT(data() == parent);
-    add(bb);
 }
 
 void TreeItem::remove(BuildingBlock* bb)

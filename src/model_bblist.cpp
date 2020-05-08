@@ -5,14 +5,14 @@ BuildingBlockListModel::BuildingBlockListModel(DataModel* datamodel, QObject* pa
     : QAbstractListModel(parent)
     , m_model(datamodel)
 {
-    connect(m_model, SIGNAL(buildingBlockAdded(BuildingBlock*)), this, SLOT(update()));
-    update();
+//    connect(m_model, SIGNAL(buildingBlockAdded(BuildingBlock*)), this, SLOT(update()));
+//    update();
 }
 
 void BuildingBlockListModel::update()
 {
-    beginResetModel();
-    endResetModel();
+//    beginResetModel();
+//    endResetModel();
 }
 
 BuildingBlock* BuildingBlockListModel::getBuildingBlock(const QModelIndex &index)

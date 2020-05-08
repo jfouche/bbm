@@ -91,7 +91,7 @@ public:
     ~BuildingBlockMgrDlg();
 
 public slots:
-    void updateBuildingBlockChildren();
+    void setCurrentBuildingBlock(int index);
 
 private:
     Ui::BuildingBlockMgrDlg *ui;

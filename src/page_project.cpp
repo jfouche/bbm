@@ -14,7 +14,7 @@ ProjectPage::ProjectPage(DataModel* model, QWidget *parent) :
     m_projectListModel = new ProjectListModel(this, m_model);
     ui->listProjects->setModel(m_projectListModel);
 
-    connect(ui->btnAddProject, SIGNAL(clicked()), this, SLOT(addProject()));
+    connect(ui->btnAddProject, &QPushButton::clicked, this, &ProjectPage::addProject);
 }
 
 ProjectPage::~ProjectPage()

@@ -35,6 +35,7 @@ private slots:
     void removeCurrentBuildingBlock();
     void showBuildingBlockManager();
     void updateUI();
+    void filter(const QString& filter);
 
 private:
     BuildingBlock* getSelection();

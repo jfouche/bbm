@@ -59,7 +59,7 @@ void BuildingBlock::add(BuildingBlock *bb)
     int index = m_children.indexOf(bb);
     if (index == -1) {
         m_children.append(bb);
-        emit childAdded(bb, this);
+        emit childAdded(bb);
     }
 }
 
@@ -68,7 +68,7 @@ void BuildingBlock::remove(BuildingBlock* bb)
     int index = m_children.indexOf(bb);
     if (index != -1) {
         m_children.removeAt(index);
-        emit childRemoved(bb, this);
+        emit childRemoved(bb);
     }
 }
 
@@ -115,7 +115,6 @@ const QVector<BuildingBlock*>& DataModel::buildingBlocks() const
 Project* DataModel::addProject()
 {
     auto project = new Project(this);
-    connect(project, SIGNAL(changed()), this, SLOT(changed()));
     m_projects.push_back(project);
     emit projectAdded(project);
     return project;
@@ -124,7 +123,6 @@ Project* DataModel::addProject()
 BuildingBlock* DataModel::addBuildingBlock()
 {
     auto bb = new BuildingBlock(this);
-    connect(bb, SIGNAL(changed()), this, SLOT(changed()));
     m_buildingblocks.push_back(bb);
     emit buildingBlockAdded(bb);
     return bb;
@@ -154,11 +152,6 @@ bool DataModel::removeBuildingBlock(BuildingBlock* bb)
     m_buildingblocks.removeAt(index);
     emit buildingBlockRemoved(bb);
     return true;
-}
-
-void DataModel::changed()
-{
-    emit modelChanged();
 }
 
 void DataModel::save(const QString& path) const

@@ -5,14 +5,6 @@ ProjectListModel::ProjectListModel(QObject* parent, DataModel* model)
     : QAbstractListModel(parent)
     , m_model(model)
 {
-    connect(model, SIGNAL(modelChanged()), this, SLOT(update()));
-    update();
-}
-
-void ProjectListModel::update()
-{
-    beginResetModel();
-    endResetModel();
 }
 
 Project* ProjectListModel::getProject(const QModelIndex &index)

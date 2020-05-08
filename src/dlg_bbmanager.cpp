@@ -197,10 +197,10 @@ BuildingBlockMgrDlg::BuildingBlockMgrDlg(DataModel* model, QWidget *parent)
     ui->comboBuildingBlocks->setModel(m_BbListModel);
 
     // SIGNALS
-    connect(ui->comboBuildingBlocks, SIGNAL(activated(int)), this, SLOT(updateBuildingBlockChildren()));
+    connect(ui->comboBuildingBlocks, qOverload<int>(&QComboBox::activated), this, &BuildingBlockMgrDlg::setCurrentBuildingBlock);
 
     // INIT
-    updateBuildingBlockChildren();
+    setCurrentBuildingBlock(0);
 }
 
 BuildingBlockMgrDlg::~BuildingBlockMgrDlg()
@@ -208,10 +208,9 @@ BuildingBlockMgrDlg::~BuildingBlockMgrDlg()
     delete ui;
 }
 
-void BuildingBlockMgrDlg::updateBuildingBlockChildren()
+void BuildingBlockMgrDlg::setCurrentBuildingBlock(int index)
 {
-    int i = ui->comboBuildingBlocks->currentIndex();
-    QModelIndex idx = m_BbListModel->index(i, 0);
+    QModelIndex idx = m_BbListModel->index(index, 0);
     auto bb = m_BbListModel->getBuildingBlock(idx);
 
     m_childrenBbModel->setParentBuildingBlock(bb);

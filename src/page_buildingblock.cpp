@@ -25,12 +25,12 @@ BuildingBlockPage::BuildingBlockPage(DataModel* model, QWidget *parent) :
     ui->treeBuildingBlocks->setModel(m_filteredBbTreeModel);
 
     // SIGNALS
-    connect(ui->editFilter, SIGNAL(textChanged(QString)), m_filteredBbTreeModel, SLOT(setFilterRegularExpression(QString)));
-    connect(ui->btnAddBuildingBlock, SIGNAL(clicked()), this, SLOT(addBuildingBlock()));
-    connect(ui->btnEditBuildingBlock, SIGNAL(clicked()), this, SLOT(editCurrentBuildingBlock()));
-    connect(ui->btnDelBuildingBlock, SIGNAL(clicked()), this, SLOT(removeCurrentBuildingBlock()));
-    connect(ui->btnManageBuildingBlocks, SIGNAL(clicked()), this, SLOT(showBuildingBlockManager()));
-    connect(ui->treeBuildingBlocks->selectionModel(), SIGNAL(selectionChanged(QItemSelection , QItemSelection )), this, SLOT(updateUI()));
+    connect(ui->editFilter, &QLineEdit::textChanged, this, &BuildingBlockPage::filter);
+    connect(ui->btnAddBuildingBlock, &QPushButton::clicked, this, &BuildingBlockPage::addBuildingBlock);
+    connect(ui->btnEditBuildingBlock, &QPushButton::clicked, this, &BuildingBlockPage::editCurrentBuildingBlock);
+    connect(ui->btnDelBuildingBlock, &QPushButton::clicked, this, &BuildingBlockPage::removeCurrentBuildingBlock);
+    connect(ui->btnManageBuildingBlocks, &QPushButton::clicked, this, &BuildingBlockPage::showBuildingBlockManager);
+    connect(ui->treeBuildingBlocks->selectionModel(), &QItemSelectionModel::selectionChanged, this, &BuildingBlockPage::updateUI);
 
     updateUI();
 }
@@ -46,6 +46,11 @@ void BuildingBlockPage::updateUI()
     bool sel = !curSel.empty();
     ui->btnEditBuildingBlock->setEnabled(sel);
     ui->btnDelBuildingBlock->setEnabled(sel);
+}
+
+void BuildingBlockPage::filter(const QString& filter)
+{
+    m_filteredBbTreeModel->setFilterRegularExpression(filter);
 }
 
 BuildingBlock* BuildingBlockPage::getSelection()

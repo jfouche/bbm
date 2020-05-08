@@ -70,8 +70,8 @@ public:
 
 signals:
     void changed();
-    void childAdded(BuildingBlock* child, BuildingBlock* parent);
-    void childRemoved(BuildingBlock* child, BuildingBlock* parent);
+    void childAdded(BuildingBlock* child);
+    void childRemoved(BuildingBlock* child);
 
 private:
     QString m_name;
@@ -106,10 +106,8 @@ public:
     void load(const QString& path);
 
 private slots:
-    void changed();
 
 signals:
-    void modelChanged();
     void projectAdded(Project*);
     void projectRemoved(Project*);
     void buildingBlockAdded(BuildingBlock*);
