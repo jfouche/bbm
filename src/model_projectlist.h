@@ -20,6 +20,7 @@ public:
     Project* getProject(const QModelIndex &index);
 
 private slots:
+    void addProject(Project* project);
 
 private:
     DataModel* m_model;

@@ -5,6 +5,7 @@ ProjectListModel::ProjectListModel(QObject* parent, DataModel* model)
     : QAbstractListModel(parent)
     , m_model(model)
 {
+    connect(model, &DataModel::projectAdded, this, &ProjectListModel::addProject);
 }
 
 Project* ProjectListModel::getProject(const QModelIndex &index)
@@ -37,5 +38,14 @@ QVariant ProjectListModel::data(const QModelIndex &index, int role) const
         }
     }
     return QVariant();
+}
+
+void ProjectListModel::addProject(Project* project)
+{
+    Q_ASSERT(m_model->projects().last() == project);
+    QModelIndex parentIdx;
+    const int first = m_model->projects().size();
+    beginInsertRows(parentIdx, first, first);
+    endInsertRows();
 }
 
