@@ -9,6 +9,8 @@ static const char* KEY_BB_ARRAY = "building_blocks";
 static const char* KEY_BB_NAME = "name";
 static const char* KEY_BB_REF = "ref";
 static const char* KEY_BB_ID = "id";
+static const char* KEY_BB_MATURITY = "maturity";
+static const char* KEY_BB_INFO = "info";
 static const char* KEY_BB_CHILDREN = "children";
 
 
@@ -26,6 +28,33 @@ struct bbIndexValue : public json::key_value
     {}
 };
 
+QString MaturityToString(BuildingBlock::Maturity m)
+{
+    switch (m) {
+    case BuildingBlock::Maturity::A : return "A";
+    case BuildingBlock::Maturity::B : return "B";
+    case BuildingBlock::Maturity::C : return "C";
+    case BuildingBlock::Maturity::D : return "D";
+    case BuildingBlock::Maturity::E : return "E";
+    case BuildingBlock::Maturity::F : return "F";
+    }
+    throw std::invalid_argument("Bad maturity");
+}
+
+namespace json {
+template<>
+BuildingBlock::Maturity as(const key_value& pair)
+{
+    QString s=as<QString>(pair);
+    if (s == "A") return BuildingBlock::Maturity::A;
+    if (s == "B") return BuildingBlock::Maturity::B;
+    if (s == "C") return BuildingBlock::Maturity::C;
+    if (s == "D") return BuildingBlock::Maturity::D;
+    if (s == "E") return BuildingBlock::Maturity::E;
+    if (s == "F") return BuildingBlock::Maturity::F;
+    throw invalid_type_exception(KEY_BB_MATURITY);
+}
+}
 
 class JsonWriter
 {
@@ -75,6 +104,8 @@ void JsonReader::read(BuildingBlock* bb, const QJsonObject& jsonObj)
 {
     bb->setName(json::as<QString>(jsonObj, KEY_BB_NAME));
     bb->setRef(json::as<QString>(jsonObj, KEY_BB_REF));
+    bb->setMaturity(json::as<BuildingBlock::Maturity>(jsonObj, KEY_BB_MATURITY));
+    bb->setInfo(json::as<QString>(jsonObj, KEY_BB_INFO));
     int id = json::as<int>(jsonObj, KEY_BB_ID);
     m_bbHash[id] = bb;
     for (auto value : json::as<QJsonArray>(jsonObj, KEY_BB_CHILDREN)) {
@@ -132,6 +163,8 @@ void JsonWriter::write(const BuildingBlock* bb, QJsonObject& obj) const
     obj[KEY_BB_NAME] = bb->name();
     obj[KEY_BB_REF] = bb->ref();
     obj[KEY_BB_ID] = m_bbMap.at(bb);
+    obj[KEY_BB_MATURITY] = MaturityToString(bb->maturity());
+    obj[KEY_BB_INFO] = bb->info();
 
     QJsonArray children;
     for (const BuildingBlock* childBb : bb->children()) {
@@ -159,9 +192,9 @@ void JsonWriter::write(QJsonObject& jsonObj) const
     for (const BuildingBlock* bb : m_model.buildingBlocks()) {
         QJsonObject bbObj;
         write(bb, bbObj);
-        projects.append(bbObj);
+        buildingblocks.append(bbObj);
     }
-    jsonObj[KEY_BB_ARRAY] = projects;
+    jsonObj[KEY_BB_ARRAY] = buildingblocks;
 }
 
 void read(DataModel& data, const QJsonObject& jsonObj)
