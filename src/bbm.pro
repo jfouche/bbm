@@ -23,6 +23,7 @@ SOURCES += \
     dlg_project.cpp \
     main.cpp \
     mainwindow.cpp \
+    model_availablebbchildren.cpp \
     model_bblist.cpp \
     model_bbtree.cpp \
     model_projectlist.cpp \
@@ -37,6 +38,7 @@ HEADERS += \
     dlg_project.h \
     json_utils.hpp \
     mainwindow.h \
+    model_availablebbchildren.h \
     model_bblist.h \
     model_bbtree.h \
     model_projectlist.h \

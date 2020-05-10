@@ -3,6 +3,10 @@
 #include "datamodel.h"
 #include "page_project.h"
 #include "page_buildingblock.h"
+#include "model_projectlist.h"
+#include "model_bblist.h"
+#include "model_bbtree.h"
+#include "model_availablebbchildren.h"
 #include <QFileDialog>
 
 // ===========================================================================
@@ -17,13 +21,45 @@ MainWindow::MainWindow(QWidget *parent)
     // TODO : remove me
     m_datamodel->load("test.json");
 
-    m_pageProject = new ProjectPage(m_datamodel, this);
-    m_pageBb = new BuildingBlockPage(m_datamodel, this);
+    /// listProjects
+    projectListModel = new ProjectListModel(this, m_datamodel);
+    filteredProjectListModel = new QSortFilterProxyModel(this);
+    filteredProjectListModel->setSourceModel(projectListModel);
+    ui->listProjects->setModel(filteredProjectListModel);
 
-    ui->stackedWidget->addWidget(m_pageProject);
-    ui->stackedWidget->addWidget(m_pageBb);
+    /// listBuildingBlocks
+    bbListModel = new BuildingBlockListModel(m_datamodel, this);
+    filteredBbListModel = new QSortFilterProxyModel(this);
+    filteredBbListModel->setSourceModel(bbListModel);
+    ui->listBuildingBlocks->setModel(filteredBbListModel);
 
-    showProjectPage();
+    /// treeBuildingBlocks
+    bbTreeModel = new BuildingBlockTreeModel(m_datamodel, this);
+    filteredBbTreeModel = new QSortFilterProxyModel(this);
+    filteredBbTreeModel->setSourceModel(bbTreeModel);
+    ui->treeBuildingBlocks->setModel(filteredBbTreeModel);
+
+    /// listBbChildren
+    availableBbChildrenModel = new AvailableBuildingBlockChildrenModel(bbListModel, this);
+    ui->listBbChildren->setModel(availableBbChildrenModel);
+
+
+//    m_pageProject = new ProjectPage(m_datamodel, this);
+//    m_pageBb = new BuildingBlockPage(m_datamodel, this);
+
+    connect(ui->btnLoad, &QPushButton::clicked, this, &MainWindow::load);
+    connect(ui->btnSave, &QPushButton::clicked, this, &MainWindow::save);
+    connect(ui->editFilter, &QLineEdit::textChanged, this, &MainWindow::filter);
+
+    connect(ui->listBuildingBlocks->selectionModel(), &QItemSelectionModel::selectionChanged, [=](const QItemSelection &selected, const QItemSelection &deselected) {
+        if (selected.indexes().empty() == false) {
+            auto bbIndex = filteredBbListModel->mapToSource(selected.indexes().first());
+            auto bb = bbListModel->getBuildingBlock(bbIndex);
+            select(bb);
+        }
+    });
+
+//    ui->rightWidget->hide();
 }
 
 MainWindow::~MainWindow()
@@ -48,16 +84,23 @@ void MainWindow::save()
     }
 }
 
-void MainWindow::showProjectPage()
+void MainWindow::updateUI()
 {
-    ui->stackedWidget->setCurrentIndex(0);
+    auto bbSelIdx = ui->listBuildingBlocks->selectionModel()->currentIndex();
+    if (bbSelIdx.isValid()) {
+
+    }
 }
 
-void MainWindow::showBuildingBlockPage()
+void MainWindow::filter(const QString& filter)
 {
-    ui->stackedWidget->setCurrentIndex(1);
+    QRegExp regex(filter, Qt::CaseInsensitive);
+    filteredProjectListModel->setFilterRegExp(regex);
+    filteredBbListModel->setFilterRegExp(regex);
+    filteredBbTreeModel->setFilterRegExp(regex);
 }
 
-
-
-
+void MainWindow::select(BuildingBlock* bb)
+{
+    availableBbChildrenModel->setParentBuildingBlock(bb);
+}
