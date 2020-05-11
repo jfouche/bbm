@@ -29,13 +29,22 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private:
+    Project* getSelectedProject();
+    BuildingBlock* getSelectedBuildingBlock();
+
 private slots:
     void load();
     void save();
     void updateUI();
     void filter(const QString& filter);
+    void addProject();
+    void editCurrentProject();
+    void delCurrentProject();
     void select(BuildingBlock* bb);
     void select(Project* project);
+    void saveProject();
+    void hideRightPanel();
 
 private:
     Ui::MainWindow *ui;

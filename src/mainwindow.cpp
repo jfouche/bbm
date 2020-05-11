@@ -43,31 +43,39 @@ MainWindow::MainWindow(QWidget *parent)
     availableBbChildrenModel = new AvailableBuildingBlockChildrenModel(bbListModel, this);
     ui->listBbChildren->setModel(availableBbChildrenModel);
 
-
-//    m_pageProject = new ProjectPage(m_datamodel, this);
-//    m_pageBb = new BuildingBlockPage(m_datamodel, this);
+    //    m_pageProject = new ProjectPage(m_datamodel, this);
+    //    m_pageBb = new BuildingBlockPage(m_datamodel, this);
 
     connect(ui->btnLoad, &QPushButton::clicked, this, &MainWindow::load);
     connect(ui->btnSave, &QPushButton::clicked, this, &MainWindow::save);
     connect(ui->editFilter, &QLineEdit::textChanged, this, &MainWindow::filter);
+    connect(ui->btnAddProject, &QPushButton::clicked, this, &MainWindow::addProject);
+    connect(ui->btnEditProject, &QPushButton::clicked, this, &MainWindow::editCurrentProject);
+    connect(ui->btnDelProject, &QPushButton::clicked, this, &MainWindow::delCurrentProject);
+    connect(ui->btnBoxEditProject->button(QDialogButtonBox::Save), &QPushButton::clicked, this, &MainWindow::saveProject);
+    connect(ui->btnBoxEditProject->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &MainWindow::hideRightPanel);
 
-    connect(ui->listBuildingBlocks->selectionModel(), &QItemSelectionModel::selectionChanged, [=](const QItemSelection &selected, const QItemSelection &deselected) {
+    auto onBbSelected = [=](const QItemSelection &selected, const QItemSelection &deselected) {
+        Q_UNUSED(deselected)
         if (selected.indexes().empty() == false) {
             auto bbIndex = filteredBbListModel->mapToSource(selected.indexes().first());
             auto bb = bbListModel->getBuildingBlock(bbIndex);
             select(bb);
         }
-    });
+    };
+    connect(ui->listBuildingBlocks->selectionModel(), &QItemSelectionModel::selectionChanged, onBbSelected);
 
-    connect(ui->listProjects->selectionModel(), &QItemSelectionModel::selectionChanged, [=](const QItemSelection &selected, const QItemSelection &deselected) {
+    auto onProjectSelected = [=](const QItemSelection &selected, const QItemSelection &deselected) {
+        Q_UNUSED(deselected)
         if (selected.indexes().empty() == false) {
             auto bbIndex = filteredProjectListModel->mapToSource(selected.indexes().first());
             auto project = projectListModel->getProject(bbIndex);
             select(project);
         }
-    });
+    };
+    connect(ui->listProjects->selectionModel(), &QItemSelectionModel::selectionChanged, onProjectSelected);
 
-//    ui->rightWidget->hide();
+    hideRightPanel();
 }
 
 MainWindow::~MainWindow()
@@ -75,6 +83,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::hideRightPanel()
+{
+    ui->treeBuildingBlocks->setFocus();
+    ui->rightWidget->hide();
+    ui->editProjectName->setText(QString());
+}
 
 void MainWindow::load()
 {
@@ -117,7 +131,65 @@ void MainWindow::select(BuildingBlock* bb)
 
 void MainWindow::select(Project* project)
 {
-//    availableBbChildrenModel->setParentBuildingBlock(bb);
+    //    availableBbChildrenModel->setParentBuildingBlock(bb);
     ui->wdgEditBb->hide();
     ui->wdgEditProject->show();
+}
+
+void MainWindow::addProject()
+{
+    Project* project = m_datamodel->addProject();
+    select(project);
+    ui->editProjectName->setFocus();
+}
+
+void MainWindow::editCurrentProject()
+{
+    Project* project = getSelectedProject();
+    if (!project)
+        return;
+
+    ui->rightWidget->show();
+    ui->wdgEditBb->hide();
+    ui->wdgEditProject->show();
+    ui->editProjectName->setText(project->name());
+    ui->editProjectName->setFocus();
+}
+
+void MainWindow::delCurrentProject()
+{
+    Project* project = getSelectedProject();
+    if (!project)
+        return;
+
+    m_datamodel->deleteProject(project);
+}
+
+void MainWindow::saveProject()
+{
+    Project* project = getSelectedProject();
+    if (!project)
+        return;
+    project->setName(ui->editProjectName->text());
+    ui->rightWidget->hide();
+}
+
+Project* MainWindow::getSelectedProject()
+{
+    auto sel = ui->listProjects->selectionModel()->currentIndex();
+    if (sel.isValid() == false) {
+        return nullptr;
+    }
+    auto idx = filteredProjectListModel->mapToSource(sel);
+    return projectListModel->getProject(idx);
+}
+
+BuildingBlock* MainWindow::getSelectedBuildingBlock()
+{
+    auto sel = ui->listBuildingBlocks->selectionModel()->currentIndex();
+    if (sel.isValid() == false) {
+        return nullptr;
+    }
+    auto idx = filteredBbListModel->mapToSource(sel);
+    return bbListModel->getBuildingBlock(idx);
 }

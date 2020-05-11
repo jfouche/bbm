@@ -93,7 +93,7 @@ void BuildingBlockPage::removeCurrentBuildingBlock()
 {
     auto bb = getSelection();
     if (bb) {
-        if (m_model->removeBuildingBlock(bb) == false) {
+        if (m_model->deleteBuildingBlock(bb) == false) {
             QMessageBox msgBox;
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.setText("Can't delete building block because it is in use in project or building block.");
@@ -107,3 +107,4 @@ void BuildingBlockPage::showBuildingBlockManager()
     BuildingBlockMgrDlg dlg(m_model, this);
     dlg.exec();
 }
+

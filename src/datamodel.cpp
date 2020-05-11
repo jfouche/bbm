@@ -120,6 +120,15 @@ Project* DataModel::addProject()
     return project;
 }
 
+void DataModel::deleteProject(Project* project)
+{
+    const int index = m_projects.indexOf(project);
+    Q_ASSERT(index != -1);
+    m_projects.remove(index);
+    emit projectDeleted(project);
+    delete project;
+}
+
 BuildingBlock* DataModel::addBuildingBlock()
 {
     auto bb = new BuildingBlock(this);
@@ -128,7 +137,7 @@ BuildingBlock* DataModel::addBuildingBlock()
     return bb;
 }
 
-bool DataModel::removeBuildingBlock(BuildingBlock* bb)
+bool DataModel::deleteBuildingBlock(BuildingBlock* bb)
 {
     const int index = m_buildingblocks.indexOf(bb);
     Q_ASSERT(index != -1);
@@ -148,9 +157,9 @@ bool DataModel::removeBuildingBlock(BuildingBlock* bb)
     }
 
     // Remove the BB
-    delete m_buildingblocks.at(index);
     m_buildingblocks.removeAt(index);
-    emit buildingBlockRemoved(bb);
+    emit buildingBlockDeleted(bb);
+    delete bb;
     return true;
 }
 

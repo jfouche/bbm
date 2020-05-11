@@ -96,11 +96,11 @@ public:
 
     Project* addProject();
     const Projects& projects() const;
-    void removeProject(Project* project);
+    void deleteProject(Project* project);
 
     BuildingBlock* addBuildingBlock();
     const BuildingBlocks& buildingBlocks() const;
-    bool removeBuildingBlock(BuildingBlock* bb);
+    bool deleteBuildingBlock(BuildingBlock* bb);
 
     void save(const QString& path) const;
     void load(const QString& path);
@@ -109,9 +109,9 @@ private slots:
 
 signals:
     void projectAdded(Project*);
-    void projectRemoved(Project*);
+    void projectDeleted(Project*);
     void buildingBlockAdded(BuildingBlock*);
-    void buildingBlockRemoved(BuildingBlock*);
+    void buildingBlockDeleted(BuildingBlock*);
 
 private:
     Projects m_projects;
