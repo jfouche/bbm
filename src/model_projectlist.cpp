@@ -5,7 +5,12 @@ ProjectListModel::ProjectListModel(QObject* parent, DataModel* model)
     : QAbstractListModel(parent)
     , m_model(model)
 {
-    connect(model, &DataModel::projectAdded, this, &ProjectListModel::addProject);
+    connect(m_model, &DataModel::projectAdded, this, &ProjectListModel::addProject);
+    for (auto project: m_model->projects()) {
+        connect(project, &Project::changed, [this, project]() {
+            this->updateProject(project);
+        });
+    }
 }
 
 Project* ProjectListModel::getProject(const QModelIndex &index)
@@ -49,3 +54,9 @@ void ProjectListModel::addProject(Project* project)
     endInsertRows();
 }
 
+void ProjectListModel::updateProject(Project* project)
+{
+    int row = m_model->projects().indexOf(project);
+    auto idx = index(row, 0);
+    emit dataChanged(idx, idx);
+}

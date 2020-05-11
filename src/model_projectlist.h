@@ -21,6 +21,7 @@ public:
 
 private slots:
     void addProject(Project* project);
+    void updateProject(Project* project);
 
 private:
     DataModel* m_model;

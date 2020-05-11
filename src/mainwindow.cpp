@@ -55,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->btnBoxEditProject->button(QDialogButtonBox::Save), &QPushButton::clicked, this, &MainWindow::saveProject);
     connect(ui->btnBoxEditProject->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &MainWindow::hideRightPanel);
 
-    auto onBbSelected = [=](const QItemSelection &selected, const QItemSelection &deselected) {
+    auto onBbSelected = [this](const QItemSelection &selected, const QItemSelection &deselected) {
         Q_UNUSED(deselected)
         if (selected.indexes().empty() == false) {
             auto bbIndex = filteredBbListModel->mapToSource(selected.indexes().first());
@@ -65,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
     };
     connect(ui->listBuildingBlocks->selectionModel(), &QItemSelectionModel::selectionChanged, onBbSelected);
 
-    auto onProjectSelected = [=](const QItemSelection &selected, const QItemSelection &deselected) {
+    auto onProjectSelected = [this](const QItemSelection &selected, const QItemSelection &deselected) {
         Q_UNUSED(deselected)
         if (selected.indexes().empty() == false) {
             auto bbIndex = filteredProjectListModel->mapToSource(selected.indexes().first());
