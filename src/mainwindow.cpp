@@ -1,13 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "datamodel.h"
-#include "page_project.h"
-#include "page_buildingblock.h"
 #include "model_projectlist.h"
 #include "model_bblist.h"
 #include "model_bbtree.h"
 #include "model_availablebbchildren.h"
 #include <QFileDialog>
+#include <QMessageBox>
 
 // ===========================================================================
 
@@ -43,39 +42,52 @@ MainWindow::MainWindow(QWidget *parent)
     availableBbChildrenModel = new AvailableBuildingBlockChildrenModel(bbListModel, this);
     ui->listBbChildren->setModel(availableBbChildrenModel);
 
-    //    m_pageProject = new ProjectPage(m_datamodel, this);
-    //    m_pageBb = new BuildingBlockPage(m_datamodel, this);
-
+    // SIGNALS
     connect(ui->btnLoad, &QPushButton::clicked, this, &MainWindow::load);
     connect(ui->btnSave, &QPushButton::clicked, this, &MainWindow::save);
     connect(ui->editFilter, &QLineEdit::textChanged, this, &MainWindow::filter);
+
     connect(ui->btnAddProject, &QPushButton::clicked, this, &MainWindow::addProject);
     connect(ui->btnEditProject, &QPushButton::clicked, this, &MainWindow::editCurrentProject);
     connect(ui->btnDelProject, &QPushButton::clicked, this, &MainWindow::delCurrentProject);
-    connect(ui->btnBoxEditProject->button(QDialogButtonBox::Save), &QPushButton::clicked, this, &MainWindow::saveProject);
-    connect(ui->btnBoxEditProject->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &MainWindow::hideRightPanel);
+
+    connect(ui->btnAddBb, &QPushButton::clicked, this, &MainWindow::addBuildingBlock);
+    connect(ui->btnEditBb, &QPushButton::clicked, this, &MainWindow::editCurrentBuildingBlock);
+    connect(ui->btnDelBb, &QPushButton::clicked, this, &MainWindow::delCurrentBuildingBlock);
+
+    connect(ui->editProjectName, &QLineEdit::editingFinished, this, &MainWindow::saveProject);
+    connect(ui->btnBoxEditProject->button(QDialogButtonBox::Close), &QPushButton::clicked, this, &MainWindow::hideRightPanel);
+
+    connect(ui->editBbName, &QLineEdit::editingFinished, this, &MainWindow::saveBuildingBlock);
+    connect(ui->editBbRef, &QLineEdit::editingFinished, this, &MainWindow::saveBuildingBlock);
+//    connect(ui->comboBbMaturity, &QComboBox::activated, this, &MainWindow::saveBuildingBlock);
+    connect(ui->editBbInfo, &QLineEdit::editingFinished, this, &MainWindow::saveBuildingBlock);
+    connect(ui->btnBoxEditBb->button(QDialogButtonBox::Close), &QPushButton::clicked, this, &MainWindow::hideRightPanel);
 
     auto onBbSelected = [this](const QItemSelection &selected, const QItemSelection &deselected) {
         Q_UNUSED(deselected)
+        BuildingBlock* bb = nullptr;
         if (selected.indexes().empty() == false) {
             auto bbIndex = filteredBbListModel->mapToSource(selected.indexes().first());
-            auto bb = bbListModel->getBuildingBlock(bbIndex);
-            select(bb);
+            bb = bbListModel->getBuildingBlock(bbIndex);
         }
+        select(bb);
     };
     connect(ui->listBuildingBlocks->selectionModel(), &QItemSelectionModel::selectionChanged, onBbSelected);
 
     auto onProjectSelected = [this](const QItemSelection &selected, const QItemSelection &deselected) {
         Q_UNUSED(deselected)
+        Project* project = nullptr;
         if (selected.indexes().empty() == false) {
             auto bbIndex = filteredProjectListModel->mapToSource(selected.indexes().first());
-            auto project = projectListModel->getProject(bbIndex);
-            select(project);
+            project = projectListModel->getProject(bbIndex);
         }
+        select(project);
     };
     connect(ui->listProjects->selectionModel(), &QItemSelectionModel::selectionChanged, onProjectSelected);
 
     hideRightPanel();
+    updateUI();
 }
 
 MainWindow::~MainWindow()
@@ -108,10 +120,13 @@ void MainWindow::save()
 
 void MainWindow::updateUI()
 {
-    auto bbSelIdx = ui->listBuildingBlocks->selectionModel()->currentIndex();
-    if (bbSelIdx.isValid()) {
+    bool projectSelected = getSelectedProject();
+    ui->btnEditProject->setEnabled(projectSelected);
+    ui->btnDelProject->setEnabled(projectSelected);
 
-    }
+    bool bbSelected = getSelectedBuildingBlock();
+    ui->btnEditBb->setEnabled(bbSelected);
+    ui->btnDelBb->setEnabled(bbSelected);
 }
 
 void MainWindow::filter(const QString& filter)
@@ -124,23 +139,28 @@ void MainWindow::filter(const QString& filter)
 
 void MainWindow::select(BuildingBlock* bb)
 {
-    availableBbChildrenModel->setParentBuildingBlock(bb);
-    ui->wdgEditBb->show();
-    ui->wdgEditProject->hide();
+    ui->listProjects->selectionModel()->reset();
+    hideRightPanel();
+    updateUI();
 }
 
 void MainWindow::select(Project* project)
 {
-    //    availableBbChildrenModel->setParentBuildingBlock(bb);
-    ui->wdgEditBb->hide();
-    ui->wdgEditProject->show();
+    ui->listBuildingBlocks->selectionModel()->reset();
+    hideRightPanel();
+    updateUI();
 }
 
 void MainWindow::addProject()
 {
     Project* project = m_datamodel->addProject();
-    select(project);
-    ui->editProjectName->setFocus();
+    project->setName("<NAME>");
+    Q_ASSERT(m_datamodel->projects().last() == project);
+    int size = m_datamodel->projects().size();
+//    QModelIndex projIdx = projectListModel->index(size-1);
+//    ui->listProjects->selectionModel()->select(projIdx, QItemSelectionModel::SelectCurrent);
+//    editCurrentProject();
+//    ui->editProjectName->setFocus();
 }
 
 void MainWindow::editCurrentProject()
@@ -163,6 +183,7 @@ void MainWindow::delCurrentProject()
         return;
 
     m_datamodel->deleteProject(project);
+    ui->listProjects->selectionModel()->clear();
 }
 
 void MainWindow::saveProject()
@@ -171,7 +192,6 @@ void MainWindow::saveProject()
     if (!project)
         return;
     project->setName(ui->editProjectName->text());
-    ui->rightWidget->hide();
 }
 
 Project* MainWindow::getSelectedProject()
@@ -192,4 +212,53 @@ BuildingBlock* MainWindow::getSelectedBuildingBlock()
     }
     auto idx = filteredBbListModel->mapToSource(sel);
     return bbListModel->getBuildingBlock(idx);
+}
+
+void MainWindow::addBuildingBlock()
+{
+    BuildingBlock* bb = m_datamodel->addBuildingBlock();
+    select(bb);
+    ui->editProjectName->setFocus();
+}
+
+void MainWindow::editCurrentBuildingBlock()
+{
+    BuildingBlock* bb = getSelectedBuildingBlock();
+    if (!bb)
+        return;
+
+    ui->rightWidget->show();
+    ui->wdgEditBb->show();
+    ui->wdgEditProject->hide();
+    ui->editBbName->setText(bb->name());
+    ui->editBbRef->setText(bb->ref());
+//    ui->comboBbMaturity->setText(bb->maturity());
+    ui->editBbInfo->setText(bb->info());
+    ui->editProjectName->setFocus();
+    availableBbChildrenModel->setParentBuildingBlock(bb);
+}
+
+void MainWindow::delCurrentBuildingBlock()
+{
+    BuildingBlock* bb = getSelectedBuildingBlock();
+    if (!bb)
+        return;
+
+    if (m_datamodel->deleteBuildingBlock(bb) == false) {
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText("Can't delete building block because it is in use in project or building block.");
+        msgBox.exec();
+    }
+}
+
+void MainWindow::saveBuildingBlock()
+{
+    BuildingBlock* bb = getSelectedBuildingBlock();
+    if (!bb)
+        return;
+    bb->setName(ui->editBbName->text());
+    bb->setRef(ui->editBbRef->text());
+//    bb->setMaturity(ui->comboBbMaturity);
+    bb->setInfo(ui->editBbInfo->text());
 }

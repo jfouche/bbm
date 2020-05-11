@@ -6,6 +6,7 @@ ProjectListModel::ProjectListModel(QObject* parent, DataModel* model)
     , m_model(model)
 {
     connect(m_model, &DataModel::projectAdded, this, &ProjectListModel::addProject);
+    connect(m_model, &DataModel::projectDeleting, this, &ProjectListModel::delProject);
     for (auto project: m_model->projects()) {
         connect(project, &Project::changed, [this, project]() {
             this->updateProject(project);
@@ -48,10 +49,24 @@ QVariant ProjectListModel::data(const QModelIndex &index, int role) const
 void ProjectListModel::addProject(Project* project)
 {
     Q_ASSERT(m_model->projects().last() == project);
+    connect(project, &Project::changed, [this, project]() {
+        this->updateProject(project);
+    });
+
     QModelIndex parentIdx;
-    const int first = m_model->projects().size();
-    beginInsertRows(parentIdx, first, first);
+    const int index = m_model->projects().size() - 1;
+    beginInsertRows(parentIdx, index, index);
     endInsertRows();
+}
+
+void ProjectListModel::delProject(Project* project)
+{
+    disconnect(project, nullptr, nullptr, nullptr);
+
+    QModelIndex parentIdx;
+    const int index = m_model->projects().indexOf(project);
+    beginRemoveRows(parentIdx, index, index);
+    endRemoveRows();
 }
 
 void ProjectListModel::updateProject(Project* project)

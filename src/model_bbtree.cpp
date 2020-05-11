@@ -21,7 +21,7 @@ TreeItem::TreeItem(DataModel* model, BuildingBlockTreeModel* treeModel)
     , m_bb(nullptr)
 {
     connect(model, &DataModel::buildingBlockAdded, this, &TreeItem::add);
-    connect(model, &DataModel::buildingBlockDeleted, this, &TreeItem::remove);
+    connect(model, &DataModel::buildingBlockDeleting, this, &TreeItem::remove);
     for (BuildingBlock* bb : model->buildingBlocks()) {
         appendChild(new TreeItem(bb, this, m_treeModel));
     }

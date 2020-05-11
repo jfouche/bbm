@@ -41,9 +41,13 @@ private slots:
     void addProject();
     void editCurrentProject();
     void delCurrentProject();
+    void addBuildingBlock();
+    void editCurrentBuildingBlock();
+    void delCurrentBuildingBlock();
     void select(BuildingBlock* bb);
     void select(Project* project);
     void saveProject();
+    void saveBuildingBlock();
     void hideRightPanel();
 
 private:

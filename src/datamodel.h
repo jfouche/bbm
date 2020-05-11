@@ -109,9 +109,9 @@ private slots:
 
 signals:
     void projectAdded(Project*);
-    void projectDeleted(Project*);
+    void projectDeleting(Project*);
     void buildingBlockAdded(BuildingBlock*);
-    void buildingBlockDeleted(BuildingBlock*);
+    void buildingBlockDeleting(BuildingBlock*);
 
 private:
     Projects m_projects;

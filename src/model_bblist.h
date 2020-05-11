@@ -21,7 +21,8 @@ public:
     BuildingBlock* getBuildingBlock(const QModelIndex &index);
 
 private slots:
-    void update();
+    void add(BuildingBlock* bb);
+    void del(BuildingBlock* bb);
 
 private:
     DataModel* m_model;

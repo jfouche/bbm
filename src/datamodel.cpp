@@ -124,8 +124,8 @@ void DataModel::deleteProject(Project* project)
 {
     const int index = m_projects.indexOf(project);
     Q_ASSERT(index != -1);
+    emit projectDeleting(project);
     m_projects.remove(index);
-    emit projectDeleted(project);
     delete project;
 }
 
@@ -157,8 +157,8 @@ bool DataModel::deleteBuildingBlock(BuildingBlock* bb)
     }
 
     // Remove the BB
+    emit buildingBlockDeleting(bb);
     m_buildingblocks.removeAt(index);
-    emit buildingBlockDeleted(bb);
     delete bb;
     return true;
 }

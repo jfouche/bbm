@@ -5,14 +5,8 @@ BuildingBlockListModel::BuildingBlockListModel(DataModel* datamodel, QObject* pa
     : QAbstractListModel(parent)
     , m_model(datamodel)
 {
-//    connect(m_model, SIGNAL(buildingBlockAdded(BuildingBlock*)), this, SLOT(update()));
-//    update();
-}
-
-void BuildingBlockListModel::update()
-{
-//    beginResetModel();
-//    endResetModel();
+    connect(m_model, &DataModel::buildingBlockAdded, this, &BuildingBlockListModel::add);
+    connect(m_model, &DataModel::buildingBlockDeleting, this, &BuildingBlockListModel::del);
 }
 
 BuildingBlock* BuildingBlockListModel::getBuildingBlock(const QModelIndex &index)
@@ -48,4 +42,19 @@ Qt::ItemFlags BuildingBlockListModel::flags(const QModelIndex &index) const
         flags |= Qt::ItemIsUserCheckable;
     }
     return flags;
+}
+
+void BuildingBlockListModel::add(BuildingBlock* bb)
+{
+    QModelIndex parent;
+    int index = m_model->buildingBlocks().size();
+    beginInsertRows(parent, index, index);
+    endInsertRows();
+}
+
+void BuildingBlockListModel::del(BuildingBlock* bb)
+{
+    QModelIndex parent;
+    int index = m_model->buildingBlocks().indexOf(bb);
+    beginRemoveRows(parent, index, index);
 }
