@@ -138,93 +138,105 @@
        <widget class="QWidget" name="rightWidget" native="true">
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <widget class="QGroupBox" name="groupBox">
-           <property name="title">
-            <string>Project</string>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_5">
+          <widget class="QWidget" name="wdgEditBb" native="true">
+           <layout class="QVBoxLayout" name="verticalLayout_8">
             <item>
-             <layout class="QFormLayout" name="formLayout_4">
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_2">
-                <property name="text">
-                 <string>name</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QLineEdit" name="lineEdit_2"/>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="QDialogButtonBox" name="buttonBox">
-              <property name="standardButtons">
-               <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
+             <widget class="QGroupBox" name="groupBox_2">
+              <property name="title">
+               <string>Building block</string>
               </property>
+              <layout class="QVBoxLayout" name="verticalLayout_6">
+               <item>
+                <layout class="QFormLayout" name="formLayout_2">
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_3">
+                   <property name="text">
+                    <string>Name</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QLineEdit" name="lineEdit_3"/>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_4">
+                   <property name="text">
+                    <string>Ref</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QLineEdit" name="lineEdit"/>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="label_5">
+                   <property name="text">
+                    <string>Maturity</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QComboBox" name="comboBox"/>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="label_6">
+                   <property name="text">
+                    <string>Info</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QLineEdit" name="lineEdit_4"/>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QListView" name="listBbChildren"/>
+               </item>
+               <item>
+                <widget class="QDialogButtonBox" name="buttonBox_2">
+                 <property name="standardButtons">
+                  <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
            </layout>
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_2">
-           <property name="title">
-            <string>Building block</string>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_6">
+          <widget class="QWidget" name="wdgEditProject" native="true">
+           <layout class="QVBoxLayout" name="verticalLayout_7">
             <item>
-             <layout class="QFormLayout" name="formLayout_2">
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_3">
-                <property name="text">
-                 <string>Name</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="lineEdit_3"/>
-              </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="label_4">
-                <property name="text">
-                 <string>Ref</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QLineEdit" name="lineEdit"/>
-              </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="label_5">
-                <property name="text">
-                 <string>Maturity</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <widget class="QComboBox" name="comboBox"/>
-              </item>
-              <item row="4" column="0">
-               <widget class="QLabel" name="label_6">
-                <property name="text">
-                 <string>Info</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="1">
-               <widget class="QLineEdit" name="lineEdit_4"/>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="QListView" name="listBbChildren"/>
-            </item>
-            <item>
-             <widget class="QDialogButtonBox" name="buttonBox_2">
-              <property name="standardButtons">
-               <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
+             <widget class="QGroupBox" name="groupBox">
+              <property name="title">
+               <string>Project</string>
               </property>
+              <layout class="QVBoxLayout" name="verticalLayout_5">
+               <item>
+                <layout class="QFormLayout" name="formLayout_4">
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_2">
+                   <property name="text">
+                    <string>name</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QLineEdit" name="lineEdit_2"/>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QDialogButtonBox" name="buttonBox">
+                 <property name="standardButtons">
+                  <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
            </layout>

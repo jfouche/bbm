@@ -35,6 +35,7 @@ private slots:
     void updateUI();
     void filter(const QString& filter);
     void select(BuildingBlock* bb);
+    void select(Project* project);
 
 private:
     Ui::MainWindow *ui;

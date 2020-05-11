@@ -59,6 +59,14 @@ MainWindow::MainWindow(QWidget *parent)
         }
     });
 
+    connect(ui->listProjects->selectionModel(), &QItemSelectionModel::selectionChanged, [=](const QItemSelection &selected, const QItemSelection &deselected) {
+        if (selected.indexes().empty() == false) {
+            auto bbIndex = filteredProjectListModel->mapToSource(selected.indexes().first());
+            auto project = projectListModel->getProject(bbIndex);
+            select(project);
+        }
+    });
+
 //    ui->rightWidget->hide();
 }
 
@@ -103,4 +111,13 @@ void MainWindow::filter(const QString& filter)
 void MainWindow::select(BuildingBlock* bb)
 {
     availableBbChildrenModel->setParentBuildingBlock(bb);
+    ui->wdgEditBb->show();
+    ui->wdgEditProject->hide();
+}
+
+void MainWindow::select(Project* project)
+{
+//    availableBbChildrenModel->setParentBuildingBlock(bb);
+    ui->wdgEditBb->hide();
+    ui->wdgEditProject->show();
 }
