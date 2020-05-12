@@ -66,23 +66,19 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto onBbSelected = [this](const QItemSelection &selected, const QItemSelection &deselected) {
         Q_UNUSED(deselected)
-        BuildingBlock* bb = nullptr;
         if (selected.indexes().empty() == false) {
             auto bbIndex = filteredBbListModel->mapToSource(selected.indexes().first());
-            bb = bbListModel->getBuildingBlock(bbIndex);
+            select(bbListModel->getBuildingBlock(bbIndex));
         }
-        select(bb);
     };
     connect(ui->listBuildingBlocks->selectionModel(), &QItemSelectionModel::selectionChanged, onBbSelected);
 
     auto onProjectSelected = [this](const QItemSelection &selected, const QItemSelection &deselected) {
         Q_UNUSED(deselected)
-        Project* project = nullptr;
         if (selected.indexes().empty() == false) {
             auto bbIndex = filteredProjectListModel->mapToSource(selected.indexes().first());
-            project = projectListModel->getProject(bbIndex);
+            select(projectListModel->getProject(bbIndex));
         }
-        select(project);
     };
     connect(ui->listProjects->selectionModel(), &QItemSelectionModel::selectionChanged, onProjectSelected);
 
@@ -139,14 +135,14 @@ void MainWindow::filter(const QString& filter)
 
 void MainWindow::select(BuildingBlock* bb)
 {
-    ui->listProjects->selectionModel()->reset();
+    ui->listProjects->selectionModel()->clear();
     hideRightPanel();
     updateUI();
 }
 
 void MainWindow::select(Project* project)
 {
-    ui->listBuildingBlocks->selectionModel()->reset();
+    ui->listBuildingBlocks->selectionModel()->clear();
     hideRightPanel();
     updateUI();
 }
