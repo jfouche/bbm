@@ -20,11 +20,14 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
-    void setParentBuildingBlock(BuildingBlock* parentBb);
+    void setCurrentBuildingBlock(BuildingBlock* bb);
+
+private:
+    bool containsCurrent(BuildingBlock* bb) const;
 
 private:
     BuildingBlockListModel* m_model;
-    BuildingBlock* m_parentBB;
+    BuildingBlock* m_currentBB;
 };
 
 #endif // AVAILABLEBUILDINGBLOCKCHILDRENMODEL_H

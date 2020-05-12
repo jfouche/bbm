@@ -32,6 +32,8 @@ public:
 private:
     Project* getSelectedProject();
     BuildingBlock* getSelectedBuildingBlock();
+    void editProject(Project& project);
+    void editBuildingBlock(BuildingBlock& bb);
 
 private slots:
     void load();

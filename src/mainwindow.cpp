@@ -140,23 +140,41 @@ void MainWindow::updateUI()
 void MainWindow::filter(const QString& filter)
 {
     QRegExp regex(filter, Qt::CaseInsensitive);
-    filteredProjectListModel->setFilterRegExp(regex);
-    filteredBbListModel->setFilterRegExp(regex);
-    filteredBbTreeModel->setFilterRegExp(regex);
+    if (ui->wdgEditBb->isVisible()) {
+        availableBbChildrenModel->setFilterRegExp(regex);
+    }
+    else if (ui->wdgEditProject->isVisible()) {
+
+    }
+    else {
+        filteredProjectListModel->setFilterRegExp(regex);
+        filteredBbListModel->setFilterRegExp(regex);
+        filteredBbTreeModel->setFilterRegExp(regex);
+    }
 }
 
 void MainWindow::select(BuildingBlock* bb)
 {
     ui->listProjects->selectionModel()->clear();
-    hideRightPanel();
     updateUI();
+    if (bb && ui->wdgEditBb->isVisible()) {
+        editBuildingBlock(*bb);
+    }
+    else {
+        hideRightPanel();
+    }
 }
 
 void MainWindow::select(Project* project)
 {
     ui->listBuildingBlocks->selectionModel()->clear();
-    hideRightPanel();
     updateUI();
+    if (project && ui->wdgEditProject->isVisible()) {
+        editProject(*project);
+    }
+    else {
+        hideRightPanel();
+    }
 }
 
 void MainWindow::addProject()
@@ -165,22 +183,26 @@ void MainWindow::addProject()
     project->setName("<NAME>");
     Q_ASSERT(m_datamodel->projects().last() == project);
     int size = m_datamodel->projects().size();
-//    QModelIndex projIdx = projectListModel->index(size-1);
-//    ui->listProjects->selectionModel()->select(projIdx, QItemSelectionModel::SelectCurrent);
-//    editCurrentProject();
-//    ui->editProjectName->setFocus();
+    //    QModelIndex projIdx = projectListModel->index(size-1);
+    //    ui->listProjects->selectionModel()->select(projIdx, QItemSelectionModel::SelectCurrent);
+    //    editCurrentProject();
+    //    ui->editProjectName->setFocus();
 }
 
 void MainWindow::editCurrentProject()
 {
     Project* project = getSelectedProject();
-    if (!project)
-        return;
+    if (project) {
+        editProject(*project);
+    }
+}
 
+void MainWindow::editProject(Project& project)
+{
     ui->rightWidget->show();
     ui->wdgEditBb->hide();
     ui->wdgEditProject->show();
-    ui->editProjectName->setText(project->name());
+    ui->editProjectName->setText(project.name());
     ui->editProjectName->setFocus();
 }
 
@@ -232,18 +254,22 @@ void MainWindow::addBuildingBlock()
 void MainWindow::editCurrentBuildingBlock()
 {
     BuildingBlock* bb = getSelectedBuildingBlock();
-    if (!bb)
-        return;
+    if (bb) {
+        editBuildingBlock(*bb);
+    }
+}
 
+void MainWindow::editBuildingBlock(BuildingBlock& bb)
+{
     ui->rightWidget->show();
     ui->wdgEditBb->show();
     ui->wdgEditProject->hide();
-    ui->editBbName->setText(bb->name());
-    ui->editBbRef->setText(bb->ref());
-    ui->comboBbMaturity->setCurrentIndex(bb->maturity());
-    ui->editBbInfo->setText(bb->info());
+    ui->editBbName->setText(bb.name());
+    ui->editBbRef->setText(bb.ref());
+    ui->comboBbMaturity->setCurrentIndex(bb.maturity());
+    ui->editBbInfo->setText(bb.info());
     ui->editProjectName->setFocus();
-    availableBbChildrenModel->setParentBuildingBlock(bb);
+    availableBbChildrenModel->setCurrentBuildingBlock(&bb);
 }
 
 void MainWindow::delCurrentBuildingBlock()
