@@ -18,40 +18,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     datamodel.cpp \
     datamodel_file.cpp \
-    dlg_bbmanager.cpp \
-    dlg_buildingblock.cpp \
-    dlg_project.cpp \
     main.cpp \
     mainwindow.cpp \
     model_availablebbchildren.cpp \
     model_bblist.cpp \
     model_bbtree.cpp \
-    model_projectlist.cpp \
-    page_buildingblock.cpp \
-    page_project.cpp
+    model_projectlist.cpp
 
 HEADERS += \
     datamodel.h \
     datamodel_file.h \
-    dlg_bbmanager.h \
-    dlg_buildingblock.h \
-    dlg_project.h \
     json_utils.hpp \
     mainwindow.h \
     model_availablebbchildren.h \
     model_bblist.h \
     model_bbtree.h \
-    model_projectlist.h \
-    page_buildingblock.h \
-    page_project.h
+    model_projectlist.h
 
 FORMS += \
-    dlg_bbmanager.ui \
-    dlg_buildingblock.ui \
-    dlg_project.ui \
-    mainwindow.ui \
-    page_buildingblock.ui \
-    page_project.ui
+    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
