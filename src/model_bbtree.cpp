@@ -34,6 +34,7 @@ TreeItem::TreeItem(BuildingBlock* bb, TreeItem* parent, BuildingBlockTreeModel* 
 {
     connect(bb, &BuildingBlock::childAdded, this, &TreeItem::add);
     connect(bb, &BuildingBlock::childRemoved, this, &TreeItem::remove);
+    connect(bb, &BuildingBlock::changed, this, &TreeItem::update);
     for (auto bb : m_bb->children()) {
         appendChild(new TreeItem(bb, this, m_treeModel));
     }
@@ -44,10 +45,10 @@ TreeItem::~TreeItem()
     qDeleteAll(m_children);
 }
 
-QModelIndex TreeItem::index()
+QModelIndex TreeItem::index(int col)
 {
     if (m_bb)
-        return m_treeModel->createIndex(row(), 0, this);
+        return m_treeModel->createIndex(row(), col, this);
     return QModelIndex();
 }
 
@@ -78,6 +79,14 @@ void TreeItem::remove(BuildingBlock* bb)
         pos++;
     }
 }
+
+void TreeItem::update()
+{
+    QModelIndex topLeft = index(0);
+    QModelIndex bottomRight = index(COL_COUNT);
+    m_treeModel->dataChanged(topLeft, bottomRight);
+}
+
 
 void TreeItem::appendChild(TreeItem *child)
 {
