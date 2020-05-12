@@ -7,6 +7,7 @@
 #include "model_availablebbchildren.h"
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QStringListModel>
 
 // ===========================================================================
 
@@ -42,6 +43,17 @@ MainWindow::MainWindow(QWidget *parent)
     availableBbChildrenModel = new AvailableBuildingBlockChildrenModel(bbListModel, this);
     ui->listBbChildren->setModel(availableBbChildrenModel);
 
+    /// Filter
+    filteredProjectListModel->setFilterKeyColumn(-1);
+    filteredBbListModel->setFilterKeyColumn(-1);
+    filteredBbTreeModel->setFilterKeyColumn(-1);
+
+    ///
+    QStringListModel *model = new QStringListModel();
+    QStringList list = {"A", "B", "C", "D", "E", "F"};
+    model->setStringList(list);
+    ui->comboBbMaturity->setModel(model);
+
     // SIGNALS
     connect(ui->btnLoad, &QPushButton::clicked, this, &MainWindow::load);
     connect(ui->btnSave, &QPushButton::clicked, this, &MainWindow::save);
@@ -60,9 +72,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->editBbName, &QLineEdit::editingFinished, this, &MainWindow::saveBuildingBlock);
     connect(ui->editBbRef, &QLineEdit::editingFinished, this, &MainWindow::saveBuildingBlock);
-//    connect(ui->comboBbMaturity, &QComboBox::activated, this, &MainWindow::saveBuildingBlock);
     connect(ui->editBbInfo, &QLineEdit::editingFinished, this, &MainWindow::saveBuildingBlock);
     connect(ui->btnBoxEditBb->button(QDialogButtonBox::Close), &QPushButton::clicked, this, &MainWindow::hideRightPanel);
+    connect(ui->comboBbMaturity, qOverload<int>(&QComboBox::activated), [=](int){ saveBuildingBlock(); });
 
     auto onBbSelected = [this](const QItemSelection &selected, const QItemSelection &deselected) {
         Q_UNUSED(deselected)
@@ -228,7 +240,7 @@ void MainWindow::editCurrentBuildingBlock()
     ui->wdgEditProject->hide();
     ui->editBbName->setText(bb->name());
     ui->editBbRef->setText(bb->ref());
-//    ui->comboBbMaturity->setText(bb->maturity());
+    ui->comboBbMaturity->setCurrentIndex(bb->maturity());
     ui->editBbInfo->setText(bb->info());
     ui->editProjectName->setFocus();
     availableBbChildrenModel->setParentBuildingBlock(bb);
@@ -255,6 +267,6 @@ void MainWindow::saveBuildingBlock()
         return;
     bb->setName(ui->editBbName->text());
     bb->setRef(ui->editBbRef->text());
-//    bb->setMaturity(ui->comboBbMaturity);
+    bb->setMaturity(static_cast<BuildingBlock::Maturity>(ui->comboBbMaturity->currentIndex()));
     bb->setInfo(ui->editBbInfo->text());
 }
