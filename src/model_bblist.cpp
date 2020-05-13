@@ -46,8 +46,9 @@ Qt::ItemFlags BuildingBlockListModel::flags(const QModelIndex &index) const
 
 void BuildingBlockListModel::add(BuildingBlock* bb)
 {
+
     QModelIndex parent;
-    int index = m_model->buildingBlocks().size();
+    int index = m_model->buildingBlocks().indexOf(bb);
     beginInsertRows(parent, index, index);
     endInsertRows();
 }
