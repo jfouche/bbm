@@ -22,7 +22,7 @@ SOURCES += \
     mainwindow.cpp \
     model_availablebbchildren.cpp \
     model_bblist.cpp \
-    model_bbtree.cpp \
+    model_detail.cpp \
     model_projectbblist.cpp \
     model_projectlist.cpp
 
@@ -33,7 +33,7 @@ HEADERS += \
     mainwindow.h \
     model_availablebbchildren.h \
     model_bblist.h \
-    model_bbtree.h \
+    model_detail.h \
     model_projectbblist.h \
     model_projectlist.h
 

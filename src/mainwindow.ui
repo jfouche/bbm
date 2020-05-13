@@ -143,7 +143,11 @@
        <widget class="QWidget" name="widget" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QTreeView" name="treeBuildingBlocks"/>
+          <layout class="QVBoxLayout" name="verticalLayout_9">
+           <item>
+            <widget class="QTreeView" name="treeDetail"/>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
@@ -291,7 +295,6 @@
   <tabstop>listProjects</tabstop>
   <tabstop>btnAddBb</tabstop>
   <tabstop>listBuildingBlocks</tabstop>
-  <tabstop>treeBuildingBlocks</tabstop>
   <tabstop>editBbName</tabstop>
   <tabstop>editBbRef</tabstop>
   <tabstop>comboBbMaturity</tabstop>

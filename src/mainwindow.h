@@ -9,7 +9,7 @@ class BuildingBlock;
 class Project;
 class ProjectListModel;
 class BuildingBlockListModel;
-class BuildingBlockTreeModel;
+class DetailTreeModel;
 class AvailableBuildingBlockChildrenModel;
 class ProjectBuildingBlockListModel;
 
@@ -62,8 +62,8 @@ private:
     QSortFilterProxyModel* filteredProjectListModel;
     BuildingBlockListModel*  bbListModel;
     QSortFilterProxyModel* filteredBbListModel;
-    BuildingBlockTreeModel* bbTreeModel;
-    QSortFilterProxyModel* filteredBbTreeModel;
+    DetailTreeModel* detailTreeModel;
+    QSortFilterProxyModel* filteredDetailTreeModel;
     AvailableBuildingBlockChildrenModel* availableBbChildrenModel;
     ProjectBuildingBlockListModel* projectBbListModel;
 };

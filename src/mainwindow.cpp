@@ -3,7 +3,7 @@
 #include "datamodel.h"
 #include "model_projectlist.h"
 #include "model_bblist.h"
-#include "model_bbtree.h"
+#include "model_detail.h"
 #include "model_availablebbchildren.h"
 #include "model_projectbblist.h"
 #include <QFileDialog>
@@ -35,10 +35,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->listBuildingBlocks->setModel(filteredBbListModel);
 
     /// treeBuildingBlocks
-    bbTreeModel = new BuildingBlockTreeModel(m_datamodel, this);
-    filteredBbTreeModel = new QSortFilterProxyModel(this);
-    filteredBbTreeModel->setSourceModel(bbTreeModel);
-    ui->treeBuildingBlocks->setModel(filteredBbTreeModel);
+    detailTreeModel = new DetailTreeModel(m_datamodel, this);
+    filteredDetailTreeModel = new QSortFilterProxyModel(this);
+    filteredDetailTreeModel->setSourceModel(detailTreeModel);
+    ui->treeDetail->setModel(filteredDetailTreeModel);
 
     /// listBbChildren
     availableBbChildrenModel = new AvailableBuildingBlockChildrenModel(bbListModel, this);
@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent)
     /// Filter
     filteredProjectListModel->setFilterKeyColumn(-1);
     filteredBbListModel->setFilterKeyColumn(-1);
-    filteredBbTreeModel->setFilterKeyColumn(-1);
+    filteredDetailTreeModel->setFilterKeyColumn(-1);
 
     ///
     QStringListModel *model = new QStringListModel();
@@ -110,7 +110,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::hideRightPanel()
 {
-    ui->treeBuildingBlocks->setFocus();
+    ui->treeDetail->setFocus();
     ui->rightWidget->hide();
     ui->editProjectName->setText(QString());
 }
@@ -154,13 +154,15 @@ void MainWindow::filter(const QString& filter)
     else {
         filteredProjectListModel->setFilterRegExp(regex);
         filteredBbListModel->setFilterRegExp(regex);
-        filteredBbTreeModel->setFilterRegExp(regex);
+        filteredDetailTreeModel->setFilterRegExp(regex);
     }
 }
 
 void MainWindow::select(BuildingBlock* bb)
 {
     ui->listProjects->selectionModel()->clear();
+    detailTreeModel->set(bb);
+    ui->treeDetail->expandAll();
     updateUI();
     if (bb && ui->wdgEditBb->isVisible()) {
         editBuildingBlock(*bb);
@@ -173,6 +175,8 @@ void MainWindow::select(BuildingBlock* bb)
 void MainWindow::select(Project* project)
 {
     ui->listBuildingBlocks->selectionModel()->clear();
+    detailTreeModel->set(project);
+    ui->treeDetail->expandAll();
     updateUI();
     if (project && ui->wdgEditProject->isVisible()) {
         editProject(*project);
