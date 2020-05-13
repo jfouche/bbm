@@ -180,13 +180,11 @@ void MainWindow::select(Project* project)
 void MainWindow::addProject()
 {
     Project* project = m_datamodel->addProject();
-    project->setName("<NAME>");
-    Q_ASSERT(m_datamodel->projects().last() == project);
-    int size = m_datamodel->projects().size();
-    //    QModelIndex projIdx = projectListModel->index(size-1);
-    //    ui->listProjects->selectionModel()->select(projIdx, QItemSelectionModel::SelectCurrent);
-    //    editCurrentProject();
-    //    ui->editProjectName->setFocus();
+    /// TODO : fixme
+//    int size = m_datamodel->projects().size();
+//    QModelIndex projIdx = projectListModel->index(size-1);
+//    ui->listProjects->selectionModel()->select(projIdx, QItemSelectionModel::SelectCurrent);
+    editProject(*project);
 }
 
 void MainWindow::editCurrentProject()
@@ -247,8 +245,8 @@ BuildingBlock* MainWindow::getSelectedBuildingBlock()
 void MainWindow::addBuildingBlock()
 {
     BuildingBlock* bb = m_datamodel->addBuildingBlock();
-    select(bb);
-    ui->editProjectName->setFocus();
+    /// TODO : select it
+    editBuildingBlock(*bb);
 }
 
 void MainWindow::editCurrentBuildingBlock()
