@@ -9,7 +9,7 @@ BuildingBlockListModel::BuildingBlockListModel(DataModel* datamodel, QObject* pa
     connect(m_model, &DataModel::buildingBlockDeleting, this, &BuildingBlockListModel::del);
 }
 
-BuildingBlock* BuildingBlockListModel::getBuildingBlock(const QModelIndex &index)
+BuildingBlock* BuildingBlockListModel::getBuildingBlock(const QModelIndex &index) const
 {
     return m_model->buildingBlocks().at(index.row());
 }

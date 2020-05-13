@@ -12,6 +12,11 @@ Project::Project(QObject* parent)
 {
 }
 
+const QList<BuildingBlock*>& Project::buildingBlocks() const
+{
+    return m_listBb;
+}
+
 void Project::setName(const QString &name)
 {
     m_name = name;
@@ -20,7 +25,24 @@ void Project::setName(const QString &name)
 
 bool Project::contains(BuildingBlock* bb) const
 {
-    return false;
+    return m_listBb.contains(bb);
+}
+
+void Project::add(BuildingBlock* bb)
+{
+    if (m_listBb.contains(bb) == false) {
+        m_listBb.push_back(bb);
+        emit bbAdded(bb);
+    }
+}
+
+void Project::remove(BuildingBlock* bb)
+{
+    int index = m_listBb.indexOf(bb);
+    if (index != -1) {
+        m_listBb.removeAt(index);
+        emit bbRemoved(bb);
+    }
 }
 
 // ===========================================================================
@@ -56,8 +78,7 @@ void BuildingBlock::setMaturity(Maturity maturity)
 
 void BuildingBlock::add(BuildingBlock *bb)
 {
-    int index = m_children.indexOf(bb);
-    if (index == -1) {
+    if (m_children.contains(bb) == false) {
         m_children.append(bb);
         emit childAdded(bb);
     }

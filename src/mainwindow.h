@@ -11,6 +11,7 @@ class ProjectListModel;
 class BuildingBlockListModel;
 class BuildingBlockTreeModel;
 class AvailableBuildingBlockChildrenModel;
+class ProjectBuildingBlockListModel;
 
 
 QT_BEGIN_NAMESPACE
@@ -64,6 +65,7 @@ private:
     BuildingBlockTreeModel* bbTreeModel;
     QSortFilterProxyModel* filteredBbTreeModel;
     AvailableBuildingBlockChildrenModel* availableBbChildrenModel;
+    ProjectBuildingBlockListModel* projectBbListModel;
 };
 
 #endif // MAINWINDOW_H

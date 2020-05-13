@@ -5,6 +5,7 @@
 
 static const char* KEY_PROJECT_ARRAY = "projects";
 static const char* KEY_PROJECT_NAME = "name";
+static const char* KEY_PROJECT_LIST_BB = "building_blocks";
 static const char* KEY_BB_ARRAY = "building_blocks";
 static const char* KEY_BB_NAME = "name";
 static const char* KEY_BB_REF = "ref";
@@ -94,10 +95,13 @@ JsonReader::JsonReader(DataModel& model)
 {
 }
 
-
 void JsonReader::read(Project* project, const QJsonObject& jsonObj)
 {
     project->setName(json::as<QString>(jsonObj, KEY_PROJECT_NAME));
+    for (auto value : json::as<QJsonArray>(jsonObj, KEY_PROJECT_LIST_BB)) {
+        int id = json::as<int>(value);
+        project->add(m_bbHash[id]);
+    }
 }
 
 void JsonReader::read(BuildingBlock* bb, const QJsonObject& jsonObj)
@@ -115,14 +119,7 @@ void JsonReader::read(BuildingBlock* bb, const QJsonObject& jsonObj)
 
 void JsonReader::read(const QJsonObject& jsonObj)
 {
-    // Read projects
-    for (auto value : json::as<QJsonArray>(jsonObj, KEY_PROJECT_ARRAY)) {
-        QJsonObject projObj = json::as<QJsonObject>(projectIndexValue(value));
-        auto project = m_model.addProject();
-        read(project, projObj);
-    }
-
-    // read BB
+    // read BB first, because project needs BB id to be retrieved
     for (auto value : json::as<QJsonArray>(jsonObj, KEY_BB_ARRAY)) {
         QJsonObject bbObj = json::as<QJsonObject>(bbIndexValue(value));
         auto bb = m_model.addBuildingBlock();
@@ -140,8 +137,12 @@ void JsonReader::read(const QJsonObject& jsonObj)
         }
     }
 
-    // link BB children to projects
-    /// TODO
+    // Read projects
+    for (auto value : json::as<QJsonArray>(jsonObj, KEY_PROJECT_ARRAY)) {
+        QJsonObject projObj = json::as<QJsonObject>(projectIndexValue(value));
+        auto project = m_model.addProject();
+        read(project, projObj);
+    }
 }
 
 JsonWriter::JsonWriter(const DataModel& model)
@@ -156,6 +157,11 @@ JsonWriter::JsonWriter(const DataModel& model)
 void JsonWriter::write(const Project* project, QJsonObject& obj) const
 {
     obj[KEY_PROJECT_NAME] = project->name();
+    QJsonArray listBb;
+    for (const BuildingBlock* bb : project->buildingBlocks()) {
+        listBb.append( QJsonValue(m_bbMap.at(bb)));
+    }
+    obj[KEY_PROJECT_LIST_BB] = listBb;
 }
 
 void JsonWriter::write(const BuildingBlock* bb, QJsonObject& obj) const
@@ -168,10 +174,7 @@ void JsonWriter::write(const BuildingBlock* bb, QJsonObject& obj) const
 
     QJsonArray children;
     for (const BuildingBlock* childBb : bb->children()) {
-        auto it = m_bbMap.find(childBb);
-        if (it->first) {
-            children.append( QJsonValue(it->second));
-        }
+        children.append( QJsonValue(m_bbMap.at(childBb)));
     }
     obj[KEY_BB_CHILDREN] = children;
 }

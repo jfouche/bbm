@@ -244,6 +244,9 @@
                 </layout>
                </item>
                <item>
+                <widget class="QListView" name="listBbInProject"/>
+               </item>
+               <item>
                 <widget class="QDialogButtonBox" name="btnBoxEditProject">
                  <property name="standardButtons">
                   <set>QDialogButtonBox::Close</set>

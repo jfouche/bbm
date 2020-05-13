@@ -5,6 +5,7 @@
 #include "model_bblist.h"
 #include "model_bbtree.h"
 #include "model_availablebbchildren.h"
+#include "model_projectbblist.h"
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QStringListModel>
@@ -42,6 +43,10 @@ MainWindow::MainWindow(QWidget *parent)
     /// listBbChildren
     availableBbChildrenModel = new AvailableBuildingBlockChildrenModel(bbListModel, this);
     ui->listBbChildren->setModel(availableBbChildrenModel);
+
+    /// listBbInProject
+    projectBbListModel = new ProjectBuildingBlockListModel(m_datamodel, this);
+    ui->listBbInProject->setModel(projectBbListModel);
 
     /// Filter
     filteredProjectListModel->setFilterKeyColumn(-1);
@@ -201,6 +206,7 @@ void MainWindow::editProject(Project& project)
     ui->wdgEditBb->hide();
     ui->wdgEditProject->show();
     ui->editProjectName->setText(project.name());
+    projectBbListModel->setProject(&project);
     ui->editProjectName->setFocus();
 }
 

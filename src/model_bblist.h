@@ -18,13 +18,13 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-    BuildingBlock* getBuildingBlock(const QModelIndex &index);
+    BuildingBlock* getBuildingBlock(const QModelIndex &index) const;
 
 private slots:
     void add(BuildingBlock* bb);
     void del(BuildingBlock* bb);
 
-private:
+protected:
     DataModel* m_model;
 };
 

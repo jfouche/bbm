@@ -21,13 +21,20 @@ public:
     const QString& name() const { return m_name; }
     void setName(const QString& name);
 
+    const QList<BuildingBlock*>& buildingBlocks() const;
+
+    void add(BuildingBlock* bb);
+    void remove(BuildingBlock* bb);
     bool contains(BuildingBlock* bb) const;
 
 signals:
     void changed();
+    void bbAdded(BuildingBlock* child);
+    void bbRemoved(BuildingBlock* child);
 
 private:
     QString m_name;
+    QList<BuildingBlock*> m_listBb;
 };
 
 /**
