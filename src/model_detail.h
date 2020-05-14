@@ -14,8 +14,6 @@ class DetailTreeModel;
  */
 class TreeItem : public QObject
 {
-    Q_OBJECT
-
 public:
     explicit TreeItem(DetailTreeModel* treeModel);
     explicit TreeItem(TreeItem* parent);
@@ -30,13 +28,15 @@ public:
     virtual QVariant data(int column) const = 0;
     virtual bool is(void* dataptr) const = 0;
 
-protected slots:
-    void add(BuildingBlock* bb);
-    void remove(BuildingBlock* bb);
+protected:
+//    void add(BuildingBlock* bb);
+    void remove(void* dataptr);
     void update();
 
 protected:
     QModelIndex index(int col = 0);
+    void add(TreeItem* item, const QModelIndex& parentIdx, int pos);
+    const QList<TreeItem*>& children() const;
 
 private:
     QList<TreeItem*> m_children;
@@ -44,13 +44,21 @@ private:
     DetailTreeModel* m_treeModel;
 };
 
+namespace uses {
+
 class ProjectTreeItem : public TreeItem
 {
+    Q_OBJECT
+
 public:
     ProjectTreeItem(Project* project, TreeItem* parent);
 
     bool is(void* dataptr) const override;
     virtual QVariant data(int column) const override;
+
+private slots:
+    void add(BuildingBlock* bb);
+    void remove(BuildingBlock* bb);
 
 private:
     Project* m_project;
@@ -58,11 +66,17 @@ private:
 
 class BuildingBlockTreeItem : public TreeItem
 {
+    Q_OBJECT
+
 public:
     BuildingBlockTreeItem(BuildingBlock* bb, TreeItem* parent);
 
     bool is(void* dataptr) const override;
     virtual QVariant data(int column) const override;
+
+private slots:
+    void add(BuildingBlock* bb);
+    void remove(BuildingBlock* bb);
 
 private:
     BuildingBlock* m_bb;
@@ -77,6 +91,8 @@ public:
     bool is(void* dataptr) const override;
     virtual QVariant data(int column) const override;
 };
+
+} // namespace uses
 
 /**
  * @brief The DetailTreeModel class
@@ -104,9 +120,38 @@ public:
     void set(Project* project);
     void set(BuildingBlock* bb);
 
-private:
+protected:
     DataModel* m_model;
     TreeItem* m_rootItem;
+};
+
+
+/**
+ * @brief The UsesTreeModel class
+ */
+class UsesTreeModel : public DetailTreeModel
+{
+    Q_OBJECT
+
+public:
+    explicit UsesTreeModel(DataModel* model, QObject *parent = nullptr);
+
+    void set(Project* project);
+    void set(BuildingBlock* bb);
+};
+
+/**
+ * @brief The UsedByTreeModel class
+ */
+class UsedByTreeModel : public DetailTreeModel
+{
+    Q_OBJECT
+
+public:
+    explicit UsedByTreeModel(DataModel* model, QObject *parent = nullptr);
+
+    void set(Project* project);
+    void set(BuildingBlock* bb);
 };
 
 #endif // MODEL_DETAIL_H

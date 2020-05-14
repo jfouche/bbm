@@ -32,27 +32,42 @@ TreeItem::~TreeItem()
     qDeleteAll(m_children);
 }
 
+const QList<TreeItem*>& TreeItem::children() const
+{
+    return m_children;
+}
+
 QModelIndex TreeItem::index(int col)
 {
     return m_treeModel->createIndex(row(), col, this);
 }
 
+void TreeItem::add(TreeItem* item, const QModelIndex& parentIdx, int pos)
+{
+    m_treeModel->beginInsertRows(parentIdx, pos, pos);
+    appendChild(item);
+    m_treeModel->endInsertRows();
+}
+
+#if 0
 void TreeItem::add(BuildingBlock* bb)
 {
     QModelIndex parentIdx = index();
     const int first = m_children.size();
     m_treeModel->beginInsertRows(parentIdx, first, first);
-    appendChild(new BuildingBlockTreeItem(bb, this));
+//    appendChild(new BuildingBlockTreeItem(bb, this));
+    appendChild(newChild(bb));
     m_treeModel->endInsertRows();
 }
+#endif // 0
 
-void TreeItem::remove(BuildingBlock* bb)
+void TreeItem::remove(void* data)
 {
     QModelIndex parentIdx = index();
     int pos = 0;
     for (auto it = m_children.begin(); it != m_children.end(); /* no it++ */) {
         const TreeItem* item = *it;
-        if (item->is(bb)) {
+        if (item->is(data)) {
             m_treeModel->beginRemoveRows(parentIdx, pos, pos);
             it = m_children.erase(it);
             delete item;
@@ -105,7 +120,7 @@ TreeItem* TreeItem::parentItem()
 
 // ===========================================================================
 
-ProjectTreeItem::ProjectTreeItem(Project* project, TreeItem* parent)
+uses::ProjectTreeItem::ProjectTreeItem(Project* project, TreeItem* parent)
     : TreeItem(parent)
     , m_project(project)
 {
@@ -117,12 +132,25 @@ ProjectTreeItem::ProjectTreeItem(Project* project, TreeItem* parent)
     }
 }
 
-bool ProjectTreeItem::is(void* dataptr) const
+void uses::ProjectTreeItem::add(BuildingBlock* bb)
+{
+    QModelIndex parentIdx = index();
+    const int pos = children().size();
+    TreeItem* childItem = new BuildingBlockTreeItem(bb, this);
+    TreeItem::add(childItem, parentIdx, pos);
+}
+
+void uses::ProjectTreeItem::remove(BuildingBlock* bb)
+{
+    TreeItem::remove(bb);
+}
+
+bool uses::ProjectTreeItem::is(void* dataptr) const
 {
     return m_project == dataptr;
 }
 
-QVariant ProjectTreeItem::data(int column) const
+QVariant uses::ProjectTreeItem::data(int column) const
 {
     switch (column) {
     case COL_NAME: return m_project->name();
@@ -132,7 +160,7 @@ QVariant ProjectTreeItem::data(int column) const
 
 // ===========================================================================
 
-BuildingBlockTreeItem::BuildingBlockTreeItem(BuildingBlock* bb, TreeItem* parent)
+uses::BuildingBlockTreeItem::BuildingBlockTreeItem(BuildingBlock* bb, TreeItem* parent)
     : TreeItem(parent)
     , m_bb(bb)
 {
@@ -143,12 +171,26 @@ BuildingBlockTreeItem::BuildingBlockTreeItem(BuildingBlock* bb, TreeItem* parent
         appendChild(new BuildingBlockTreeItem(bb, this));
     }
 }
-bool BuildingBlockTreeItem::is(void* dataptr) const
+
+void uses::BuildingBlockTreeItem::add(BuildingBlock* bb)
+{
+    QModelIndex parentIdx = index();
+    const int pos = children().size();
+    TreeItem* childItem = new BuildingBlockTreeItem(bb, this);
+    TreeItem::add(childItem, parentIdx, pos);
+}
+
+void uses::BuildingBlockTreeItem::remove(BuildingBlock* bb)
+{
+    TreeItem::remove(bb);
+}
+
+bool uses::BuildingBlockTreeItem::is(void* dataptr) const
 {
     return m_bb == dataptr;
 }
 
-QVariant BuildingBlockTreeItem::data(int column) const
+QVariant uses::BuildingBlockTreeItem::data(int column) const
 {
     switch (column) {
     case COL_NAME: return m_bb->name();
@@ -161,25 +203,25 @@ QVariant BuildingBlockTreeItem::data(int column) const
 
 // ===========================================================================
 
-RootTreeItem::RootTreeItem(Project* project, DetailTreeModel* treeModel)
+uses::RootTreeItem::RootTreeItem(Project* project, DetailTreeModel* treeModel)
     : TreeItem(treeModel)
 {
     appendChild(new ProjectTreeItem(project, this));
 }
 
-RootTreeItem::RootTreeItem(BuildingBlock* bb, DetailTreeModel* treeModel)
+uses::RootTreeItem::RootTreeItem(BuildingBlock* bb, DetailTreeModel* treeModel)
     : TreeItem(treeModel)
 {
     appendChild(new BuildingBlockTreeItem(bb, this));
 }
 
-bool RootTreeItem::is(void* dataptr) const
+bool uses::RootTreeItem::is(void* dataptr) const
 {
     Q_UNUSED(dataptr)
     return false;
 }
 
-QVariant RootTreeItem::data(int column) const
+QVariant uses::RootTreeItem::data(int column) const
 {
     Q_UNUSED(column)
     return QVariant();
@@ -299,18 +341,25 @@ TreeItem* DetailTreeModel::treeItem(int row, const QModelIndex &parent)
     return item->child(row);
 }
 
-void DetailTreeModel::set(Project* project)
+// ===========================================================================
+
+UsesTreeModel::UsesTreeModel(DataModel* model, QObject *parent)
+    : DetailTreeModel(model, parent)
+{
+}
+
+void UsesTreeModel::set(Project* project)
 {
     beginResetModel();
     delete m_rootItem;
-    m_rootItem = new RootTreeItem(project, this);
+    m_rootItem = new uses::RootTreeItem(project, this);
     endResetModel();
 }
 
-void DetailTreeModel::set(BuildingBlock* bb)
+void UsesTreeModel::set(BuildingBlock* bb)
 {
     beginResetModel();
     delete m_rootItem;
-    m_rootItem = new RootTreeItem(bb, this);
+    m_rootItem = new uses::RootTreeItem(bb, this);
     endResetModel();
 }

@@ -9,7 +9,8 @@ class BuildingBlock;
 class Project;
 class ProjectListModel;
 class BuildingBlockListModel;
-class DetailTreeModel;
+class UsesTreeModel;
+class UsedByTreeModel;
 class AvailableBuildingBlockChildrenModel;
 class ProjectBuildingBlockListModel;
 
@@ -40,6 +41,7 @@ private slots:
     void load();
     void save();
     void updateUI();
+    void updateDetailModel();
     void filter(const QString& filter);
     void addProject();
     void editCurrentProject();
@@ -62,7 +64,8 @@ private:
     QSortFilterProxyModel* filteredProjectListModel;
     BuildingBlockListModel*  bbListModel;
     QSortFilterProxyModel* filteredBbListModel;
-    DetailTreeModel* detailTreeModel;
+    UsesTreeModel* usesTreeModel;
+    UsedByTreeModel* usedByTreeModel;
     QSortFilterProxyModel* filteredDetailTreeModel;
     AvailableBuildingBlockChildrenModel* availableBbChildrenModel;
     ProjectBuildingBlockListModel* projectBbListModel;

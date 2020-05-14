@@ -35,9 +35,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->listBuildingBlocks->setModel(filteredBbListModel);
 
     /// treeBuildingBlocks
-    detailTreeModel = new DetailTreeModel(m_datamodel, this);
+    usesTreeModel = new UsesTreeModel(m_datamodel, this);
+    //usedByTreeModel = new UsedByTreeModel(m_datamodel, this);
     filteredDetailTreeModel = new QSortFilterProxyModel(this);
-    filteredDetailTreeModel->setSourceModel(detailTreeModel);
+    filteredDetailTreeModel->setSourceModel(usesTreeModel);
     ui->treeDetail->setModel(filteredDetailTreeModel);
 
     /// listBbChildren
@@ -63,6 +64,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->btnLoad, &QPushButton::clicked, this, &MainWindow::load);
     connect(ui->btnSave, &QPushButton::clicked, this, &MainWindow::save);
     connect(ui->editFilter, &QLineEdit::textChanged, this, &MainWindow::filter);
+
+    connect(ui->btnUses, &QRadioButton::clicked, this, &MainWindow::updateDetailModel);
+    connect(ui->btnUsedBy, &QRadioButton::clicked, this, &MainWindow::updateDetailModel);
 
     connect(ui->btnAddProject, &QPushButton::clicked, this, &MainWindow::addProject);
     connect(ui->btnEditProject, &QPushButton::clicked, this, &MainWindow::editCurrentProject);
@@ -99,8 +103,10 @@ MainWindow::MainWindow(QWidget *parent)
     };
     connect(ui->listProjects->selectionModel(), &QItemSelectionModel::selectionChanged, onProjectSelected);
 
+    ui->btnUses->setChecked(true);
     hideRightPanel();
     updateUI();
+    updateDetailModel();
 }
 
 MainWindow::~MainWindow()
@@ -142,6 +148,16 @@ void MainWindow::updateUI()
     ui->btnDelBb->setEnabled(bbSelected);
 }
 
+void MainWindow::updateDetailModel()
+{
+    if (ui->btnUses->isChecked()) {
+        filteredDetailTreeModel->setSourceModel(usesTreeModel);
+    }
+    else {
+        filteredDetailTreeModel->setSourceModel(usedByTreeModel);
+    }
+}
+
 void MainWindow::filter(const QString& filter)
 {
     QRegExp regex(filter, Qt::CaseInsensitive);
@@ -161,7 +177,7 @@ void MainWindow::filter(const QString& filter)
 void MainWindow::select(BuildingBlock* bb)
 {
     ui->listProjects->selectionModel()->clear();
-    detailTreeModel->set(bb);
+    usesTreeModel->set(bb);
     ui->treeDetail->expandAll();
     updateUI();
     if (bb && ui->wdgEditBb->isVisible()) {
@@ -175,7 +191,7 @@ void MainWindow::select(BuildingBlock* bb)
 void MainWindow::select(Project* project)
 {
     ui->listBuildingBlocks->selectionModel()->clear();
-    detailTreeModel->set(project);
+    usesTreeModel->set(project);
     ui->treeDetail->expandAll();
     updateUI();
     if (project && ui->wdgEditProject->isVisible()) {
