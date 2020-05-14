@@ -7,6 +7,11 @@ BuildingBlockListModel::BuildingBlockListModel(DataModel* datamodel, QObject* pa
 {
     connect(m_model, &DataModel::buildingBlockAdded, this, &BuildingBlockListModel::add);
     connect(m_model, &DataModel::buildingBlockDeleting, this, &BuildingBlockListModel::del);
+    for (auto bb: m_model->buildingBlocks()) {
+        connect(bb, &BuildingBlock::changed, [this, bb]() {
+            this->update(bb);
+        });
+    }
 }
 
 BuildingBlock* BuildingBlockListModel::getBuildingBlock(const QModelIndex &index) const
@@ -46,6 +51,10 @@ Qt::ItemFlags BuildingBlockListModel::flags(const QModelIndex &index) const
 
 void BuildingBlockListModel::add(BuildingBlock* bb)
 {
+    Q_ASSERT(m_model->buildingBlocks().last() == bb);
+    connect(bb, &BuildingBlock::changed, [this, bb]() {
+        this->update(bb);
+    });
 
     QModelIndex parent;
     int index = m_model->buildingBlocks().indexOf(bb);
@@ -58,4 +67,11 @@ void BuildingBlockListModel::del(BuildingBlock* bb)
     QModelIndex parent;
     int index = m_model->buildingBlocks().indexOf(bb);
     beginRemoveRows(parent, index, index);
+}
+
+void BuildingBlockListModel::update(BuildingBlock* bb)
+{
+    int row = m_model->buildingBlocks().indexOf(bb);
+    auto idx = index(row, 0);
+    emit dataChanged(idx, idx);
 }

@@ -205,11 +205,10 @@ void MainWindow::select(Project* project)
 void MainWindow::addProject()
 {
     Project* project = m_datamodel->addProject();
-    /// TODO : fixme
-//    int size = m_datamodel->projects().size();
-//    QModelIndex projIdx = projectListModel->index(size-1);
-//    ui->listProjects->selectionModel()->select(projIdx, QItemSelectionModel::SelectCurrent);
     editProject(*project);
+    int pos = m_datamodel->projects().indexOf(project);
+    QModelIndex projIdx = filteredProjectListModel->index(pos, 0);
+    ui->listProjects->selectionModel()->select(projIdx, QItemSelectionModel::ClearAndSelect);
 }
 
 void MainWindow::editCurrentProject()
@@ -250,29 +249,31 @@ void MainWindow::saveProject()
 
 Project* MainWindow::getSelectedProject()
 {
-    auto sel = ui->listProjects->selectionModel()->currentIndex();
-    if (sel.isValid() == false) {
+    auto sel = ui->listProjects->selectionModel()->selectedIndexes();
+    if (sel.empty()) {
         return nullptr;
     }
-    auto idx = filteredProjectListModel->mapToSource(sel);
+    auto idx = filteredProjectListModel->mapToSource(sel.at(0));
     return projectListModel->getProject(idx);
 }
 
 BuildingBlock* MainWindow::getSelectedBuildingBlock()
 {
-    auto sel = ui->listBuildingBlocks->selectionModel()->currentIndex();
-    if (sel.isValid() == false) {
+    auto sel = ui->listBuildingBlocks->selectionModel()->selectedIndexes();
+    if (sel.empty()) {
         return nullptr;
     }
-    auto idx = filteredBbListModel->mapToSource(sel);
+    auto idx = filteredBbListModel->mapToSource(sel.at(0));
     return bbListModel->getBuildingBlock(idx);
 }
 
 void MainWindow::addBuildingBlock()
 {
     BuildingBlock* bb = m_datamodel->addBuildingBlock();
-    /// TODO : select it
     editBuildingBlock(*bb);
+    int pos = m_datamodel->buildingBlocks().indexOf(bb);
+    QModelIndex bbIdx = filteredBbListModel->index(pos, 0);
+    ui->listBuildingBlocks->selectionModel()->select(bbIdx, QItemSelectionModel::ClearAndSelect);
 }
 
 void MainWindow::editCurrentBuildingBlock()
@@ -292,7 +293,7 @@ void MainWindow::editBuildingBlock(BuildingBlock& bb)
     ui->editBbRef->setText(bb.ref());
     ui->comboBbMaturity->setCurrentIndex(bb.maturity());
     ui->editBbInfo->setText(bb.info());
-    ui->editProjectName->setFocus();
+    ui->editBbName->setFocus();
     availableBbChildrenModel->setCurrentBuildingBlock(&bb);
 }
 

@@ -23,6 +23,7 @@ public:
 private slots:
     void add(BuildingBlock* bb);
     void del(BuildingBlock* bb);
+    void update(BuildingBlock* bb);
 
 protected:
     DataModel* m_model;
