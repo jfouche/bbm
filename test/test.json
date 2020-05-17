@@ -1,0 +1,56 @@
+{
+    "building_blocks": [
+        {
+            "children": [
+                3,
+                4
+            ],
+            "id": 1,
+            "info": "",
+            "maturity": "F",
+            "name": "BB1",
+            "ref": ""
+        },
+        {
+            "children": [
+            ],
+            "id": 2,
+            "info": "",
+            "maturity": "F",
+            "name": "BB2",
+            "ref": ""
+        },
+        {
+            "children": [
+            ],
+            "id": 3,
+            "info": "",
+            "maturity": "F",
+            "name": "BB11",
+            "ref": ""
+        },
+        {
+            "children": [
+            ],
+            "id": 4,
+            "info": "",
+            "maturity": "F",
+            "name": "BB12",
+            "ref": ""
+        }
+    ],
+    "projects": [
+        {
+            "building_blocks": [
+                1
+            ],
+            "name": "P1"
+        },
+        {
+            "building_blocks": [
+                2
+            ],
+            "name": "P2"
+        }
+    ]
+}

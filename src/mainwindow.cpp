@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_datamodel = new DataModel(this);
     // TODO : remove me
-    m_datamodel->load("test.json");
+    m_datamodel->load("../test/test.json");
 
     /// listProjects
     projectListModel = new ProjectListModel(this, m_datamodel);
