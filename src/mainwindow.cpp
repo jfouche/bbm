@@ -180,7 +180,7 @@ void MainWindow::select(BuildingBlock* bb)
     usesTreeModel->set(bb);
     ui->treeDetail->expandAll();
     updateUI();
-    if (bb && ui->wdgEditBb->isVisible()) {
+    if (bb && ui->rightWidget->isVisible()) {
         editBuildingBlock(*bb);
     }
     else {
@@ -194,7 +194,7 @@ void MainWindow::select(Project* project)
     usesTreeModel->set(project);
     ui->treeDetail->expandAll();
     updateUI();
-    if (project && ui->wdgEditProject->isVisible()) {
+    if (project && ui->rightWidget->isVisible()) {
         editProject(*project);
     }
     else {
