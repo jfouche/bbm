@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     /// treeBuildingBlocks
     usesTreeModel = new UsesTreeModel(m_datamodel, this);
-    //usedByTreeModel = new UsedByTreeModel(m_datamodel, this);
+    usedByTreeModel = new UsedByTreeModel(m_datamodel, this);
     filteredDetailTreeModel = new QSortFilterProxyModel(this);
     filteredDetailTreeModel->setSourceModel(usesTreeModel);
     ui->treeDetail->setModel(filteredDetailTreeModel);

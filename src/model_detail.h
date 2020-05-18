@@ -19,6 +19,16 @@ public:
     explicit TreeItem(TreeItem* parent);
     ~TreeItem();
 
+    enum Columns {
+        COL_NAME,
+        COL_REF,
+        COL_MATURITY,
+        COL_INFO,
+        COL_COUNT
+    };
+
+    static const std::vector<QString> MaturityLabel;
+
     void appendChild(TreeItem *child);
     TreeItem *child(int row);
     int childCount() const;
@@ -35,7 +45,7 @@ protected:
 
 protected:
     QModelIndex index(int col = 0);
-    void add(TreeItem* item, const QModelIndex& parentIdx, int pos);
+    void add(TreeItem* item);
     const QList<TreeItem*>& children() const;
 
 private:
@@ -44,55 +54,6 @@ private:
     DetailTreeModel* m_treeModel;
 };
 
-namespace uses {
-
-class ProjectTreeItem : public TreeItem
-{
-    Q_OBJECT
-
-public:
-    ProjectTreeItem(Project* project, TreeItem* parent);
-
-    bool is(void* dataptr) const override;
-    virtual QVariant data(int column) const override;
-
-private slots:
-    void add(BuildingBlock* bb);
-    void remove(BuildingBlock* bb);
-
-private:
-    Project* m_project;
-};
-
-class BuildingBlockTreeItem : public TreeItem
-{
-    Q_OBJECT
-
-public:
-    BuildingBlockTreeItem(BuildingBlock* bb, TreeItem* parent);
-
-    bool is(void* dataptr) const override;
-    virtual QVariant data(int column) const override;
-
-private slots:
-    void add(BuildingBlock* bb);
-    void remove(BuildingBlock* bb);
-
-private:
-    BuildingBlock* m_bb;
-};
-
-class RootTreeItem : public TreeItem
-{
-public:
-    RootTreeItem(Project* project, DetailTreeModel* treeModel);
-    RootTreeItem(BuildingBlock* bb, DetailTreeModel* treeModel);
-
-    bool is(void* dataptr) const override;
-    virtual QVariant data(int column) const override;
-};
-
-} // namespace uses
 
 /**
  * @brief The DetailTreeModel class

@@ -23,6 +23,8 @@ SOURCES += \
     model_availablebbchildren.cpp \
     model_bblist.cpp \
     model_detail.cpp \
+    model_detail_usedby.cpp \
+    model_detail_uses.cpp \
     model_projectbblist.cpp \
     model_projectlist.cpp
 
@@ -34,6 +36,8 @@ HEADERS += \
     model_availablebbchildren.h \
     model_bblist.h \
     model_detail.h \
+    model_detail_usedby.h \
+    model_detail_uses.h \
     model_projectbblist.h \
     model_projectlist.h
 
