@@ -78,12 +78,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->btnDelBb, &QPushButton::clicked, this, &MainWindow::delCurrentBuildingBlock);
 
     connect(ui->editProjectName, &QLineEdit::editingFinished, this, &MainWindow::saveProject);
-    connect(ui->btnBoxEditProject->button(QDialogButtonBox::Close), &QPushButton::clicked, this, &MainWindow::hideRightPanel);
 
     connect(ui->editBbName, &QLineEdit::editingFinished, this, &MainWindow::saveBuildingBlock);
     connect(ui->editBbRef, &QLineEdit::editingFinished, this, &MainWindow::saveBuildingBlock);
     connect(ui->editBbInfo, &QLineEdit::editingFinished, this, &MainWindow::saveBuildingBlock);
-    connect(ui->btnBoxEditBb->button(QDialogButtonBox::Close), &QPushButton::clicked, this, &MainWindow::hideRightPanel);
     connect(ui->comboBbMaturity, qOverload<int>(&QComboBox::activated), [=](int){ saveBuildingBlock(); });
 
     auto onBbSelected = [this](const QItemSelection &selected, const QItemSelection &deselected) {
@@ -105,7 +103,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->listProjects->selectionModel(), &QItemSelectionModel::selectionChanged, onProjectSelected);
 
     ui->btnUses->setChecked(true);
-    hideRightPanel();
     updateUI();
     updateDetailModel();
 }
@@ -113,13 +110,6 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-
-void MainWindow::hideRightPanel()
-{
-    ui->treeDetail->setFocus();
-    ui->rightWidget->hide();
-    ui->editProjectName->setText(QString());
 }
 
 void MainWindow::load()
@@ -162,17 +152,10 @@ void MainWindow::updateDetailModel()
 void MainWindow::filter(const QString& filter)
 {
     QRegExp regex(filter, Qt::CaseInsensitive);
-    if (ui->wdgEditBb->isVisible()) {
-        availableBbChildrenModel->setFilterRegExp(regex);
-    }
-    else if (ui->wdgEditProject->isVisible()) {
-
-    }
-    else {
-        filteredProjectListModel->setFilterRegExp(regex);
-        filteredBbListModel->setFilterRegExp(regex);
-        filteredDetailTreeModel->setFilterRegExp(regex);
-    }
+    availableBbChildrenModel->setFilterRegExp(regex);
+    filteredProjectListModel->setFilterRegExp(regex);
+    filteredBbListModel->setFilterRegExp(regex);
+    filteredDetailTreeModel->setFilterRegExp(regex);
 }
 
 void MainWindow::select(BuildingBlock* bb)
@@ -182,11 +165,8 @@ void MainWindow::select(BuildingBlock* bb)
     usedByTreeModel->set(bb);
     ui->treeDetail->expandAll();
     updateUI();
-    if (bb && ui->rightWidget->isVisible()) {
+    if (bb && ui->dockEditBb->isVisible()) {
         editBuildingBlock(*bb);
-    }
-    else {
-        hideRightPanel();
     }
 }
 
@@ -197,11 +177,8 @@ void MainWindow::select(Project* project)
     usedByTreeModel->set(project);
     ui->treeDetail->expandAll();
     updateUI();
-    if (project && ui->rightWidget->isVisible()) {
+    if (project && ui->dockEditProject->isVisible()) {
         editProject(*project);
-    }
-    else {
-        hideRightPanel();
     }
 }
 
@@ -224,9 +201,7 @@ void MainWindow::editCurrentProject()
 
 void MainWindow::editProject(Project& project)
 {
-    ui->rightWidget->show();
-    ui->wdgEditBb->hide();
-    ui->wdgEditProject->show();
+    ui->dockEditProject->show();
     ui->editProjectName->setText(project.name());
     projectBbListModel->setProject(&project);
     ui->editProjectName->setFocus();
@@ -289,9 +264,7 @@ void MainWindow::editCurrentBuildingBlock()
 
 void MainWindow::editBuildingBlock(BuildingBlock& bb)
 {
-    ui->rightWidget->show();
-    ui->wdgEditBb->show();
-    ui->wdgEditProject->hide();
+    ui->dockEditBb->show();
     ui->editBbName->setText(bb.name());
     ui->editBbRef->setText(bb.ref());
     ui->comboBbMaturity->setCurrentIndex(bb.maturity());

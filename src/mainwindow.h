@@ -53,7 +53,6 @@ private slots:
     void select(Project* project);
     void saveProject();
     void saveBuildingBlock();
-    void hideRightPanel();
 
 private:
     Ui::MainWindow *ui;
