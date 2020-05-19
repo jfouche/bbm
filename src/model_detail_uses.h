@@ -3,6 +3,9 @@
 
 #include "model_detail.h"
 
+/**
+ * @brief The ProjectUsesTreeItem class
+ */
 class ProjectUsesTreeItem : public TreeItem
 {
     Q_OBJECT
@@ -21,6 +24,9 @@ private:
     Project* m_project;
 };
 
+/**
+ * @brief The BuildingBlockUsesTreeItem class
+ */
 class BuildingBlockUsesTreeItem : public TreeItem
 {
     Q_OBJECT
@@ -39,6 +45,9 @@ private:
     BuildingBlock* m_bb;
 };
 
+/**
+ * @brief The RootUsesTreeItem class
+ */
 class RootUsesTreeItem : public TreeItem
 {
 public:
@@ -47,6 +56,20 @@ public:
 
     bool is(void* dataptr) const override;
     virtual QVariant data(int column) const override;
+};
+
+/**
+ * @brief The UsesTreeModel class
+ */
+class UsesTreeModel : public DetailTreeModel
+{
+    Q_OBJECT
+
+public:
+    explicit UsesTreeModel(DataModel* model, QObject *parent = nullptr);
+
+    void set(Project* project);
+    void set(BuildingBlock* bb);
 };
 
 #endif // MODEL_USES_H

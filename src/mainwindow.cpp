@@ -3,7 +3,8 @@
 #include "datamodel.h"
 #include "model_projectlist.h"
 #include "model_bblist.h"
-#include "model_detail.h"
+#include "model_detail_uses.h"
+#include "model_detail_usedby.h"
 #include "model_availablebbchildren.h"
 #include "model_projectbblist.h"
 #include <QFileDialog>
@@ -178,6 +179,7 @@ void MainWindow::select(BuildingBlock* bb)
 {
     ui->listProjects->selectionModel()->clear();
     usesTreeModel->set(bb);
+    usedByTreeModel->set(bb);
     ui->treeDetail->expandAll();
     updateUI();
     if (bb && ui->rightWidget->isVisible()) {
@@ -192,6 +194,7 @@ void MainWindow::select(Project* project)
 {
     ui->listBuildingBlocks->selectionModel()->clear();
     usesTreeModel->set(project);
+    usedByTreeModel->set(project);
     ui->treeDetail->expandAll();
     updateUI();
     if (project && ui->rightWidget->isVisible()) {

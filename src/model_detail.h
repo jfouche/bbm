@@ -86,33 +86,4 @@ protected:
     TreeItem* m_rootItem;
 };
 
-
-/**
- * @brief The UsesTreeModel class
- */
-class UsesTreeModel : public DetailTreeModel
-{
-    Q_OBJECT
-
-public:
-    explicit UsesTreeModel(DataModel* model, QObject *parent = nullptr);
-
-    void set(Project* project);
-    void set(BuildingBlock* bb);
-};
-
-/**
- * @brief The UsedByTreeModel class
- */
-class UsedByTreeModel : public DetailTreeModel
-{
-    Q_OBJECT
-
-public:
-    explicit UsedByTreeModel(DataModel* model, QObject *parent = nullptr);
-
-    void set(Project* project);
-    void set(BuildingBlock* bb);
-};
-
 #endif // MODEL_DETAIL_H
