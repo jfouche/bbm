@@ -48,7 +48,8 @@
         },
         {
             "building_blocks": [
-                2
+                2,
+                1
             ],
             "name": "P2"
         }
