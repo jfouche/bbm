@@ -15,8 +15,7 @@ ProjectUsesTreeItem::ProjectUsesTreeItem(Project* project, TreeItem* parent)
 
 void ProjectUsesTreeItem::add(BuildingBlock* bb)
 {
-    TreeItem* childItem = new BuildingBlockUsesTreeItem(bb, this);
-    TreeItem::add(childItem);
+    TreeItem::add(new BuildingBlockUsesTreeItem(bb, this));
 }
 
 void ProjectUsesTreeItem::remove(BuildingBlock* bb)
@@ -53,8 +52,7 @@ BuildingBlockUsesTreeItem::BuildingBlockUsesTreeItem(BuildingBlock* bb, TreeItem
 
 void BuildingBlockUsesTreeItem::add(BuildingBlock* bb)
 {
-    TreeItem* childItem = new BuildingBlockUsesTreeItem(bb, this);
-    TreeItem::add(childItem);
+    TreeItem::add(new BuildingBlockUsesTreeItem(bb, this));
 }
 
 void BuildingBlockUsesTreeItem::remove(BuildingBlock* bb)

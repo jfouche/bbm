@@ -4,47 +4,65 @@
 #include "model_detail.h"
 #include <QSet>
 
+class UsedByBuildingBlock;
+
+struct UsedByParents {
+    QSet<UsedByBuildingBlock*> bb;
+    QSet<Project*> project;
+};
+
+/**
+ * @brief The UsedByBuildingBlock class
+ */
+class UsedByBuildingBlock : public QObject
+{
+    Q_OBJECT
+
+public:
+    UsedByBuildingBlock(BuildingBlock* bb);
+
+    const BuildingBlock* bb() const;
+    const UsedByParents& parents() const;
+
+public slots:
+    void addBb(UsedByBuildingBlock* parent);
+    void addProject(Project* parent);
+    void removeBb(UsedByBuildingBlock* parent);
+    void removeProject(Project* parent);
+
+signals:
+    void bbAdded(UsedByBuildingBlock*);
+    void projectAdded(Project*);
+    void bbRemoved(UsedByBuildingBlock*);
+    void projectRemoved(Project*);
+
+private:
+    const BuildingBlock* m_bb;
+    UsedByParents m_parents;
+};
+
+
+
 /**
  * @brief The UsedByDataModel class
  */
-class UsedByDataModel
+class UsedByDataModel : public QObject
 {
-private:
-    struct Parents {
-        QSet<BuildingBlock*> bb;
-        QSet<Project*> project;
-    };
+    Q_OBJECT
 
 public:
-    typedef QMap<BuildingBlock*, Parents> MapParents;
-    typedef MapParents::const_iterator const_iterator;
+    UsedByDataModel(DataModel* model);
 
-    const const_iterator operator()(BuildingBlock* bb) const {
-        return parents.find(bb);
-    }
-
-    const_iterator end() const {
-        return parents.end();
-    }
-
-    void insert(BuildingBlock* bb, BuildingBlock* parent) {
-        parents[bb].bb.insert(parent);
-    }
-
-    void insert(BuildingBlock* bb, Project* parent) {
-        parents[bb].project.insert(parent);
-    }
-
-    void remove(BuildingBlock* bb, BuildingBlock* parent) {
-        parents[bb].bb.remove(parent);
-    }
-
-    void remove(BuildingBlock* bb, Project* parent) {
-        parents[bb].project.remove(parent);
-    }
+    UsedByBuildingBlock* get(BuildingBlock* bb);
 
 private:
-    MapParents parents;
+    void insert(BuildingBlock* bb, BuildingBlock* parent);
+    void insert(BuildingBlock* bb, Project* parent);
+    void remove(BuildingBlock* bb, BuildingBlock* parent);
+    void remove(BuildingBlock* bb, Project* parent);
+
+private:
+    QVector<UsedByBuildingBlock*> m_listBb;
 };
 
 /**
@@ -58,7 +76,7 @@ public:
     ProjectUsedByTreeItem(Project* project, TreeItem* parent);
 
     bool is(void* dataptr) const override;
-    virtual QVariant data(int column) const override;
+    QVariant data(int column) const override;
 
 private:
     Project* m_project;
@@ -72,14 +90,19 @@ class BuildingBlockUsedByTreeItem : public TreeItem
     Q_OBJECT
 
 public:
-    BuildingBlockUsedByTreeItem(BuildingBlock* bb, const UsedByDataModel& parents, TreeItem* parent);
+    BuildingBlockUsedByTreeItem(UsedByBuildingBlock* bb, TreeItem* parent);
 
     bool is(void* dataptr) const override;
-    virtual QVariant data(int column) const override;
+    QVariant data(int column) const override;
+
+public slots:
+    void addBb(UsedByBuildingBlock* bb);
+    void addProject(Project* project);
+    void removeBb(UsedByBuildingBlock* bb);
+    void removeProject(Project* project);
 
 private:
-    BuildingBlock* m_bb;
-    const UsedByDataModel& m_model;
+    UsedByBuildingBlock* m_bb;
 };
 
 /**
@@ -88,14 +111,11 @@ private:
 class RootUsedByTreeItem : public TreeItem
 {
 public:
-    RootUsedByTreeItem(Project* project, const UsedByDataModel& model, DetailTreeModel* treeModel);
-    RootUsedByTreeItem(BuildingBlock* bb, const UsedByDataModel& model, DetailTreeModel* treeModel);
+    RootUsedByTreeItem(Project* project, DetailTreeModel* treeModel);
+    RootUsedByTreeItem(UsedByBuildingBlock* bb, DetailTreeModel* treeModel);
 
     bool is(void* dataptr) const override;
-    virtual QVariant data(int column) const override;
-
-private:
-    const UsedByDataModel& m_model;
+    QVariant data(int column) const override;
 };
 
 /**

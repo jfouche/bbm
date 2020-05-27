@@ -14,7 +14,7 @@ public:
     ProjectUsesTreeItem(Project* project, TreeItem* parent);
 
     bool is(void* dataptr) const override;
-    virtual QVariant data(int column) const override;
+    QVariant data(int column) const override;
 
 private slots:
     void add(BuildingBlock* bb);
@@ -35,7 +35,7 @@ public:
     BuildingBlockUsesTreeItem(BuildingBlock* bb, TreeItem* parent);
 
     bool is(void* dataptr) const override;
-    virtual QVariant data(int column) const override;
+    QVariant data(int column) const override;
 
 private slots:
     void add(BuildingBlock* bb);
@@ -55,7 +55,7 @@ public:
     RootUsesTreeItem(BuildingBlock* bb, DetailTreeModel* treeModel);
 
     bool is(void* dataptr) const override;
-    virtual QVariant data(int column) const override;
+    QVariant data(int column) const override;
 };
 
 /**

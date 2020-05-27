@@ -39,11 +39,8 @@ public:
     virtual bool is(void* dataptr) const = 0;
 
 protected:
-//    void add(BuildingBlock* bb);
     void remove(void* dataptr);
     void update();
-
-protected:
     QModelIndex index(int col = 0);
     void add(TreeItem* item);
     const QList<TreeItem*>& children() const;
