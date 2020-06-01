@@ -68,6 +68,16 @@ public:
     const QList<BuildingBlock*>& children();
     const QList<BuildingBlock*>& children() const;
 
+    const QList<BuildingBlock*>& parentBb();
+    const QList<BuildingBlock*>& parentBb() const;
+    const QList<Project*>& parentProject();
+    const QList<Project*>& parentProject() const;
+
+    void addParent(Project* project);
+    void addParent(BuildingBlock* parent);
+    void removeParent(Project* project);
+    void removeParent(BuildingBlock* parent);
+
     /**
     * @brief contains
     * @param bb
@@ -79,6 +89,10 @@ signals:
     void changed();
     void childAdded(BuildingBlock* child);
     void childRemoved(BuildingBlock* child);
+    void parentAdded(BuildingBlock* parent);
+    void parentAdded(Project* parent);
+    void parentRemoved(BuildingBlock* parent);
+    void parentRemoved(Project* parent);
 
 private:
     QString m_name;
@@ -86,6 +100,8 @@ private:
     Maturity m_maturity;
     QString m_info;
     QList<BuildingBlock*> m_children;
+    QList<BuildingBlock*> m_parentBb;
+    QList<Project*> m_parentProjects;
 };
 
 /**

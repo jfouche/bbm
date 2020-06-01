@@ -33,6 +33,7 @@ void Project::add(BuildingBlock* bb)
     if (m_listBb.contains(bb) == false) {
         m_listBb.push_back(bb);
         emit bbAdded(bb);
+        bb->addParent(this);
     }
 }
 
@@ -42,6 +43,7 @@ void Project::remove(BuildingBlock* bb)
     if (index != -1) {
         m_listBb.removeAt(index);
         emit bbRemoved(bb);
+        bb->removeParent(this);
     }
 }
 
@@ -81,6 +83,7 @@ void BuildingBlock::add(BuildingBlock *bb)
     if (m_children.contains(bb) == false) {
         m_children.append(bb);
         emit childAdded(bb);
+        bb->addParent(this);
     }
 }
 
@@ -90,6 +93,7 @@ void BuildingBlock::remove(BuildingBlock* bb)
     if (index != -1) {
         m_children.removeAt(index);
         emit childRemoved(bb);
+        bb->removeParent(this);
     }
 }
 
@@ -103,6 +107,16 @@ const QList<BuildingBlock *> &BuildingBlock::children() const
     return m_children;
 }
 
+const QList<BuildingBlock*>& BuildingBlock::parentBb()
+{
+    return m_parentBb;
+}
+
+const QList<Project*>& BuildingBlock::parentProject()
+{
+    return m_parentProjects;
+}
+
 bool BuildingBlock::contains(BuildingBlock* bb) const
 {
     for (const BuildingBlock* child : m_children) {
@@ -114,6 +128,44 @@ bool BuildingBlock::contains(BuildingBlock* bb) const
         }
     }
     return false;
+}
+
+void BuildingBlock::addParent(Project* project)
+{
+    Q_ASSERT(m_parentProjects.indexOf(project) == -1);
+    if (m_parentProjects.indexOf(project) == -1) {
+        m_parentProjects.push_back(project);
+        emit parentAdded(project);
+    }
+}
+
+void BuildingBlock::addParent(BuildingBlock* parent)
+{
+    Q_ASSERT(m_parentBb.indexOf(parent) == -1);
+    if (m_parentBb.indexOf(parent) == -1) {
+        m_parentBb.push_back(parent);
+        emit parentAdded(parent);
+    }
+}
+
+void BuildingBlock::removeParent(Project* project)
+{
+    Q_ASSERT(m_parentProjects.indexOf(project) != -1);
+    int i = m_parentProjects.indexOf(project);
+    if (i != -1) {
+        m_parentProjects.removeAt(i);
+        emit parentRemoved(project);
+    }
+}
+
+void BuildingBlock::removeParent(BuildingBlock* parent)
+{
+    Q_ASSERT(m_parentBb.indexOf(parent) != -1);
+    int i = m_parentBb.indexOf(parent);
+    if (i != -1) {
+        m_parentBb.removeAt(i);
+        emit parentRemoved(parent);
+    }
 }
 
 // ===========================================================================
