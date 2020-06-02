@@ -6,7 +6,7 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-add_executable(app
+add_executable(bbm-ui
     main.cpp
     mainwindow.cpp
     model_availablebbchildren.cpp
@@ -20,11 +20,11 @@ add_executable(app
     mainwindow.ui
 )
 
-target_include_directories(app
+target_include_directories(bbm-ui
     PUBLIC ../src
 )
 
-target_link_libraries(app 
+target_link_libraries(bbm-ui 
     PRIVATE bbm 
     PRIVATE Qt5::Widgets
 )

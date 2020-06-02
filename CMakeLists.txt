@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1.0)
 
-project(bbm-ui)
+project(bbm)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -14,7 +14,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     # Note this needs to be done in the main CMakeLists
     # since it calls enable_testing, which must be in the
     # main CMakeLists.
-    #include(CTest)
+    include(CTest)
 endif()
 
 
@@ -22,7 +22,7 @@ add_subdirectory(src)
 add_subdirectory(app)
 
 # Testing only available if this is the main app
-# Emergency override MODERN_CMAKE_BUILD_TESTING provided as well
-if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING) AND BUILD_TESTING)
-    add_subdirectory(tests)
+# Emergency override BBM_BUILD_TESTING provided as well
+if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR BBM_BUILD_TESTING) AND BUILD_TESTING)
+    add_subdirectory(test)
 endif()

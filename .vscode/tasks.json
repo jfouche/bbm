@@ -14,14 +14,30 @@
               }
         },
         {
+            "label": "test",
+            "type": "shell",
+            "command": "cd build && mingw32-make -f Makefile all test",
+            "problemMatcher": "$gcc",
+        },
+        {
             "label": "cmake",
             "type": "shell",
-            "command": "cd build && cmake -G \"MinGW Makefiles\" -DCMAKE_PREFIX_PATH=E:\\App\\Qt\\5.15.0\\mingw81_64 .."
+            "command": "cmake -B build -G \"MinGW Makefiles\" -DCMAKE_PREFIX_PATH=E:\\App\\Qt\\5.15.0\\mingw81_64 ."
+        },
+        {
+            "label": "cmake-dbg",
+            "type": "shell",
+            "command": "cmake -B build -G \"MinGW Makefiles\" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=E:\\App\\Qt\\5.15.0\\mingw81_64 ."
         },
         {
             "label": "clean",
             "type": "shell",
             "command": "del /S /Q build\\*"
+        },
+        {
+            "label": "windeployqt",
+            "type": "shell",
+            "command": "cd build/app && windeployqt bbm-ui.exe"
         }
     ]
 }
