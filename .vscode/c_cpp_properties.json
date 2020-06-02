@@ -1,0 +1,20 @@
+{
+    "configurations": [{
+        "name": "Win64",
+        "includePath": [
+            "${workspaceFolder}/**",
+            "E:\\App\\Qt\\5.15.0\\mingw81_64\\include\\**"
+        ],
+        "defines": [
+            "_DEBUG",
+            "UNICODE",
+            "_UNICODE"
+        ],
+        "compilerPath": "E:\\App\\Qt\\Tools\\mingw810_64\\bin\\gcc.exe",
+        "cStandard": "c11",
+        "cppStandard": "gnu++14",
+        "intelliSenseMode": "clang-x86",
+        "configurationProvider": "ms-vscode.cmake-tools"
+    }],
+    "version": 4
+}
