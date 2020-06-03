@@ -20,11 +20,6 @@ add_executable(bbm-ui
     mainwindow.ui
 )
 
-target_include_directories(bbm-ui
-    PUBLIC ../src
-)
+target_include_directories(bbm-ui PUBLIC ../src)
 
-target_link_libraries(bbm-ui 
-    PRIVATE bbm 
-    PRIVATE Qt5::Widgets
-)
+target_link_libraries(bbm-ui PRIVATE bbm Qt5::Widgets)

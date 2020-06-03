@@ -9,6 +9,4 @@ add_library(bbm
     datamodel_file.cpp
 )
 
-target_link_libraries(bbm PRIVATE 
-    Qt5::Widgets
-)
+target_link_libraries(bbm PRIVATE Qt5::Widgets)

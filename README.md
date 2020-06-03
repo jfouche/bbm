@@ -2,14 +2,25 @@
 Building blocks manager
 
 ## Init
-Dans `.vscode/settings.json`, définir les variables d'environnement nécessaires au build (mingw et Qt).
+Les outils préconnisés, et expliqués dans ce documents sont :
+- VSCode
+- CMake Tools vscode plugin
 
+Dépendance : Qt 
+
+Dans `.vscode/settings.json`, définir les variables nécessaires au build.
+* Pour permettre `windeployqt`
+```
     "terminal.integrated.env.windows": {
-        "PATH": "E:\\App\\Qt\\Tools\\mingw810_64\\bin;${env:PATH};E:\\App\\Qt\\5.15.0\\mingw81_64\\bin"
-    },
+        "PATH": "${env:PATH};E:\\App\\Qt\\5.15.0\\mingw81_64\\bin"
+    }
+```
+* Pour ajouter Qt 
+```
     "cmake.configureSettings": { 
         "CMAKE_PREFIX_PATH": "E:\\App\\Qt\\5.15.0\\mingw81_64"
     }
+```
 
 ## Taches VSCODE
 * `clean`: Suppresion du répertoire du build
