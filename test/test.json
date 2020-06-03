@@ -1,6 +1,5 @@
 {
-    "building_blocks": [
-        {
+    "building_blocks": [{
             "children": [
                 3,
                 4
@@ -12,8 +11,7 @@
             "ref": ""
         },
         {
-            "children": [
-            ],
+            "children": [],
             "id": 2,
             "info": "",
             "maturity": "F",
@@ -21,8 +19,7 @@
             "ref": ""
         },
         {
-            "children": [
-            ],
+            "children": [],
             "id": 3,
             "info": "",
             "maturity": "F",
@@ -30,8 +27,7 @@
             "ref": ""
         },
         {
-            "children": [
-            ],
+            "children": [],
             "id": 4,
             "info": "",
             "maturity": "F",
@@ -39,8 +35,7 @@
             "ref": ""
         }
     ],
-    "projects": [
-        {
+    "projects": [{
             "building_blocks": [
                 1
             ],
@@ -48,8 +43,8 @@
         },
         {
             "building_blocks": [
-                2,
-                1
+                1,
+                2
             ],
             "name": "P2"
         }
