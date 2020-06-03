@@ -53,7 +53,7 @@ bool ProjectBuildingBlockListModel::setData(const QModelIndex &index, const QVar
             m_project->add(bb);
         }
         else {
-            m_project->add(bb);
+            m_project->remove(bb);
         }
         // We should observe bbAdded/bbRemoved signals, but it's easier this way
         emit dataChanged(index, index);
