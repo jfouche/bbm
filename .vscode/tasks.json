@@ -12,6 +12,12 @@
             "label": "windeployqt",
             "type": "shell",
             "command": "cd build/app && windeployqt bbm-ui.exe && cd ../test && windeployqt test-bbm.exe"
+        },
+        {
+            "label": "cppcheck",
+            "type": "shell",
+            "command": "cppcheck --project=build/compile_commands.json --template=\"{file}:{line}:0: {severity}: {message}\" -DQ_MOC_OUTPUT_REVISION=67",
+            "problemMatcher":"$gcc"
         }
     ]
 }
