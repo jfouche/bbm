@@ -16,7 +16,7 @@
         {
             "label": "cppcheck",
             "type": "shell",
-            "command": "cppcheck --project=build/compile_commands.json --template=\"{file}:{line}:0: {severity}: {message}\" -DQ_MOC_OUTPUT_REVISION=67",
+            "command": "cppcheck --project=build/compile_commands.json --template=gcc -DQ_MOC_OUTPUT_REVISION=67",
             "problemMatcher":"$gcc"
         }
     ]
