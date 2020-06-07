@@ -113,7 +113,6 @@ DetailTreeModel::DetailTreeModel(DataModel* model, QObject *parent)
 
 DetailTreeModel::~DetailTreeModel()
 {
-    delete m_rootItem;
 }
 
 QVariant DetailTreeModel::headerData(int section, Qt::Orientation orientation, int role) const

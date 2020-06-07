@@ -199,7 +199,7 @@ void DataModel::deleteProject(Project* project)
     Q_ASSERT(index != -1);
     emit projectDeleting(project);
     m_projects.remove(index);
-    delete project;
+    project->deleteLater();
 }
 
 BuildingBlock* DataModel::addBuildingBlock()
@@ -232,7 +232,7 @@ bool DataModel::deleteBuildingBlock(BuildingBlock* bb)
     // Remove the BB
     emit buildingBlockDeleting(bb);
     m_buildingblocks.removeAt(index);
-    delete bb;
+    bb->deleteLater();
     return true;
 }
 

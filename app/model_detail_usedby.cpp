@@ -101,7 +101,7 @@ UsedByTreeModel::UsedByTreeModel(DataModel* model, QObject *parent)
 void UsedByTreeModel::set(Project* project)
 {
     beginResetModel();
-    delete m_rootItem;
+    m_rootItem->deleteLater();
     m_rootItem = new RootUsedByTreeItem(project, this);
     endResetModel();
 }
@@ -109,7 +109,7 @@ void UsedByTreeModel::set(Project* project)
 void UsedByTreeModel::set(BuildingBlock* bb)
 {
     beginResetModel();
-    delete m_rootItem;
+    m_rootItem->deleteLater();
     m_rootItem = new RootUsedByTreeItem(bb, this);
     endResetModel();
 }

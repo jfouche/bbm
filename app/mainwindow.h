@@ -36,6 +36,8 @@ private:
     BuildingBlock* getSelectedBuildingBlock();
     void editProject(Project& project);
     void editBuildingBlock(BuildingBlock& bb);
+    void select(BuildingBlock* bb);
+    void select(Project* project);
 
 private slots:
     void load();
@@ -49,8 +51,6 @@ private slots:
     void addBuildingBlock();
     void editCurrentBuildingBlock();
     void delCurrentBuildingBlock();
-    void select(BuildingBlock* bb);
-    void select(Project* project);
     void saveProject();
     void saveBuildingBlock();
 
