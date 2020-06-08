@@ -1,6 +1,6 @@
 #include "model_detail_usedby.h"
 #include "datamodel.h"
-
+#include <QDebug>
 
 // ===========================================================================
 
@@ -29,22 +29,14 @@ BuildingBlockUsedByTreeItem::BuildingBlockUsedByTreeItem(BuildingBlock* bb, Tree
     : TreeItem(parent)
     , m_bb(bb)
 {
-    connect(bb, qOverload<BuildingBlock*>(&BuildingBlock::parentAdded), [&](BuildingBlock* parent) {
-        TreeItem::add(new BuildingBlockUsedByTreeItem(parent, this));
-    });
-    connect(bb, qOverload<Project*>(&BuildingBlock::parentAdded), [&](Project* parent) {
-        TreeItem::add(new ProjectUsedByTreeItem(parent, this));
-    });
-    connect(bb, qOverload<BuildingBlock*>(&BuildingBlock::parentRemoved), [&](BuildingBlock* parent) {
-        TreeItem::remove(parent);
-    });
-    connect(bb, qOverload<Project*>(&BuildingBlock::parentRemoved), [&](Project* parent) {
-        TreeItem::remove(parent);
-    });
-    for (const auto& parent : bb->parentBb()) {
+    connect(m_bb, qOverload<BuildingBlock*>(&BuildingBlock::parentAdded), this, qOverload<BuildingBlock*>(&BuildingBlockUsedByTreeItem::add));
+    connect(m_bb, qOverload<Project*>(&BuildingBlock::parentAdded), this, qOverload<Project*>(&BuildingBlockUsedByTreeItem::add));
+    connect(m_bb, qOverload<BuildingBlock*>(&BuildingBlock::parentRemoved), this, qOverload<BuildingBlock*>(&BuildingBlockUsedByTreeItem::remove));
+    connect(m_bb, qOverload<Project*>(&BuildingBlock::parentRemoved), this, qOverload<Project*>(&BuildingBlockUsedByTreeItem::remove));
+    for (const auto& parent : m_bb->parentBb()) {
         appendChild(new BuildingBlockUsedByTreeItem(parent, this));
     }
-    for (const auto& parent : bb->parentProject()) {
+    for (const auto& parent : m_bb->parentProject()) {
         appendChild(new ProjectUsedByTreeItem(parent, this));
     }
 }
@@ -63,6 +55,26 @@ QVariant BuildingBlockUsedByTreeItem::data(int column) const
     case COL_INFO: return m_bb->info();
     }
     return QVariant();
+}
+
+void BuildingBlockUsedByTreeItem::add(Project* parent)
+{
+    TreeItem::add(new ProjectUsedByTreeItem(parent, this));
+}
+
+void BuildingBlockUsedByTreeItem::add(BuildingBlock* parent)
+{
+    TreeItem::add(new BuildingBlockUsedByTreeItem(parent, this));
+}
+
+void BuildingBlockUsedByTreeItem::remove(Project* parent)
+{
+    remove(parent);
+}
+
+void BuildingBlockUsedByTreeItem::remove(BuildingBlock* parent)
+{
+    remove(parent);
 }
 
 // ===========================================================================
@@ -109,7 +121,7 @@ void UsedByTreeModel::set(Project* project)
 void UsedByTreeModel::set(BuildingBlock* bb)
 {
     beginResetModel();
-    m_rootItem->deleteLater();
+    if (m_rootItem) m_rootItem->deleteLater();
     m_rootItem = new RootUsedByTreeItem(bb, this);
     endResetModel();
 }

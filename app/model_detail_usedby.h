@@ -35,6 +35,12 @@ public:
     bool is(void* dataptr) const override;
     QVariant data(int column) const override;
 
+private slots:
+    void add(Project* project);
+    void add(BuildingBlock* bb);
+    void remove(Project* project);
+    void remove(BuildingBlock* bb);
+
 private:
     BuildingBlock* m_bb;
 };
