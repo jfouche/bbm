@@ -34,8 +34,8 @@ public:
 private:
     Project* getSelectedProject();
     BuildingBlock* getSelectedBuildingBlock();
-    void editProject(Project& project);
-    void editBuildingBlock(BuildingBlock& bb);
+    void editProject(Project* project);
+    void editBuildingBlock(BuildingBlock* bb);
     void select(BuildingBlock* bb);
     void select(Project* project);
 

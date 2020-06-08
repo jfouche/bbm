@@ -164,7 +164,7 @@ void MainWindow::select(BuildingBlock* bb)
     ui->treeDetail->expandAll();
     updateUI();
     if (bb && ui->dockEditBb->isVisible()) {
-        editBuildingBlock(*bb);
+        editBuildingBlock(bb);
     }
 }
 
@@ -176,14 +176,14 @@ void MainWindow::select(Project* project)
     ui->treeDetail->expandAll();
     updateUI();
     if (project && ui->dockEditProject->isVisible()) {
-        editProject(*project);
+        editProject(project);
     }
 }
 
 void MainWindow::addProject()
 {
     Project* project = m_datamodel->addProject();
-    editProject(*project);
+    editProject(project);
     int pos = m_datamodel->projects().indexOf(project);
     QModelIndex projIdx = filteredProjectListModel->index(pos, 0);
     ui->listProjects->selectionModel()->select(projIdx, QItemSelectionModel::ClearAndSelect);
@@ -193,15 +193,15 @@ void MainWindow::editCurrentProject()
 {
     Project* project = getSelectedProject();
     if (project) {
-        editProject(*project);
+        editProject(project);
     }
 }
 
-void MainWindow::editProject(Project& project)
+void MainWindow::editProject(Project* project)
 {
     ui->dockEditProject->show();
-    ui->editProjectName->setText(project.name());
-    projectBbListModel->setProject(&project);
+    ui->editProjectName->setText(project->name());
+    projectBbListModel->setProject(project);
     ui->editProjectName->setFocus();
 }
 
@@ -246,7 +246,7 @@ BuildingBlock* MainWindow::getSelectedBuildingBlock()
 void MainWindow::addBuildingBlock()
 {
     BuildingBlock* bb = m_datamodel->addBuildingBlock();
-    editBuildingBlock(*bb);
+    editBuildingBlock(bb);
     int pos = m_datamodel->buildingBlocks().indexOf(bb);
     QModelIndex bbIdx = filteredBbListModel->index(pos, 0);
     ui->listBuildingBlocks->selectionModel()->select(bbIdx, QItemSelectionModel::ClearAndSelect);
@@ -256,19 +256,19 @@ void MainWindow::editCurrentBuildingBlock()
 {
     BuildingBlock* bb = getSelectedBuildingBlock();
     if (bb) {
-        editBuildingBlock(*bb);
+        editBuildingBlock(bb);
     }
 }
 
-void MainWindow::editBuildingBlock(BuildingBlock& bb)
+void MainWindow::editBuildingBlock(BuildingBlock* bb)
 {
     ui->dockEditBb->show();
-    ui->editBbName->setText(bb.name());
-    ui->editBbRef->setText(bb.ref());
-    ui->comboBbMaturity->setCurrentIndex(bb.maturity());
-    ui->editBbInfo->setText(bb.info());
+    ui->editBbName->setText(bb->name());
+    ui->editBbRef->setText(bb->ref());
+    ui->comboBbMaturity->setCurrentIndex(bb->maturity());
+    ui->editBbInfo->setText(bb->info());
     ui->editBbName->setFocus();
-    availableBbChildrenModel->setCurrentBuildingBlock(&bb);
+    availableBbChildrenModel->setCurrentBuildingBlock(bb);
 }
 
 void MainWindow::delCurrentBuildingBlock()
