@@ -112,7 +112,7 @@ UsesTreeModel::UsesTreeModel(DataModel* model, QObject *parent)
 void UsesTreeModel::set(Project* project)
 {
     beginResetModel();
-    m_rootItem->deleteLater();
+    if (m_rootItem) m_rootItem->deleteLater();
     m_rootItem = new RootUsesTreeItem(project, this);
     endResetModel();
 }
@@ -120,7 +120,7 @@ void UsesTreeModel::set(Project* project)
 void UsesTreeModel::set(BuildingBlock* bb)
 {
     beginResetModel();
-    m_rootItem->deleteLater();
+    if (m_rootItem) m_rootItem->deleteLater();
     m_rootItem = new RootUsesTreeItem(bb, this);
     endResetModel();
 }

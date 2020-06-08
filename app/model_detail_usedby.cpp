@@ -113,7 +113,7 @@ UsedByTreeModel::UsedByTreeModel(DataModel* model, QObject *parent)
 void UsedByTreeModel::set(Project* project)
 {
     beginResetModel();
-    m_rootItem->deleteLater();
+    if (m_rootItem) m_rootItem->deleteLater();
     m_rootItem = new RootUsedByTreeItem(project, this);
     endResetModel();
 }
