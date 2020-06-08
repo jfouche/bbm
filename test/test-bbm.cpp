@@ -24,6 +24,20 @@ struct BuildingBlockSpy {
     {}
 };
 
+struct ProjectSpy {
+    Project* const project;
+    const QSignalSpy changedSpy;
+    const QSignalSpy bbAddedSpy;
+    const QSignalSpy bbRemovedSpy;
+
+    ProjectSpy(Project* p)
+    : project(p)
+    , changedSpy(p, &Project::changed)
+    , bbAddedSpy(p, &Project::bbAdded)
+    , bbRemovedSpy(p, &Project::bbRemoved)
+    {}
+};
+
 struct DataModelSpy {
     DataModel* const model;
     const QSignalSpy projectAddedSpy;
@@ -114,6 +128,8 @@ void TestDataModel::testSignals()
     QCOMPARE(spy.buildingBlockAddedSpy.count(), 0);
     QCOMPARE(spy.buildingBlockDeletingSpy.count(), 0);
 
+    auto& p1 = model->projects().at(0);
+    auto& p2 = model->projects().at(1);
     auto& bb1 = model->buildingBlocks().at(0);
     auto& bb2 = model->buildingBlocks().at(1);
     auto& bb11 = model->buildingBlocks().at(2);
@@ -129,6 +145,14 @@ void TestDataModel::testSignals()
     QCOMPARE(bb12Spy.parentBbAddedSpy.count(), 1);
     QCOMPARE(bb12Spy.parentBbAddedSpy.at(0).at(0).data_ptr().data.ptr, bb2);
     QCOMPARE(bb12Spy.childAddedSpy.count(), 0);
+
+    ProjectSpy p1Spy(p1);
+    BuildingBlockSpy bb11Spy(bb11);
+    p1->add(bb11);
+    QCOMPARE(p1Spy.bbAddedSpy.count(), 1);
+    QCOMPARE(bb11Spy.parentProjectAddedSpy.count(), 1);
+
+    bb2->add(bb1);
 }
 
 QTEST_MAIN(TestDataModel);

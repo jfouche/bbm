@@ -20,7 +20,7 @@ void AvailableBuildingBlockChildrenModel::setCurrentBuildingBlock(BuildingBlock*
 bool AvailableBuildingBlockChildrenModel::containsCurrent(BuildingBlock* bb) const
 {
     QList<BuildingBlock*> checked;
-    std::function<bool(BuildingBlock*)> contains = [this, &checked, &contains](BuildingBlock* parent) -> bool {
+    std::function<bool(BuildingBlock*)> contains = [&](BuildingBlock* parent) -> bool {
         if (checked.contains(parent)) {
             return false;
         }

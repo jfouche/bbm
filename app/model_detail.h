@@ -29,7 +29,6 @@ public:
 
     static const std::vector<QString> MaturityLabel;
 
-    void appendChild(TreeItem *child);
     TreeItem *child(int row);
     int childCount() const;
     int row() const;
@@ -39,6 +38,7 @@ public:
     virtual bool is(void* dataptr) const = 0;
 
 protected:
+    void appendChild(TreeItem *child);
     void remove(void* dataptr);
     void update();
     QModelIndex index(int col = 0);
