@@ -61,8 +61,6 @@ void ProjectListModel::addProject(Project* project)
 
 void ProjectListModel::delProject(Project* project)
 {
-    disconnect(project, nullptr, nullptr, nullptr);
-
     QModelIndex parentIdx;
     const int index = m_model->projects().indexOf(project);
     beginRemoveRows(parentIdx, index, index);
