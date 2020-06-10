@@ -19,8 +19,10 @@ const QList<BuildingBlock*>& Project::buildingBlocks() const
 
 void Project::setName(const QString &name)
 {
-    m_name = name;
-    emit changed();
+    if (name != m_name) {
+        m_name = name;
+        emit changed();
+    }
 }
 
 bool Project::contains(BuildingBlock* bb) const
@@ -56,26 +58,34 @@ BuildingBlock::BuildingBlock(QObject* parent)
 
 void BuildingBlock::setName(const QString &name)
 {
-    m_name = name;
-    emit changed();
+    if (name != m_name) {
+        m_name = name;
+        emit changed();
+    }
 }
 
 void BuildingBlock::setRef(const QString &ref)
 {
-    m_ref = ref;
-    emit changed();
+    if (ref != m_ref) {
+        m_ref = ref;
+        emit changed();
+    }
 }
 
 void BuildingBlock::setInfo(const QString &info)
 {
-    m_info = info;
-    emit changed();
+    if (info != m_info) {
+        m_info = info;
+        emit changed();
+    }
 }
 
 void BuildingBlock::setMaturity(Maturity maturity)
 {
-    m_maturity = maturity;
-    emit changed();
+    if (maturity != m_maturity) {
+        m_maturity = maturity;
+        emit changed();
+    }
 }
 
 void BuildingBlock::add(BuildingBlock *bb)
