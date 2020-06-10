@@ -4,7 +4,6 @@
     // Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
         {
             "name": "(gdb) Lancer",
             "type": "cppdbg",
@@ -16,8 +15,13 @@
             "environment": [],
             "externalConsole": true,
             "MIMode": "gdb",
-            "miDebuggerPath": "E:\\App\\Qt\\Tools\\mingw810_64\\bin\\gdb.exe",
+            "miDebuggerPath": "${config:MINGW_DIR}\\bin\\gdb.exe",
             "setupCommands": [
+                {
+                    "description": "Test",
+                    "text": "python import sys;sys.path.insert(1, 'E:/App/Qt/Tools/QtCreator/share/qtcreator/debugger/');from gdbbridge import *;theDumper.loadDumpers({'token':16})",
+                    "ignoreFailures": false
+                },
                 {
                     "description": "Activer l'impression en mode Pretty pour gdb",
                     "text": "-enable-pretty-printing",
