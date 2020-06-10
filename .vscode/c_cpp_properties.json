@@ -3,7 +3,8 @@
         "name": "Win64",
         "includePath": [
             "${workspaceFolder}/**",
-            "${config:QT_DIR}\\include\\**"
+            "${config:QT_DIR}\\include\\**",
+            "/usr/include/x86_64-linux-gnu/qt5/**"
         ],
         "defines": [
             "_DEBUG",
