@@ -59,8 +59,6 @@ class DetailTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
 
-    friend class TreeItem;
-
 public:
     explicit DetailTreeModel(DataModel* model, QObject *parent = nullptr);
     ~DetailTreeModel();
@@ -74,6 +72,10 @@ public:
 
     TreeItem* treeItem(const QModelIndex& index) const;
     TreeItem* treeItem(int row, const QModelIndex& parent);
+    QModelIndex index(TreeItem* item, int col = 0) const;
+    void childAdded(TreeItem* item, int pos);
+    void childRemoved(TreeItem* item, int pos);
+    void update(TreeItem* item);
 
     void set(Project* project);
     void set(BuildingBlock* bb);

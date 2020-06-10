@@ -30,31 +30,22 @@ const QList<TreeItem*>& TreeItem::children() const
     return m_children;
 }
 
-QModelIndex TreeItem::index(int col)
-{
-    return m_treeModel->createIndex(row(), col, this);
-}
-
 void TreeItem::add(TreeItem* item)
 {
-    QModelIndex parentIdx = index();
     int pos = m_children.size();
-    m_treeModel->beginInsertRows(parentIdx, pos, pos);
     appendChild(item);
-    m_treeModel->endInsertRows();
+    m_treeModel->childAdded(item, pos);
 }
 
 void TreeItem::remove(void* data)
 {
-    QModelIndex parentIdx = index();
     int pos = 0;
     for (auto it = m_children.begin(); it != m_children.end(); /* no it++ */) {
-        const TreeItem* item = *it;
+        TreeItem* item = *it;
         if (item->is(data)) {
-            m_treeModel->beginRemoveRows(parentIdx, pos, pos);
             it = m_children.erase(it);
+            m_treeModel->childRemoved(item, pos);
             delete item;
-            m_treeModel->endRemoveRows();
         }
         else {
             ++it;
@@ -65,11 +56,8 @@ void TreeItem::remove(void* data)
 
 void TreeItem::update()
 {
-    QModelIndex topLeft = index(0);
-    QModelIndex bottomRight = index(m_treeModel->columnCount());
-    m_treeModel->dataChanged(topLeft, bottomRight);
+    m_treeModel->update(this);
 }
-
 
 void TreeItem::appendChild(TreeItem *child)
 {
@@ -213,4 +201,30 @@ TreeItem* DetailTreeModel::treeItem(int row, const QModelIndex &parent)
         item = treeItem(parent);
     }
     return item->child(row);
+}
+
+QModelIndex DetailTreeModel::index(TreeItem* item, int col) const
+{
+    return createIndex(item->row(), col, item);
+}
+
+void DetailTreeModel::childAdded(TreeItem* item, int pos)
+{
+    QModelIndex parentIdx = index(item->parentItem());
+    beginInsertRows(parentIdx, pos, pos);
+    endInsertRows();
+}
+
+void DetailTreeModel::childRemoved(TreeItem* item, int pos)
+{
+    QModelIndex parentIdx = index(item->parentItem());
+    beginRemoveRows(parentIdx, pos, pos);
+    endRemoveRows();
+}
+
+void DetailTreeModel::update(TreeItem* item)
+{
+    QModelIndex topLeft = index(item);
+    QModelIndex bottomRight = index(item, columnCount());
+    emit dataChanged(topLeft, bottomRight);
 }
