@@ -21,6 +21,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_datamodel = new DataModel(this);
 
+    /// Splitter handle
+    QSplitterHandle *handle = ui->splitter->handle(1);
+    QHBoxLayout *layout = new QHBoxLayout(handle);
+    layout->setSpacing(0);
+    layout->setMargin(0);
+
+    QFrame *line = new QFrame(handle);
+    line->setFrameShape(QFrame::VLine);
+    line->setFrameShadow(QFrame::Sunken);
+    layout->addWidget(line);
+
     /// listProjects
     projectListModel = new ProjectListModel(this, m_datamodel);
     filteredProjectListModel = new QSortFilterProxyModel(this);
@@ -163,7 +174,7 @@ void MainWindow::select(BuildingBlock* bb)
     usedByTreeModel->set(bb);
     ui->treeDetail->expandAll();
     updateUI();
-    if (bb && ui->dockEditBb->isVisible()) {
+    if (bb && ui->groupBuildingBlock->isVisible()) {
         editBuildingBlock(bb);
     }
 }
@@ -175,7 +186,7 @@ void MainWindow::select(Project* project)
     usedByTreeModel->set(project);
     ui->treeDetail->expandAll();
     updateUI();
-    if (project && ui->dockEditProject->isVisible()) {
+    if (project && ui->groupProject->isVisible()) {
         editProject(project);
     }
 }
@@ -199,7 +210,9 @@ void MainWindow::editCurrentProject()
 
 void MainWindow::editProject(Project* project)
 {
-    ui->dockEditProject->show();
+    ui->dockEdit->show();
+    ui->groupProject->show();
+    ui->groupBuildingBlock->hide();
     ui->editProjectName->setText(project->name());
     projectBbListModel->setProject(project);
     ui->editProjectName->setFocus();
@@ -262,7 +275,9 @@ void MainWindow::editCurrentBuildingBlock()
 
 void MainWindow::editBuildingBlock(BuildingBlock* bb)
 {
-    ui->dockEditBb->show();
+    ui->dockEdit->show();
+    ui->groupBuildingBlock->show();
+    ui->groupProject->hide();
     ui->editBbName->setText(bb->name());
     ui->editBbRef->setText(bb->ref());
     ui->comboBbMaturity->setCurrentIndex(bb->maturity());

@@ -82,6 +82,10 @@ void TestDataModel::testLoad()
     QCOMPARE(bb2->name(), "BB2");
     QCOMPARE(bb11->name(), "BB11");
     QCOMPARE(bb12->name(), "BB12");
+    QCOMPARE(bb1->ref(), "65000001");
+    QCOMPARE(bb2->ref(), "65000002");
+    QCOMPARE(bb11->ref(), "65000011");
+    QCOMPARE(bb12->ref(), "65000012");
 
     QCOMPARE(p1->buildingBlocks().size(), 1);
     QCOMPARE(p1->buildingBlocks().at(0), bb1);

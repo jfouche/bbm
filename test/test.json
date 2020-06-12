@@ -1,5 +1,6 @@
 {
-    "building_blocks": [{
+    "building_blocks": [
+        {
             "children": [
                 3,
                 4
@@ -8,34 +9,38 @@
             "info": "",
             "maturity": "F",
             "name": "BB1",
-            "ref": ""
+            "ref": "65000001"
         },
         {
-            "children": [],
+            "children": [
+            ],
             "id": 2,
             "info": "",
             "maturity": "F",
             "name": "BB2",
-            "ref": ""
+            "ref": "65000002"
         },
         {
-            "children": [],
+            "children": [
+            ],
             "id": 3,
             "info": "",
             "maturity": "F",
             "name": "BB11",
-            "ref": ""
+            "ref": "65000011"
         },
         {
-            "children": [],
+            "children": [
+            ],
             "id": 4,
             "info": "",
             "maturity": "F",
             "name": "BB12",
-            "ref": ""
+            "ref": "65000012"
         }
     ],
-    "projects": [{
+    "projects": [
+        {
             "building_blocks": [
                 1
             ],
