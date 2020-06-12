@@ -45,6 +45,7 @@ private slots:
     void load();
     void save();
     void saveAs();
+    void about();
     void updateUI();
     void updateDetailModel();
     void filter(const QString& filter);

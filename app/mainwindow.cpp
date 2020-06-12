@@ -125,6 +125,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->action_Open, &QAction::triggered, this, &MainWindow::load);
     connect(ui->action_Save, &QAction::triggered, this, &MainWindow::save);
     connect(ui->actionSave_as, &QAction::triggered, this, &MainWindow::saveAs);
+    connect(ui->actionE_xit, &QAction::triggered, this, &QMainWindow::close);
+    connect(ui->action_About, &QAction::triggered, this, &MainWindow::about);
 
     connect(ui->editFilter, &QLineEdit::textChanged, this, &MainWindow::filter);
 
@@ -406,4 +408,9 @@ void MainWindow::updateTitle(bool modified)
         title.append(" *");
     }
     setWindowTitle(title);
+}
+
+void MainWindow::about()
+{
+    QMessageBox::about(this, "About" + TITLE, ".....");
 }
