@@ -11,6 +11,7 @@ private slots:
     void init();
     void cleanup();
 
+    void testClear();
     void testLoad();
     void testSignals();
 

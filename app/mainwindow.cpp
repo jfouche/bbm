@@ -11,6 +11,7 @@
 #include <QMessageBox>
 #include <QStringListModel>
 
+static const QString TITLE = "Building Block Manager";
 
 static void decorateSplitter(QSplitter* splitter, int index)
 {
@@ -68,9 +69,10 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
-
     m_datamodel = new DataModel(this);
+
+    ui->setupUi(this);
+    updateTitle();
 
     /// Splitter handle
     decorateSplitter(ui->splitter, 1);
@@ -113,9 +115,17 @@ MainWindow::MainWindow(QWidget *parent)
     model->setStringList(list);
     ui->comboBbMaturity->setModel(model);
 
+    /// ACTIONS
+    const QStyle* s = style();
+    //ui->action_New->setIcon(s->standardIcon(QStyle::SP_new))
+    ui->action_Open->setIcon(s->standardIcon(QStyle::SP_DialogOpenButton));
+
     // SIGNALS
-    connect(ui->btnLoad, &QPushButton::clicked, this, &MainWindow::load);
-    connect(ui->btnSave, &QPushButton::clicked, this, &MainWindow::save);
+    connect(ui->action_New, &QAction::triggered, this, &MainWindow::clear);
+    connect(ui->action_Open, &QAction::triggered, this, &MainWindow::load);
+    connect(ui->action_Save, &QAction::triggered, this, &MainWindow::save);
+    connect(ui->actionSave_as, &QAction::triggered, this, &MainWindow::saveAs);
+
     connect(ui->editFilter, &QLineEdit::textChanged, this, &MainWindow::filter);
 
     connect(ui->btnUses, &QRadioButton::clicked, this, &MainWindow::updateDetailModel);
@@ -164,19 +174,51 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::clear() 
+{
+    m_filename.clear();
+    m_datamodel->clear();
+    updateTitle();
+
+    ui->editFilter->clear();
+    
+    ui->editBbName->clear();
+    ui->editBbRef->clear();
+    ui->editBbInfo->clear();
+    ui->comboBbMaturity->setCurrentIndex(0);
+
+    ui->editProjectName->clear();
+}
+
 void MainWindow::load()
 {
+    clear();
     QString filename = QFileDialog::getOpenFileName(this, tr("Open file"), "", tr("BB Files (*.json)"));
     if (!filename.isNull()) {
         m_datamodel->load(filename);
+        m_filename = filename;
+        updateTitle();
     }
 }
 
 void MainWindow::save()
 {
+    if (m_filename.isEmpty()) {
+        saveAs();
+    }
+    else
+    {
+        m_datamodel->save(m_filename);
+        updateTitle();
+    }
+}
+
+void MainWindow::saveAs()
+{
     QString filename = QFileDialog::getSaveFileName(this, tr("Open file"), "", tr("BB Files (*.json)"));
     if (!filename.isNull()) {
-        m_datamodel->save(filename);
+        m_filename = filename;
+        save();
     }
 }
 
@@ -217,7 +259,7 @@ void MainWindow::select(BuildingBlock* bb)
     usedByTreeModel->set(bb);
     ui->treeDetail->expandAll();
     updateUI();
-    if (bb && ui->groupBuildingBlock->isVisible()) {
+    if (bb && ui->dockEdit->isVisible()) {
         editBuildingBlock(bb);
     }
 }
@@ -229,7 +271,7 @@ void MainWindow::select(Project* project)
     usedByTreeModel->set(project);
     ui->treeDetail->expandAll();
     updateUI();
-    if (project && ui->groupProject->isVisible()) {
+    if (project && ui->dockEdit->isVisible()) {
         editProject(project);
     }
 }
@@ -352,4 +394,16 @@ void MainWindow::saveBuildingBlock()
     bb->setRef(ui->editBbRef->text());
     bb->setMaturity(static_cast<BuildingBlock::Maturity>(ui->comboBbMaturity->currentIndex()));
     bb->setInfo(ui->editBbInfo->text());
+}
+
+void MainWindow::updateTitle(bool modified)
+{
+    QString title(TITLE);
+    if (!m_filename.isEmpty()) {
+        title.append(" - ").append(m_filename);
+    }
+    if (modified) {
+        title.append(" *");
+    }
+    setWindowTitle(title);
 }

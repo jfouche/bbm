@@ -21,6 +21,7 @@ public:
     BuildingBlock* getBuildingBlock(const QModelIndex &index) const;
 
 private slots:
+    void clear();
     void add(BuildingBlock* bb);
     void del(BuildingBlock* bb);
     void update(BuildingBlock* bb);

@@ -97,6 +97,7 @@ DetailTreeModel::DetailTreeModel(DataModel* model, QObject *parent)
     , m_model(model)
     , m_rootItem(nullptr)
 {
+    connect(m_model, &DataModel::cleared, this, &DetailTreeModel::clear);
 }
 
 DetailTreeModel::~DetailTreeModel()
@@ -227,4 +228,14 @@ void DetailTreeModel::update(TreeItem* item)
     QModelIndex topLeft = index(item);
     QModelIndex bottomRight = index(item, columnCount());
     emit dataChanged(topLeft, bottomRight);
+}
+
+void DetailTreeModel::clear()
+{
+    beginResetModel();
+    if (m_rootItem) {
+        m_rootItem->deleteLater();
+    }
+    m_rootItem = nullptr;
+    endResetModel();
 }

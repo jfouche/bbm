@@ -23,6 +23,7 @@ private slots:
     void addProject(Project* project);
     void delProject(Project* project);
     void updateProject(Project* project);
+    void clear();
 
 private:
     DataModel* m_model;

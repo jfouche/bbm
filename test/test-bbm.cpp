@@ -64,6 +64,14 @@ void TestDataModel::cleanup()
     delete model;
 }
 
+void TestDataModel::testClear()
+{
+    model->load("../../test/test.json");
+    model->clear();
+    QVERIFY(model->projects().isEmpty());
+    QVERIFY(model->buildingBlocks().isEmpty());
+}
+
 void TestDataModel::testLoad()
 {
     model->load("../../test/test.json");

@@ -80,6 +80,9 @@ public:
     void set(Project* project);
     void set(BuildingBlock* bb);
 
+private slots:
+    void clear();
+
 protected:
     DataModel* m_model;
     TreeItem* m_rootItem;

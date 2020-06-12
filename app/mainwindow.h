@@ -38,10 +38,13 @@ private:
     void editBuildingBlock(BuildingBlock* bb);
     void select(BuildingBlock* bb);
     void select(Project* project);
+    void updateTitle(bool modified = false);
 
 private slots:
+    void clear();
     void load();
     void save();
+    void saveAs();
     void updateUI();
     void updateDetailModel();
     void filter(const QString& filter);
@@ -57,6 +60,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     DataModel* m_datamodel;
+    QString m_filename;
 
     /// MODELS
     ProjectListModel* projectListModel;

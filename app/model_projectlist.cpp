@@ -5,6 +5,7 @@ ProjectListModel::ProjectListModel(QObject* parent, DataModel* model)
     : QAbstractListModel(parent)
     , m_model(model)
 {
+    connect(m_model, &DataModel::cleared, this, &ProjectListModel::clear);
     connect(m_model, &DataModel::projectAdded, this, &ProjectListModel::addProject);
     connect(m_model, &DataModel::projectDeleting, this, &ProjectListModel::delProject);
     for (auto project: m_model->projects()) {
@@ -72,4 +73,10 @@ void ProjectListModel::updateProject(Project* project)
     int row = m_model->projects().indexOf(project);
     auto idx = index(row, 0);
     emit dataChanged(idx, idx);
+}
+
+void ProjectListModel::clear()
+{
+    beginResetModel();
+    endResetModel();
 }

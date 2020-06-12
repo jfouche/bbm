@@ -127,14 +127,14 @@ public:
 
     void save(const QString& path) const;
     void load(const QString& path);
-
-private slots:
+    void clear();
 
 signals:
     void projectAdded(Project*);
     void projectDeleting(Project*);
     void buildingBlockAdded(BuildingBlock*);
     void buildingBlockDeleting(BuildingBlock*);
+    void cleared();
 
 private:
     Projects m_projects;

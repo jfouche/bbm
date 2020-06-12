@@ -276,3 +276,13 @@ void DataModel::load(const QString& path)
         qWarning() << e.what();
     }
 }
+
+void DataModel::clear()
+{
+    for (auto p: m_projects) p->deleteLater();
+    for (auto bb: m_buildingblocks) bb->deleteLater();
+    m_projects.clear();
+    m_buildingblocks.clear();
+
+    emit cleared();
+}

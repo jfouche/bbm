@@ -5,6 +5,7 @@ BuildingBlockListModel::BuildingBlockListModel(DataModel* datamodel, QObject* pa
     : QAbstractListModel(parent)
     , m_model(datamodel)
 {
+    connect(m_model, &DataModel::cleared, this, &BuildingBlockListModel::clear);
     connect(m_model, &DataModel::buildingBlockAdded, this, &BuildingBlockListModel::add);
     connect(m_model, &DataModel::buildingBlockDeleting, this, &BuildingBlockListModel::del);
     for (auto bb: m_model->buildingBlocks()) {
@@ -74,4 +75,10 @@ void BuildingBlockListModel::update(BuildingBlock* bb)
     int row = m_model->buildingBlocks().indexOf(bb);
     auto idx = index(row, 0);
     emit dataChanged(idx, idx);
+}
+
+void BuildingBlockListModel::clear()
+{
+    beginResetModel();
+    endResetModel();
 }
