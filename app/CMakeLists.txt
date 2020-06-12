@@ -18,6 +18,8 @@ add_executable(bbm-ui
     model_projectlist.cpp
 
     mainwindow.ui
+
+    bbm-ui.rc
 )
 
 target_include_directories(bbm-ui PUBLIC ../src)
