@@ -5,6 +5,7 @@ ProjectBuildingBlockListModel::ProjectBuildingBlockListModel(DataModel* datamode
     : BuildingBlockListModel(datamodel, parent)
     , m_project(nullptr)
 {
+    connect(datamodel, &DataModel::cleared, [=]() { m_project = nullptr; });
 }
 
 void ProjectBuildingBlockListModel::setProject(Project* project)
@@ -60,4 +61,3 @@ bool ProjectBuildingBlockListModel::setData(const QModelIndex &index, const QVar
     }
     return true;
 }
-
