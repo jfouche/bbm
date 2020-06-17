@@ -3,17 +3,19 @@
             "name": "Win64",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${config:QT_DIR}\\include\\**"
+                "${config:QT_DIR}/include/**"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "${config:MINGW_DIR}\\bin\\gcc.exe",
+            // "compilerPath": "${config:MINGW_DIR}\\bin\\gcc.exe",
+            "compilerPath": "cl.exe",
             "cStandard": "c11",
             "cppStandard": "gnu++14",
-            "intelliSenseMode": "clang-x86",
+            // "intelliSenseMode": "clang-x86",
+            "intelliSenseMode": "msvc-x64",
             "configurationProvider": "ms-vscode.cmake-tools"
         },
         {

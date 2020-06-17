@@ -69,12 +69,12 @@ void BuildingBlockUsedByTreeItem::add(BuildingBlock* parent)
 
 void BuildingBlockUsedByTreeItem::remove(Project* parent)
 {
-    remove(parent);
+    TreeItem::remove(parent);
 }
 
 void BuildingBlockUsedByTreeItem::remove(BuildingBlock* parent)
 {
-    remove(parent);
+    TreeItem::remove(parent);
 }
 
 // ===========================================================================

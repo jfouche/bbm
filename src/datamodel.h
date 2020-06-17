@@ -5,13 +5,13 @@
 #include <QVector>
 #include <QList>
 
-struct Project;
-struct BuildingBlock;
+class Project;
+class BuildingBlock;
 
 /**
- * @brief The Project struct
+ * @brief The Project class
  */
-struct Project : public QObject
+class Project : public QObject
 {
     Q_OBJECT
 
@@ -38,9 +38,9 @@ private:
 };
 
 /**
- * @brief The BuildingBlock struct
+ * @brief The BuildingBlock class
  */
-struct BuildingBlock : public QObject
+class BuildingBlock : public QObject
 {
     Q_OBJECT
 
