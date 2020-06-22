@@ -73,8 +73,7 @@ void BuildingBlockListModel::del(BuildingBlock* bb)
 void BuildingBlockListModel::update(BuildingBlock* bb)
 {
     int row = m_model->buildingBlocks().indexOf(bb);
-    auto idx = index(row, 0);
-    emit dataChanged(idx, idx);
+    emit dataChanged(index(row), index(row, columnCount()-1));
 }
 
 void BuildingBlockListModel::clear()

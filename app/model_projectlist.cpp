@@ -71,8 +71,7 @@ void ProjectListModel::delProject(Project* project)
 void ProjectListModel::updateProject(Project* project)
 {
     int row = m_model->projects().indexOf(project);
-    auto idx = index(row, 0);
-    emit dataChanged(idx, idx);
+    emit dataChanged(index(row), index(row, columnCount()-1));
 }
 
 void ProjectListModel::clear()

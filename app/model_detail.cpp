@@ -225,9 +225,7 @@ void DetailTreeModel::childRemoved(TreeItem* item, int pos)
 
 void DetailTreeModel::update(TreeItem* item)
 {
-    QModelIndex topLeft = index(item);
-    QModelIndex bottomRight = index(item, columnCount());
-    emit dataChanged(topLeft, bottomRight);
+    emit dataChanged(index(item), index(item, columnCount()-1));
 }
 
 void DetailTreeModel::clear()
