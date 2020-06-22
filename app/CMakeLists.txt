@@ -16,6 +16,7 @@ add_executable(bbm-ui
     model_detail_uses.cpp
     model_projectbblist.cpp
     model_projectlist.cpp
+    model_summary.cpp
 
     mainwindow.ui
 

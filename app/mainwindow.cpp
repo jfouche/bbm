@@ -7,6 +7,7 @@
 #include "model_detail_usedby.h"
 #include "model_availablebbchildren.h"
 #include "model_projectbblist.h"
+#include "model_summary.h"
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QStringListModel>
@@ -95,6 +96,12 @@ MainWindow::MainWindow(QWidget *parent)
     filteredDetailTreeModel = new QSortFilterProxyModel(this);
     filteredDetailTreeModel->setSourceModel(usesTreeModel);
     ui->treeDetail->setModel(filteredDetailTreeModel);
+
+    /// Summary
+    summaryModel = new SummaryModel(m_datamodel, this);
+    filteredSummaryModel = new QSortFilterProxyModel(this);
+    filteredSummaryModel->setSourceModel(summaryModel);
+    ui->treeSummary->setModel(filteredSummaryModel);
 
     /// listBbChildren
     availableBbChildrenModel = new AvailableBuildingBlockChildrenModel(bbListModel, this);
@@ -412,5 +419,5 @@ void MainWindow::updateTitle(bool modified)
 
 void MainWindow::about()
 {
-    QMessageBox::about(this, "About" + TITLE, ".....");
+    QMessageBox::about(this, "About" + TITLE, "\"Building Block Manager\" tool,\nDistributed under the MIT license.");
 }

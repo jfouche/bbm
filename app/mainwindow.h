@@ -13,6 +13,7 @@ class UsesTreeModel;
 class UsedByTreeModel;
 class AvailableBuildingBlockChildrenModel;
 class ProjectBuildingBlockListModel;
+class SummaryModel;
 
 
 QT_BEGIN_NAMESPACE
@@ -73,6 +74,8 @@ private:
     QSortFilterProxyModel* filteredDetailTreeModel;
     AvailableBuildingBlockChildrenModel* availableBbChildrenModel;
     ProjectBuildingBlockListModel* projectBbListModel;
+    SummaryModel* summaryModel;
+    QSortFilterProxyModel* filteredSummaryModel;
 };
 
 #endif // MAINWINDOW_H
